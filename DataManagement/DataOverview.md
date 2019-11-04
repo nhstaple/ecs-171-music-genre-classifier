@@ -127,7 +127,7 @@ harmonic and melodic characterisitics of music. Spectrum is projected onto
 	* mfcc: Mel-Frequency coeffecients 
 
 Mel-Frequency is a representation of the short-term power spectrum of a sound.
-MFCC's are teh coeffecients that collectively make up an MFC. Commonly used as
+MFCC's are the coeffecients that collectively make up an MFC. Commonly used as
 features in speech recognition. Finding use in other applications such as
 genre classification and audio similarity.
 
