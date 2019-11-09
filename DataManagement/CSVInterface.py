@@ -1,5 +1,8 @@
 
 import pandas as pd
+from sklearn.model_selection import KFold
+
+
 class featRead:
 
 	def __init__(self, csvs=['features.csv', 'tracks.csv', 'echonest.csv', 'genres.csv']):	
@@ -33,17 +36,74 @@ class featRead:
 				print(key + ' is not a vaild csv file name')
 				break;
 
-	
+	#lists all of the data frames names contained by the featRead object
 	def listFrames(self):
 		for key in self.tableDF:
 			print(key)
 
+	#return a certain data fram 
+	#@frame: string name of frame
 	def getFrame(self, frame):
 		return self.tableDF[frame]
 
-	def getFeatures(self, feature=['chroma_cens'], stat=['mean', 'std']):
+	#return a subset of statistics from a specific feature
+	#@feature: feature categories can be found in the DataOverview.md
+	#@stat: list of stats you want from the feature category
+	def getFeatures(self, feature='chroma_cens', stat=['mean', 'std']):
 		df = self.tableDF['features'].copy()
-		for i in feature:
-			feat = df[i]
+		df = df[feature]
+		return df[stat]
+
+	#return the data subset 'small', 'medium', 'large'
+	#@frame: frame that subset will be obtained from
+	#@sub: string that specifies which subset
+	#default is small subset
+	def getSubset(self, frame, sub='small'):
+		setDF = self.tableDF['set']
+
+		if(sub == 'small'):
+			subset = setDF
+			subset = subset.loc[subset['subset'] == sub]
+			newDF = frame[frame.index.isin(subset.index)].copy()
+			return newDF
+
+		elif(sub == 'medium'):
+			subset = setDF
+			subset = subset.loc[(subset['subset'] == sub) | (subset['subset'] == 'small')]
+			newDF = frame[frame.index.isin(subset.index)].copy()
+			return newDF
+
+		elif(sub == 'large'):
+			subset = setDF
+			subset = subset.loc[(subset['subset'] == sub) | (subset['subset'] == 'medium') | (subset['subset'] == 'small')]
+			newDF = frame[frame.index.isin(subset.index)].copy()
+			return newDF
+
+		else:
+			print('Not a vaild set type')
+
+	#KFold function
+	#@frame: data frame
+	#@k: integer, number of splits
+	#return: returns a collection of data frames
+	def makeKfold(self, frame, k):
+		kf = KFold(n_splits=k, shuffle=True)
+		df_collection = {}
+		i = 0
+		for train_index, test_index in kf.split(frame):
+			df_collection[i,"training"] = frame.iloc[train_index]
+			df_collection[i,"testing"] = frame.iloc[test_index]
+			i += 1
+		return df_collection
+
+	#can be used after getFeatures() method to merge dataframes of different
+	#feature category.
+	#@f1: frame on the left
+	#@f2: frame on the right
+	#return: returns combined dataframe
+	def mergeFrames(self, f1, f2):
+		combined = pd.merge(f1, f2, on='track_id', how='outer')
+		return combined
+
 
 
