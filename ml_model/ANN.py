@@ -1,18 +1,18 @@
 import tensorflow as tf
 
-#returns a 4 layers FFNN: 2 hidden layers with numNodes neurons and an output layer with numClasses neurons
-def buildModel(numClasses, numNodes):
-    # create a sequential model with 2 hidden layers with sigmoid activation and 3 neurons
-    # the output layer uses sigmoid and numClasses nodes
-    model = tf.keras.models.Sequential([
-        tf.keras.layers.Dense(numNodes, activation='sigmoid', input_shape=(8,), use_bias=True),
-        tf.keras.layers.Dense(numNodes, activation='sigmoid'),
-        tf.keras.layers.Dense(numClasses, activation='sigmoid')
-    ])
-
-    # compile the model with Stochastic Gradient Descent, Mean Squared Error, and using accuracy to measure error
-    model.compile(optimizer='SGD',
-                  loss='mean_squared_error',
+def buildModel(numFeatures, numLayers, numNodes, actFunc, numClasses):
+    model = tf.keras.models.Sequential()
+    # add the first hidden layer
+    model.add(tf.keras.layers.Dense(numNodes, activation=actFunc, input_dim=numFeatures))
+    # add additional hidden layers as requested
+    for x in range(numLayers-1):
+        model.add(tf.keras.layers.Dense(numNodes, activation=actFunc))
+    # add the output layer
+    model.add(tf.keras.layers.Dense(numClasses, activation='softmax'))
+    # compile the model with adam optimizer, categorical_crossentropy for multi-class classification
+    # and using binary_accuracy to measure error
+    model.compile(optimizer='adam',
+                  loss='categorical_crossentropy',
                   metrics=['accuracy'])
 
     return model
