@@ -1,3 +1,6 @@
+# ANN.py
+# author - matthew
+
 import tensorflow as tf
 
 def buildModel(numFeatures, numLayers, numNodes, actFunc, numClasses):
