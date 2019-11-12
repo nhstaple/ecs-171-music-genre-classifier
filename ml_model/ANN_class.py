@@ -3,9 +3,9 @@
 ## from hw2
 
 import numpy as np
-import keras
-from keras.models import Sequential
-from keras.layers import Dense
+from tensorflow import keras
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
 import pandas as pd
 from tensorflow.keras.optimizers import SGD
 
