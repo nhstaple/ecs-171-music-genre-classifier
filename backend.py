@@ -1,43 +1,18 @@
 from flask import Flask, jsonify, request #import objects from the Flask model
 app = Flask(__name__) #define app using Flask
 
-languages = [{'name' : 'JavaScript'}, {'name' : 'Python'}, {'name' : 'Ruby'}]
-
+# reference to https://www.youtube.com/watch?v=qH--M56OsUg
+# songArray is the example, which is like a data base
 songArray = ["one", "two","three"]
 
+# Homepage, which is for testing. It uses url: http://localhost:8080
 @app.route('/', methods=['GET'])
 def test():
-	return jsonify({'message' : 'It works!'})
-
-@app.route('/lang', methods=['GET'])
-def returnAll():
-	return jsonify({'languages' : languages})
-
-@app.route('/lang/<string:name>', methods=['GET'])
-def returnOne(name):
-	langs = [language for language in languages if language['name'] == name]
-	return jsonify({'language' : langs[0]})
-
-@app.route('/lang', methods=['POST'])
-def addOne():
-	language = {'name' : request.json['name']}
-
-	languages.append(language)
-	return jsonify({'languages' : languages})
-
-@app.route('/lang/<string:name>', methods=['PUT'])
-def editOne(name):
-	langs = [language for language in languages if language['name'] == name]
-	langs[0]['name'] = request.json['name']
-	return jsonify({'language' : langs[0]})
-
-@app.route('/lang/<string:name>', methods=['DELETE'])
-def removeOne(name):
-	lang = [language for language in languages if language['name'] == name]
-	languages.remove(lang[0])
-	return jsonify({'languages' : languages})
+	return jsonify({'songGenre' : 'It works!'})
 
 
+# use url: http://localhost:8080/song/songName, 
+# which the songName is the song title and can be changed
 @app.route('/song/<string:name>', methods=['GET'])
 def findOneSong(name):
 	# songList = [song for song in songArray if song == name]
