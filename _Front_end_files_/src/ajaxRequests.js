@@ -16,13 +16,15 @@ return vars;
 //create actual ajax request to send song title, and receive a response from the swe team:
 //ajax grabs the info from the url
 function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
-    //I'm not sure what to query for the url, have to figure this out
-    //for now just using this url:
-    let temp = null;
+    //for backend, find url we need (url1 is temporary):
     let url1 = "http://localhost:8080/song/";
     let url2 = url1 + song;
     //sending song title to server and wait to get genre back
     let xhr = createAJAXRequest('GET', url2);
+
+    console.log(url2);// JD: for testing
+    console.log(xhr);// JD: for testing
+    console.log(xhr.onload);// JD: for testing
     //checking for errors
     if (!xhr) {
 	     alert('CORS not supported');
@@ -32,22 +34,26 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
     xhr.onload = function() {
       //grab the response from swe team
 	     let responseStr = xhr.responseText;  // get the JSON string
-       //console.log(responseStr); //to test
-	     let object = JSON.parse(responseStr);  // turn it into an object
+       console.log(responseStr); //to test
+       
+       let object = JSON.parse(responseStr);  // turn it into an object
+
+       console.log(object.songGenre);// JD: for testing
        //place the response on the screen
        //for now just place on Landing Page, this is a html paragraph dom element
-       document.getElementById('ThirdPage').textContent = object.songGenre;
-       console.log(object); //to test
-       temp =  object.songGenre;
+       let temporaryResponse = "Sent Request " + object.songGenre
+       console.log(temporaryResponse);// JD: for testing
+       document.getElementById('placeGenreHere').textContent = temporaryResponse;
+	     //console.log(object); //to test
     }
     xhr.send();
-    return temp;
 }
 //at this point, user has clicked the search button, so we will need to send the request:
-export default function sbm(id){
-    //for now songinput is hardcoded, will need to change!!
-    // let id = document.getElementById("songInput").value;
-    let genre = makeAJAXRequest(id);
-    return genre;
+export function sbm(id){
+    //this function makes request and sends it:
+    //Backend: uncomment to test
+    makeAJAXRequest(id);
+    //below works, testing placing a response onto screen:
+    // let temporaryResponse = "Sent Request " + id
+    // document.getElementById('placeGenreHere').textContent = temporaryResponse
 }
-
