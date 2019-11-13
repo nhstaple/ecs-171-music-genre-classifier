@@ -1,10 +1,16 @@
-'use strict'; //import {smb, createAJAXRequest} from 'ajaxRequests.js'
+"use strict";
+
+var ajaxRequests = _interopRequireWildcard(require("./ajaxRequests.js"));
 
 var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -53,9 +59,13 @@ function (_React$Component) {
         landingPage: false,
         secondPageState: true,
         thirdPageState: false
-      });
+      }); //call ajaxrequest, must wait for page to render.
 
-      console.log(_this.state.songTitle);
+
+      var song = _this.state.songTitle;
+      setTimeout(function () {
+        ajaxRequests.sbm(song);
+      }, 1000);
     });
 
     _defineProperty(_assertThisInitialized(_this), "gotoPageThreeState", function () {
@@ -85,16 +95,8 @@ function (_React$Component) {
 
   _createClass(MainPage, [{
     key: "render",
-    //call ajax request:
-
-    /* button and event listener
-    callAJAXRequest = () => {
-      sbm();
-    }
-    <button id="Ajax request button" onClick={this.callAJAXRequest.bind(this)}>sends ajax req</button>
-    */
     value: function render() {
-      if (this.state.landingPage == true) {
+      if (this.state.landingPage === true) {
         return _react.default.createElement("main", null, _react.default.createElement("div", {
           className: "pageContainer"
         }, _react.default.createElement("p", {
@@ -115,16 +117,16 @@ function (_React$Component) {
           id: "buttonStyle",
           onClick: this.gotoPageTwoState
         }, " Search "))));
-      } else if (this.state.secondPageState == true) {
+      } else if (this.state.secondPageState === true) {
         return _react.default.createElement("main", null, _react.default.createElement("div", {
           className: "pageContainer"
         }, _react.default.createElement("p", {
-          id: "SecondPage"
-        }, "song title: ", this.state.songTitle), _react.default.createElement("button", {
+          id: "placeGenreHere"
+        }), _react.default.createElement("button", {
           id: "SecondPageButton",
           onClick: this.gotoPageThreeState
         }, "goto 3rd page")));
-      } else if (this.state.thirdPageState == true) {
+      } else if (this.state.thirdPageState === true) {
         return _react.default.createElement("main", null, _react.default.createElement("div", {
           className: "pageContainer"
         }, _react.default.createElement("p", {

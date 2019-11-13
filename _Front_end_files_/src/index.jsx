@@ -1,5 +1,4 @@
-'use strict'
-//import {smb, createAJAXRequest} from 'ajaxRequests.js'
+import * as ajaxRequests from './ajaxRequests.js'
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -30,8 +29,9 @@ class MainPage extends React.Component{
       secondPageState: true,
       thirdPageState: false
     })
-    console.log(this.state.songTitle)
-
+    //call ajaxrequest, must wait for page to render.
+    const song = this.state.songTitle
+    setTimeout(function() { ajaxRequests.sbm(song); }, 1000);
   }
   gotoPageThreeState = () =>{
     this.setState({
@@ -45,15 +45,8 @@ class MainPage extends React.Component{
       songTitle: event.target.value
     })
   }
-  //call ajax request:
-  /* button and event listener
-  callAJAXRequest = () => {
-    sbm();
-  }
-  <button id="Ajax request button" onClick={this.callAJAXRequest.bind(this)}>sends ajax req</button>
-  */
   render() {
-    if(this.state.landingPage == true){
+    if(this.state.landingPage === true){
       return (
         <main>
           <div className="pageContainer">
@@ -72,23 +65,20 @@ class MainPage extends React.Component{
               />
               <button id="buttonStyle" onClick={this.gotoPageTwoState}> Search </button>
             </div>
-
-
           </div>
         </main>
       );
-    } else if(this.state.secondPageState == true) {
+    } else if(this.state.secondPageState === true) {
       return (
         <main>
           <div className="pageContainer">
-            <p id="SecondPage">
-              song title: {this.state.songTitle}
+            <p id="placeGenreHere">
             </p>
             <button id="SecondPageButton" onClick={this.gotoPageThreeState}>goto 3rd page</button>
           </div>
         </main>
       );
-    } else if(this.state.thirdPageState == true) {
+    } else if(this.state.thirdPageState === true) {
       return (
         <main>
           <div className="pageContainer">
