@@ -16,8 +16,7 @@ return vars;
 //create actual ajax request to send song title, and receive a response from the swe team:
 //ajax grabs the info from the url
 function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
-    //I'm not sure what to query for the url, have to figure this out
-    //for now just using this url:
+    //for backend, find url we need (url1 is temporary):
     let url1 = "/findgenre?song=";
     let url2 = url1 + song;
     //sending song title to server and wait to get genre back
@@ -35,14 +34,17 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
 	     let object = JSON.parse(responseStr);  // turn it into an object
        //place the response on the screen
        //for now just place on Landing Page, this is a html paragraph dom element
-       document.getElementById('LandingPage').textContent = object.songGenre;
+       document.getElementById('placeGenreHere').textContent = object.songGenre;
 	     //console.log(object); //to test
     }
     xhr.send();
 }
 //at this point, user has clicked the search button, so we will need to send the request:
-export function sbm(){
-    //for now songinput is hardcoded, will need to change!!
-    let id = document.getElementById("songInput").value;
-    makeAJAXRequest(id);
+export function sbm(id){
+    //this function makes request and sends it:
+    //Backend: uncomment to test
+    //makeAJAXRequest(id);
+    //below works, testing placing a response onto screen:
+    let temporaryResponse = "Sent Request " + id
+    document.getElementById('placeGenreHere').textContent = temporaryResponse
 }
