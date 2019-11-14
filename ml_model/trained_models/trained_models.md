@@ -28,3 +28,7 @@ This saves the following files to disk:
 
 * `/ml_model/trained_models/my_model_parameters.csv`
 * `/ml_model/trained_models/my_model_weights.npy`
+
+# How to load a model _after_ it's saved to disk
+
+`net = ANN(trained_model='my_model')
