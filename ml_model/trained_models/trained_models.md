@@ -31,4 +31,4 @@ This saves the following files to disk:
 
 # How to load a model _after_ it's saved to disk
 
-`net = ANN(trained_model='my_model')
+`net = ANN(trained_model='my_model')`
