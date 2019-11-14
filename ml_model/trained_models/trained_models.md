@@ -24,4 +24,7 @@ For example,
 
 `ANN.save_to_disk(model_name='my_model')`
 
-These get saved into `/ml_model/trained_models/`.
+This saves the following files to disk:
+
+* `/ml_model/trained_models/my_model_parameters.csv`
+* `/ml_model/trained_models/my_model_weights.npy`
