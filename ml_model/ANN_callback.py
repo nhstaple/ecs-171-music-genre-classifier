@@ -12,6 +12,7 @@ from tensorflow.keras.optimizers import SGD
 class Callback(keras.callbacks.Callback):
 	# add variables to keep track of parameters
 	weights = []
+	
 	def on_train_begin(self, logs={}):
 		return
 

@@ -15,6 +15,8 @@ from ANN_callback import Callback
 from ANN_encode import encode
 from ANN_result import Result
 
+TRAINED_MODEL_DIR = './trained_models/'
+
 # ANN - Artificial Neural Network
 # constructor
 # ANN
@@ -47,34 +49,30 @@ class ANN():
 		init=False):
 
 		self.trained = False
-		# TODO Check if the user provided an already trained model
+		# Check if the user provided an already trained model and set the hyperparameters
 		if trained_model != '':
-			# Set the paramters
-			self.trained = True
-			# parameter_frame = pd.read_csv(
-			# 	str(trained_model) + '_paramters.csv',
-			# 	col=ANN_Parameter.keys
-			# )
-			# Set the hyperparemters for the constructorß
-			# for feature in parameter_frame:
-			#	p.parameters[feature] = parameter_frame[feature].values()[0]
-			#
-			# TODO
-			# Set the weights 
-			# w := [ [], [] , ..., [] ]
-			# w = read list of lists from file: str(trained_model) + "_weights.csv"
-			# m.set_weights(w)
+			print('Loading a model from disk!')
+			parameter_frame = pd.read_csv(
+				TRAINED_MODEL_DIR + str(trained_model) + '_parameters.csv',
+			 	names=Parameter.keys
+			)
+			# Adjust the parameters for construction
+			for feature in parameter_frame:
+				string = str(feature) + ': ' + str(parameter_frame[feature][0])
+				print(string)
+				p.parameters[feature] = parameter_frame[feature][0]
+			print('\n\n')
 
-		# Set the parameters 
-		self.num_hidden_layers = p.parameters['num_hidden_layers']
-		self.nodes_per_hidden = p.parameters['nodes_per_hidden']
-		self.num_input = p.parameters['num_input']
-		self.num_output = p.parameters['num_output']
-		self.hidden_activation = p.parameters['hidden_activation']
-		self.output_activation = p.parameters['output_activation']
-		self.initialize = p.parameters['initialize']
-		self.learning_rate = p.parameters['learning_rate']
-		self.loss_function = p.parameters['loss_function']
+		# Set the parameters that are visible outside of the class's methods
+		self.num_hidden_layers 	= p.parameters['num_hidden_layers']
+		self.nodes_per_hidden 	= p.parameters['nodes_per_hidden']
+		self.num_input 			= p.parameters['num_input']
+		self.num_output 		= p.parameters['num_output']
+		self.hidden_activation 	= p.parameters['hidden_activation']
+		self.output_activation 	= p.parameters['output_activation']
+		self.initialize 		= p.parameters['initialize']
+		self.learning_rate 		= p.parameters['learning_rate']
+		self.loss_function 		= p.parameters['loss_function']
 
 		m = Sequential()
 		# If init is set then initialize the weights and biases
@@ -132,6 +130,19 @@ class ANN():
 
 		m.compile(loss=self.loss_function, optimizer=SGD(lr=self.learning_rate), metrics=['accuracy'])
 
+		# If the model is being loaded from disk then load the weights
+		if trained_model != '':
+			print('Loading trained weights!')
+			# Load weights from disk
+			w = np.load(TRAINED_MODEL_DIR + str(trained_model) + "_weights.npy", allow_pickle=True)
+
+			# Set each layer's weights
+			for i in range(0, len(m.layers)):
+				m.layers[i].set_weights(w[i])
+
+			# Set the trained flag
+			self.trained = True
+
 		self.model = m
 
 	# trains the network on the provided parameters
@@ -160,30 +171,20 @@ class ANN():
 		return hist, c
 	
 	# Print the weights of the network
-	# TODO make the function print from the last layer
 	def show_weights(self, num=1):
 		if num < 1:
-			print('invalded parameter {}'.format(num))
+			num = len(self.model.layers) - 1
 			return
-		## TODO make general
-		print("\n****\nLayer L - 3")
-		print("Bias")
-		print(self.model.layers[0].get_weights()[1])
-		print("Weights")
-		print(self.model.layers[0].get_weights()[0])
-		# print("\n****\nLayer L - 2")
-		# print(self.model.layers[1].get_weights()[1])
-		# print(self.model.layers[1].get_weights()[0])
-		# print("\n****\nLayer L - 1")
-		# print(self.model.layers[2].get_weights()[1])
-		# print(self.model.layers[2].get_weights()[0])
 
-		# for i in range len(model.layers) - 1 to num:
-		#	print("\n****\nLayer L - {}".format(i))
-		#	print("Bias")
-		#	print(self.model.layers[i].get_weights()[1])
-		#	print("Weights")
-		#	print(self.model.layers[i].get_weights()[0])
+		index = len(self.model.layers) - 1
+		for _ in range(0, num):
+			if index < 0: break
+			print("\n****\nLayer L - {}".format(index))
+			print("Bias")
+			print(self.model.layers[index].get_weights()[1])
+			print("Weights")
+			print(self.model.layers[index].get_weights()[0])
+			index = index - 1
 
 	# performs a prediction based on the sample
 	# assume that the model is trained
@@ -218,37 +219,25 @@ class ANN():
 		
 		return result
 
+	def save_to_disk(self, model_name='test'):
+		# Save the parameters to disk
+		parameter_file = open(TRAINED_MODEL_DIR + model_name + '_parameters.csv', "w")
+		p = str(self.num_input) + ',' + str(self.num_hidden_layers) + ',' + str(self.nodes_per_hidden) + ',' + str(self.num_output) + ',' + self.hidden_activation + ',' + self.output_activation + ',' + str(self.initialize) + ',' + str(self.learning_rate) + ',' + self.loss_function
+		parameter_file.write(p)
+		parameter_file.close()
+
+		# Save the weights to disk
+		w = []
+		for i in range(0, len(self.model.layers)):
+			w.append(self.model.layers[i].get_weights())
+		w = np.array(w)
+		np.save(TRAINED_MODEL_DIR + model_name + '_weights', w)
+
 
 test = True
 
 if test:
-	net = ANN(p=Parameter(
-		# paramterize if you want
-		# see ANN_parameters.py
-	))
-
-	# TODO make this a general function for showin n layers or a specific layer
-	net.show_weights()
-
-	# The data after removing outliers
-	# data = outlier_method(RawData)
-
-	# Test and train split using encoded Y labels (vector of 0s with one 1)
-	# trainx, testx, trainy, testy = train_test_split(
-	# 	data.drop(columns=[dep]),
-	#	encode(data), # one hot encoder, see ANN_encode.py
-	#	test_size=0.34,
-	#	random_state=EXPERIMENT_SEED
-	#)
-
-	# Ordered pair for validating the ANN
-	# test_set = (testx, np.array(testy))
-
-	# Train the network
-	# returns history of training process, and a callback object that can extract information about the model at the end of events
-	# history, callback = net.train(
-	#	trainx,
-	#	trainy,
-	#	num_iter=NUM_EPOCHS,
-	#	testing=test_set
-	#)
+	# Load a trained model
+	net = ANN(trained_model='test_0')
+	# Show the last two layers of weights
+	net.show_weights(2)
