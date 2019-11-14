@@ -7,12 +7,10 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 import pandas as pd
 from tensorflow.keras.optimizers import SGD
-
-# Placeholder classes
-genres = ['Genre 1', 'Genre 2', 'Genre 3', 'Genre 4']
+from genres import classes
 
 DEF_INPUT_NODES = 8
-DEF_OUTPUT_NODES = len(genres)
+DEF_OUTPUT_NODES = len(classes)
 DEF_HIDDEN_LAYERS = 2
 DEF_NODES_PER_LAYER = 3
 DEF_HIDDEN_ACTIVATION = 'sigmoid'
@@ -20,33 +18,9 @@ DEF_OUTPUT_ACTIVATION = 'sigmoid'
 DEF_LEARNING_RATE = 10
 DEF_LOSS_FUNCTION = 'mean_squared_error'
 
-# Call back function used to extract info from the model
-# during trainingß
-class CallBack(keras.callbacks.Callback):
-	# add variables to keep track of parameters
-
-	def on_train_begin(self, logs={}):
-		return
-
-	def on_train_end(self, logs={}):
-		return
- 
-	def on_epoch_begin(self, logs={}):
-		return
- 
-	def on_epoch_end(self, epoch, logs={}):
-		return
- 
-	def on_batch_begin(self, batch, logs={}):
-		return
- 
-	def on_batch_end(self, batch, logs={}):
-		return
-
-
 # Make a parameter object to be passed to the constructor of the ANN
 # Interface for the .csv file
-class ANN_Parameter():
+class Parameter():
 	# interface
 	keys = [
 		'num_input',

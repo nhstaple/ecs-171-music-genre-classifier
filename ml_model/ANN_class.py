@@ -9,7 +9,31 @@ from tensorflow.keras.layers import Dense
 import pandas as pd
 from tensorflow.keras.optimizers import SGD
 
-from ANN_helpers import ANN_Parameter, CallBack
+from genres import classes
+from ANN_parameter import Parameter
+from ANN_callback import Callback
+from ANN_encode import encode
+from ANN_result import Result
+
+# ANN - Artificial Neural Network
+# constructor
+# ANN
+#   input:
+# 	- trained_model: name of the model. There should be a _paramters.csv and _weights.csv associated with the name
+# 	- p: the parameters. See ANN_Parameter.py for info on how to change the parameters
+# 	- init: should the model have it's weights initialized. TODO: set the initialization
+#
+# Methods
+#	X is a Pandas data frame, Y the dependent columumn in the dataframe, encode() is a onehotencoder see ANN_encode.py
+#	returns the history, and the callback (callback defined in ANN_callback.py)
+#	ANN.train(X, encode(Y), num_iter=100, testing=(), batch=-1):
+
+# 	Num is the number of layers to print starting from the last layer
+#	ANN.show_weights(num=1)
+
+#	Sample is a pandas dataframe with one row. That's how I made it for the homework but an array of arrays might work, too.
+#	Returns a result object, see ANN_result.py
+# 	ANN.predict(sample)
 
 class ANN():
 	# The constructor
@@ -17,8 +41,8 @@ class ANN():
 		self,
 		# File name of a .csv with a trained neural network
 		trained_model='',
-		# Default parameters
-		p=ANN_Parameter(),
+		# Default parameters, see ANN_parameters.py for class definition
+		p=Parameter(),
 		# Initialize the network's weights prior to training
 		init=False):
 
@@ -41,6 +65,7 @@ class ANN():
 			# w = read list of lists from file: str(trained_model) + "_weights.csv"
 			# m.set_weights(w)
 
+		# Set the parameters 
 		self.num_hidden_layers = p.parameters['num_hidden_layers']
 		self.nodes_per_hidden = p.parameters['nodes_per_hidden']
 		self.num_input = p.parameters['num_input']
@@ -114,7 +139,7 @@ class ANN():
 	# returns the history and weights
 	def train(self, X, Y, num_iter=100, testing=(), batch=-1):
 		# The callback object.
-		c = CallBack()
+		c = Callback()
 
 		# The accuracy record
 		hist = 0
@@ -135,7 +160,11 @@ class ANN():
 		return hist, c
 	
 	# Print the weights of the network
+	# TODO make the function print from the last layer
 	def show_weights(self, num=1):
+		if num < 1:
+			print('invalded parameter {}'.format(num))
+			return
 		## TODO make general
 		print("\n****\nLayer L - 3")
 		print("Bias")
@@ -149,29 +178,53 @@ class ANN():
 		# print(self.model.layers[2].get_weights()[1])
 		# print(self.model.layers[2].get_weights()[0])
 
+		# for i in range len(model.layers) - 1 to num:
+		#	print("\n****\nLayer L - {}".format(i))
+		#	print("Bias")
+		#	print(self.model.layers[i].get_weights()[1])
+		#	print("Weights")
+		#	print(self.model.layers[i].get_weights()[0])
+
 	# performs a prediction based on the sample
 	# assume that the model is trained
+	# returns an instance of Result(), see ANN_result.py
 	def predict(self, sample):
 		if not self.trained:
 			print("ERROR! Trained to predict on an untrained network.\nSample\n{0}".format(sample))
 			exit()
 
+		result = Result(
+			title='',
+			artist=''
+		)
+
 		prediction = self.model.predict(sample)[0]
 		print('Results')
 		max_category = [0, 0.00]
-		for i in range(0, 10):
+		max_hist = []
+		for i in range(0, len(classes)):
 			if max_category[1] < prediction[i]:
+				max_hist.append(max_category)
 				max_category = [i, prediction[i]]
-			print("{0}:\t{1:.4f}%".format(classes[i], 100 * prediction[i]))
-			
-		print('\n{0}\n\nMost likely: {1}'.format(sample, classes[max_category[0]]))
+
+		i = len(max_hist) - 1
+		result.res['prediction'] = dict()
+		while len(result.res['prediction']) < len(Result.interface['prediction']) and i >= 0:
+			top_result = max_hist[i]
+			index = top_result[0]
+			probability = top_result[1]
+			result.res['prediction'][classes[index]] = probability
+			i = i - 1
+		
+		return result
 
 
 test = True
 
 if test:
-	net = ANN(p=ANN_Parameter(
+	net = ANN(p=Parameter(
 		# paramterize if you want
+		# see ANN_parameters.py
 	))
 
 	# TODO make this a general function for showin n layers or a specific layer
@@ -183,7 +236,7 @@ if test:
 	# Test and train split using encoded Y labels (vector of 0s with one 1)
 	# trainx, testx, trainy, testy = train_test_split(
 	# 	data.drop(columns=[dep]),
-	#	encode(data), # one hot encoder
+	#	encode(data), # one hot encoder, see ANN_encode.py
 	#	test_size=0.34,
 	#	random_state=EXPERIMENT_SEED
 	#)
