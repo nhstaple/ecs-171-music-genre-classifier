@@ -9,147 +9,104 @@ from tensorflow.keras.layers import Dense
 import pandas as pd
 from tensorflow.keras.optimizers import SGD
 
-class CallBack(keras.callbacks.Callback):
-	# add variables to keep track of parameters
-
-	def on_train_begin(self, logs={}):
-		return
-
-	def on_train_end(self, logs={}):
-		return
- 
-	def on_epoch_begin(self, logs={}):
-		return
- 
-	def on_epoch_end(self, epoch, logs={}):
-		return
- 
-	def on_batch_begin(self, batch, logs={}):
-		return
- 
-	def on_batch_end(self, batch, logs={}):
-		return
-
-# Placeholder classes
-classes = ['Genre 1', 'Genre 2', 'Genre 3', 'Genre 4']
-
-# Make a parameter object to be passed to the constructor of the ANN
-def make_p(
-		num_input=10,
-		num_hidden_layers=2,
-		nodes_per_hidden=3,
-		num_output=len(classes),
-		hidden_activation='sigmoid',
-		output_activation='sigmoid',
-		initialize=True,
-		learning_rate=10,
-		loss_function='mean_squared_error'):
-
-	parameters = {
-		'num_input': num_input,
-		'num_hidden_layers': num_hidden_layers,
-		'nodes_per_hidden': nodes_per_hidden,
-		'num_output': num_output,
-		'hidden_activation': hidden_activation,
-		'output_activation': output_activation,
-		'initialize': initialize,
-		'learning_rate':learning_rate,
-		'loss_function': loss_function
-	}
-
-	return parameters
+from ANN_helpers import ANN_Parameter, CallBack
 
 class ANN():
+	# The constructor
 	def __init__(
 		self,
-		p=dict(),
-		num_in=10,
-		num_hidden=2,
-		nodes_per_hid=3,
-		num_out=4,
-		hidden_a='sigmoid',
-		output_a='sigmoid',
-		init=False,
-		lamb=10,
-		loss_func='mean_squared_error'):
+		# File name of a .csv with a trained neural network
+		trained_model='',
+		# Default parameters
+		p=ANN_Parameter(),
+		# Initialize the network's weights prior to training
+		init=False):
 
-		# If the network was passed a paramter object
-		if len(p):
-			num_in = p['num_input']
-			num_in = p['num_input']
-			num_hidden = p['num_hidden_layers']
-			nodes_per_hid = p['nodes_per_hidden']
-			num_out = p['num_output']
-			hidden_a = p['hidden_activation']
-			output_a = p['output_activation']
-			init = p['initialize']
-			lamb = p['learning_rate']
-			loss_func = p['loss_function']
+		self.trained = False
+		# TODO Check if the user provided an already trained model
+		if trained_model != '':
+			# Set the paramters
+			self.trained = True
+			# parameter_frame = pd.read_csv(
+			# 	str(trained_model) + '_paramters.csv',
+			# 	col=ANN_Parameter.keys
+			# )
+			# Set the hyperparemters for the constructorß
+			# for feature in parameter_frame:
+			#	p.parameters[feature] = parameter_frame[feature].values()[0]
+			#
+			# TODO
+			# Set the weights 
+			# w := [ [], [] , ..., [] ]
+			# w = read list of lists from file: str(trained_model) + "_weights.csv"
+			# m.set_weights(w)
 
-		self.hidden = num_hidden
-		self.nodehiddden = nodes_per_hid
-		self.output = num_out
-		self.activ = hidden_a
-		self.init = init
-		self.input = num_in
+		self.num_hidden_layers = p.parameters['num_hidden_layers']
+		self.nodes_per_hidden = p.parameters['nodes_per_hidden']
+		self.num_input = p.parameters['num_input']
+		self.num_output = p.parameters['num_output']
+		self.hidden_activation = p.parameters['hidden_activation']
+		self.output_activation = p.parameters['output_activation']
+		self.initialize = p.parameters['initialize']
+		self.learning_rate = p.parameters['learning_rate']
+		self.loss_function = p.parameters['loss_function']
 
 		m = Sequential()
 		# If init is set then initialize the weights and biases
 		if init:
 			# First hidden layer connected to input layer
 			m.add(Dense(
-				input_dim=num_in,
-				units=nodes_per_hid,
-				activation=hidden_a,
+				input_dim=self.num_input,
+				units=self.nodes_per_hidden,
+				activation=self.hidden_activation,
 				kernel_initializer='zeros',
 				bias_initializer='zeros'
 			))
 			
 			# Remaining hidden layers
-			for _ in range(1, num_hidden):
+			for _ in range(1, self.num_hidden_layers):
 				m.add(Dense(
-					input_dim=nodes_per_hid,
-					units=nodes_per_hid,
-					activation=hidden_a,
+					input_dim=self.nodes_per_hidden,
+					units=self.nodes_per_hidden,
+					activation=self.hidden_activation,
 					kernel_initializer='zeros',
 					bias_initializer='zeros'
 				))
 
-			if num_hidden == 1:
+			if self.num_hidden_layers == 1:
 				m.add(Dense(
-					input_dim=num_hidden,
-					units=num_out,
-					activation=output_a,
+					input_dim=self.num_hidden_layers,
+					units=self.num_output,
+					activation=self.output_activation,
 					kernel_initializer='zeros',
 					bias_initializer='zeros'
 				))
 			else:
 				# Last hidden layer that leads to output Layer
 				m.add(Dense(
-					units=num_out,
-					activation=output_a,
+					units=self.num_output,
+					activation=self.output_activation,
 					kernel_initializer='zeros',
 					bias_initializer='zeros'
 				))
 
-			## TODO set desired weights to 1
-
 		# Else use a random distribution to initalize (implicit)
 		else:
 			# First hidden layer
-			m.add(Dense(nodes_per_hid, input_dim=num_in, activation=hidden_a))
+			m.add(Dense(self.nodes_per_hidden, input_dim=self.num_input, activation=self.hidden_activation))
 			
 			# Remaining hidden layers
-			for _ in range(1, num_hidden):
-				m.add(Dense(nodes_per_hid, activation=hidden_a))
+			for _ in range(1, self.num_hidden_layers):
+				m.add(Dense(self.nodes_per_hidden, activation=self.hidden_activation))
 			
-			if num_hidden == 1:
-				m.add(Dense(num_out, input_dim=nodes_per_hid, activation=output_a))
+			if self.num_hidden_layers == 1:
+				m.add(Dense(self.num_output, input_dim=self.nodes_per_hidden, activation=self.output_activation))
 			else:
 				# Last hidden layer that leads to output
-				m.add(Dense(num_out, activation=output_a))
+				m.add(Dense(self.num_output, activation=self.output_activation))
 
-		m.compile(loss=loss_func, optimizer=SGD(lr=lamb), metrics=['accuracy'])
+		m.compile(loss=self.loss_function, optimizer=SGD(lr=self.learning_rate), metrics=['accuracy'])
+
 		self.model = m
 
 	# trains the network on the provided parameters
@@ -173,6 +130,8 @@ class ANN():
 		else:
 			hist = self.model.fit(X, np.array(Y), epochs=num_iter, callbacks=[c], validation_data=testing, batch_size=batch)
 
+		self.trained = True
+
 		return hist, c
 	
 	# Print the weights of the network
@@ -193,6 +152,10 @@ class ANN():
 	# performs a prediction based on the sample
 	# assume that the model is trained
 	def predict(self, sample):
+		if not self.trained:
+			print("ERROR! Trained to predict on an untrained network.\nSample\n{0}".format(sample))
+			exit()
+
 		prediction = self.model.predict(sample)[0]
 		print('Results')
 		max_category = [0, 0.00]
@@ -207,7 +170,7 @@ class ANN():
 test = True
 
 if test:
-	net = ANN(p=make_p(
+	net = ANN(p=ANN_Parameter(
 		# paramterize if you want
 	))
 
@@ -230,7 +193,7 @@ if test:
 
 	# Train the network
 	# returns history of training process, and a callback object that can extract information about the model at the end of events
-	# h, w = net.train(
+	# history, callback = net.train(
 	#	trainx,
 	#	trainy,
 	#	num_iter=NUM_EPOCHS,
