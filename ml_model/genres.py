@@ -1,11 +1,24 @@
 # genres.py
 
-
-NUM_GENRES = 16
-
 # Genres
-classes = []
-for i in range(0, NUM_GENRES):
-	classes.append(
-		"Genre {0}".format(int(i + 1))
-	)
+classes = [
+	'Experimental',
+	'Electronic',
+	'Rock',
+	'Instrumental',
+	'Pop',
+	'Folk',
+	'Hip-Hop',
+	'International',
+	'Jazz',
+	'Classical',
+	'Country',
+	'Spoken',
+	'Blues',
+	'Soul-RnB',
+	'Old-Time / Historic',
+	'Easy Listening'
+]
+
+
+NUM_GENRES = len(classes)

@@ -63,6 +63,8 @@ class ANN():
 				p.parameters[feature] = parameter_frame[feature][0]
 			print('\n\n')
 
+		print("built using:\n{0}\n".format(p.parameters))
+
 		# Set the parameters that are visible outside of the class's methods
 		self.num_hidden_layers 	= p.parameters['num_hidden_layers']
 		self.nodes_per_hidden 	= p.parameters['nodes_per_hidden']
@@ -148,7 +150,7 @@ class ANN():
 	# trains the network on the provided parameters
 	# if testing is empty then no validation is done
 	# returns the history and weights
-	def train(self, X, Y, num_iter=100, testing=(), batch=-1):
+	def train(self, X, Y, num_iter=100, testing=(), batch=1):
 		# The callback object.
 		c = Callback()
 
@@ -200,22 +202,29 @@ class ANN():
 		)
 
 		prediction = self.model.predict(sample)[0]
-		print('Results')
-		max_category = [0, 0.00]
+		print('Showing Results for Prediction')
+
+		max_category = {
+			'index': 0,
+			'value': -1.00
+		}
+
 		max_hist = []
 		for i in range(0, len(classes)):
-			if max_category[1] < prediction[i]:
-				max_hist.append(max_category)
-				max_category = [i, prediction[i]]
+			# string = str(classes[i]) + ': ' + str(prediction[i])
+			# print(string)
+			max_category['index'] = i
+			max_category['value'] = prediction[i]
+			max_hist.append(max_category)
+			max_category = max_category.copy()
 
-		i = len(max_hist) - 1
+		max_hist = sorted(max_hist, key = lambda i: i['value'],reverse=True) 
+
 		result.res['prediction'] = dict()
-		while len(result.res['prediction']) < len(Result.interface['prediction']) and i >= 0:
-			top_result = max_hist[i]
-			index = top_result[0]
-			probability = top_result[1]
+		for i in range(0, 8):
+			index = max_hist[i]['index']
+			probability = max_hist[i]['value']
 			result.res['prediction'][classes[index]] = probability
-			i = i - 1
 		
 		return result
 
@@ -234,7 +243,7 @@ class ANN():
 		np.save(TRAINED_MODEL_DIR + model_name + '_weights', w)
 
 
-test = True
+test = False
 
 if test:
 	# Load a trained model

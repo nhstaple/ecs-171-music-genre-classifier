@@ -4,14 +4,14 @@
 ## A onehotencoder
 
 import numpy as np
-from genres import classes
+from genres import classes, NUM_GENRES
 
 # TODO replace with the actual feature name that is the genre
-dep = 'genre'
+dep = 'genre_top'
 
 # decodes an encoding 
 def decode(enc):
-	for i in range (0, 10):
+	for i in range (0, NUM_GENRES):
 		if enc[i]:
 			return classes[i]
 	print("FATAL ERROR: a sample's class cannot be dencoded: {}".format(enc))
@@ -24,8 +24,8 @@ def decode(enc):
 def encode(data, string=False):
 	Y = []
 	if string:
-		encoding = np.zeros(10)
-		for i in range(0, len(classes)):
+		encoding = np.zeros(NUM_GENRES)
+		for i in range(0, NUM_GENRES):
 			if data[dep] == classes[i]:
 				encoding[i] = 1
 				Y.append(encoding) ; break
@@ -34,8 +34,8 @@ def encode(data, string=False):
 				exit()
 		return Y
 	for _, sample in data.iterrows():
-		encoding = np.zeros(10)
-		for i in range(0, len(classes)):
+		encoding = np.zeros(NUM_GENRES)
+		for i in range(0, NUM_GENRES):
 			if sample[dep] == classes[i]:
 				encoding[i] = 1
 				Y.append(encoding) ; break

@@ -18,6 +18,7 @@ class featRead:
 				self.tableDF['track'] = tracks['track'].copy()
 				self.tableDF['artist'] = tracks['artist'].copy()
 				self.tableDF['set'] = tracks['set'].copy()
+				# self.tableDF['genre_top'] = tracks['genre_top'].copy()
 
 			elif(key == 'echonest.csv'):
 				echonest = pd.read_csv('echonest.csv', index_col=0, header=[0, 1, 2])
@@ -34,7 +35,7 @@ class featRead:
 				self.tableDF['genres'] = genres
 			else:
 				print(key + ' is not a vaild csv file name')
-				break;
+				break
 
 	#lists all of the data frames names contained by the featRead object
 	def listFrames(self):
