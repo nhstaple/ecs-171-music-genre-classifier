@@ -192,6 +192,7 @@ class ANN():
 	# assume that the model is trained
 	# returns an instance of Result(), see ANN_result.py
 	def predict(self, sample):
+		num_predictions = 16
 		if not self.trained:
 			print("ERROR! Trained to predict on an untrained network.\nSample\n{0}".format(sample))
 			exit()
@@ -202,7 +203,7 @@ class ANN():
 		)
 
 		prediction = self.model.predict(sample)[0]
-		print('Showing Results for Prediction')
+		# print('Showing Results for Prediction')
 
 		max_category = {
 			'index': 0,
@@ -221,7 +222,7 @@ class ANN():
 		max_hist = sorted(max_hist, key = lambda i: i['value'],reverse=True) 
 
 		result.res['prediction'] = dict()
-		for i in range(0, 8):
+		for i in range(0, num_predictions):
 			index = max_hist[i]['index']
 			probability = max_hist[i]['value']
 			result.res['prediction'][classes[index]] = probability
@@ -241,6 +242,10 @@ class ANN():
 			w.append(self.model.layers[i].get_weights())
 		w = np.array(w)
 		np.save(TRAINED_MODEL_DIR + model_name + '_weights', w)
+
+		f1 = TRAINED_MODEL_DIR + model_name + '_parameters.csv'
+		f2 = TRAINED_MODEL_DIR + model_name + '_weights.npy'
+		print('Saved\n\t{0}\n\t{1}\n'.format(f1, f2))
 
 
 test = False
