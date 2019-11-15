@@ -1,0 +1,8 @@
+Classification rate for top 1:	0.493
+Classification rate for top 2:	0.684
+Classification rate for top 3:	0.802
+Classification rate for top 4:	0.871
+Classification rate for top 5:	0.923
+Classification rate for top 6:	0.964
+Classification rate for top 7:	0.986
+Classification rate for top 8:	1.0

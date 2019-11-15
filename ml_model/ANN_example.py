@@ -13,7 +13,7 @@ import random
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
 
-g = input("Load a model from disk? model? (y/n)\t") 
+g = input("Load a model from disk? (y/n)\t") 
 MODEL_NAME = ''
 
 if g == 'y' or g == 'Y':
