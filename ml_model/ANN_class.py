@@ -130,7 +130,9 @@ class ANN():
 				# Last hidden layer that leads to output
 				m.add(Dense(self.num_output, activation=self.output_activation))
 
-		m.compile(loss=self.loss_function, optimizer=SGD(lr=self.learning_rate), metrics=['accuracy'])
+		# m.compile(loss=self.loss_function, optimizer=SGD(lr=self.learning_rate), metrics=['accuracy'])
+		m.compile(loss=self.loss_function, optimizer='adam', metrics=['categorical_accuracy'])
+
 
 		# If the model is being loaded from disk then load the weights
 		if trained_model != '':

@@ -13,8 +13,11 @@ import random
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
 
-# TODO rename to your name
+g = input("Load a model from disk? model? (y/n)\t") 
 MODEL_NAME = ''
+
+if g == 'y' or g == 'Y':
+	MODEL_NAME = input('Name of your model: \t')
 
 # Load the Data Management's interface
 import sys
@@ -24,6 +27,8 @@ import CSVInterface
 print('Initializing...')
 # reads the data from the csv
 reader = CSVInterface.featRead()
+
+input('Press enter to continue')
 
 # Data stuff
 # D = { X | Y }
@@ -87,17 +92,18 @@ else:
 	net = ANN(p=Parameter(
 		num_input=len(sample),
 		num_hidden_layers=2,
-		nodes_per_hidden=2,
+		nodes_per_hidden=16,
 		num_output=NUM_GENRES,
 		hidden_activation='relu',
 		output_activation='softmax',
 		initialize=False,
-		learning_rate=10,
 		loss_function='categorical_crossentropy'
 	))
 
 	# Show the weights
 	# net.show_weights(net.num_hidden_layers + 1)
+
+	input('Press enter to train the model...')
 
 	# Train the network
 	# returns history of training process, and a callback object that can
@@ -105,9 +111,9 @@ else:
 	history, callback = net.train(
 		trainx,
 		trainy,
-		num_iter=1500,
+		num_iter=500,
 		testing=(testx, np.array(testy)),
-		batch=1000
+		batch=100
 	)
 
 # Set the sample to a specific value. I recommend producing a synthetic sample
@@ -121,31 +127,37 @@ else:
 # to send to the front end!
 
 # Let's see how accurate the model is for the top @num_to_check many categories
-# keeps track of number of matches
-matches = 0
 # the number of test samples to predict
-samples = 1000
+samples = 0
 # the number of results to check
-num_to_check = 4
+num_to_check = 8
 
-for i in range(0, samples):
-	sample = testx[i].copy()
-	result = net.predict(pd.DataFrame([sample]))
+top_predictions = ''
 
-	counter = 0
-	sample_category = decode(testy[i])
+samples = int(input('Begin prediction on test set. Number of samples: '))
+for num in range(1, num_to_check + 1):
+	# keeps track of number of matches
+	matches = 0
+	for i in range(0, samples):
+		sample = testx[i].copy()
+		result = net.predict(pd.DataFrame([sample]))
 
-	for genre in result.res['prediction']:
-		if genre == sample_category: matches = matches + 1
-		if counter > num_to_check: break
-		# print("{0}: {1}".format(genre, result.res['prediction'][genre]))
-		counter = counter + 1
+		counter = 0
+		sample_category = decode(testy[i])
 
-print('Classification rate for top {0}:\t{1}'.format(num_to_check, matches / samples))
+		for genre in result.res['prediction']:
+			if genre == sample_category and counter < num:
+				matches = matches + 1
+			# print("{0}: {1}".format(genre, result.res['prediction'][genre]))
+			counter = counter + 1
+	top_predictions = top_predictions + 'Classification rate for top {0}:\t{1}\n'.format(num, matches / samples)
+
+print(top_predictions)
 
 # For the ML team: copy and paste this file and name it one word, <your name>
 # ANN_<your name>.py
-g = input("Save model, {}? (y/n)\t".format(MODEL_NAME)) 
-if g == 'Y' or g == 'y':
-	g = input('model name: ')
-	net.save_to_disk(g)
+if MODEL_NAME == '':
+	g = input("Save model? (y/n)\t") 
+	if g == 'Y' or g == 'y':
+		g = input('model name: ')
+		net.save_to_disk(g)
