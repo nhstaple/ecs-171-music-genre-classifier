@@ -10,27 +10,31 @@ from ANN_class import ANN
 from ANN_encode import encode, decode
 import random
 
+# TODO change to a list of features
+indepent_features = 'mfcc'
+
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
 
+# Load model or train model?
 g = input("Load a model from disk? (y/n)\t") 
 MODEL_NAME = ''
-
 if g == 'y' or g == 'Y':
 	MODEL_NAME = input('Name of your model: \t')
+elif g != 'n' or g != 'N':
+	MODEL_NAME = g
+	print('Model name: {}\n'.format(MODEL_NAME))
 
+## Process Data
 # Load the Data Management's interface
 import sys
 sys.path.append('../DataManagement/')
 import CSVInterface
 
-print('Initializing...')
+print('Initializing Data Management interface...')
 # reads the data from the csv
 reader = CSVInterface.featRead()
 
-input('Press enter to continue')
-
-# Data stuff
 # D = { X | Y }
 # D[X][Y]
 D = {}
@@ -56,16 +60,18 @@ D['Y'] = {
 # The data after removing outliers
 # data = outlier_method(RawData)
 
-# TODO change to a list of features
-indepent_features = 'mfcc'
-
+print('Constructing datasets')
+print('X')
 # the ind vars
 X =  pd.DataFrame(D['X']['small'][
 		indepent_features]
 	)
+
+print('Y')
 # the dependent var
 Y = pd.DataFrame(D['Y']['small'], columns=['genre_top'])
 
+print('train/test split')
 # Test and train split using encoded Y labels (vector of 0s with one 1)
 trainx, testx, trainy, testy = train_test_split(
 	X.values,
@@ -75,10 +81,12 @@ trainx, testx, trainy, testy = train_test_split(
 )
 
 sample = trainx[0].copy()
+print('Data done!\n\n********')
 
-print('\n\nBuilding neural net')
+## Build the neural network
+print('\nBuilding neural net')
 print('input : {}'.format(len(sample)))
-print('output: {}'.format(NUM_GENRES))
+print('output: {}\n'.format(NUM_GENRES))
 
 net = 0
 history = 0
@@ -126,22 +134,25 @@ else:
 # add missing information to ANN_result.Result, then adds it to a wrapper
 # to send to the front end!
 
+## Predicting
 # Let's see how accurate the model is for the top @num_to_check many categories
 # the number of test samples to predict
 samples = 0
+# The number of test samples to check
+samples = int(input('Begin prediction on test set.\nNumber of samples:\t'))
 # the number of results to check
-num_to_check = 8
+num_to_check = int(input('Number of predictions to check:\t'))
 
-top_predictions = ''
-
-samples = int(input('Begin prediction on test set. Number of samples: '))
+print('\n')
+top_predictions = '\nResults\n'
 for num in range(1, num_to_check + 1):
+	print('Computing top {}'.format(num))
 	# keeps track of number of matches
 	matches = 0
 	for i in range(0, samples):
-		sample = testx[i].copy()
-		result = net.predict(pd.DataFrame([sample]))
-
+		sample = np.array(testx[i].copy())
+		sample = pd.DataFrame([sample], columns=X.columns)
+		result = net.predict(sample.values)
 		counter = 0
 		sample_category = decode(testy[i])
 
@@ -149,11 +160,13 @@ for num in range(1, num_to_check + 1):
 			if genre == sample_category and counter < num:
 				matches = matches + 1
 			# print("{0}: {1}".format(genre, result.res['prediction'][genre]))
-			counter = counter + 1
-	top_predictions = top_predictions + 'Classification rate for top {0}:\t{1}\n'.format(num, matches / samples)
+			if counter >= num: break
+			else: counter = counter + 1
+	top_predictions = top_predictions + 'Classification for top {0} predictions:\t{1}\n'.format(num, matches / samples)
 
 print(top_predictions)
 
+## Save the Model
 # For the ML team: copy and paste this file and name it one word, <your name>
 # ANN_<your name>.py
 if MODEL_NAME == '':

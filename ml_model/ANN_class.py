@@ -51,7 +51,7 @@ class ANN():
 		self.trained = False
 		# Check if the user provided an already trained model and set the hyperparameters
 		if trained_model != '':
-			print('Loading a model from disk!')
+			print('Loading a model from disk!\nParameters loaded from disk:')
 			parameter_frame = pd.read_csv(
 				TRAINED_MODEL_DIR + str(trained_model) + '_parameters.csv',
 			 	names=Parameter.keys
@@ -61,9 +61,8 @@ class ANN():
 				string = str(feature) + ': ' + str(parameter_frame[feature][0])
 				print(string)
 				p.parameters[feature] = parameter_frame[feature][0]
-			print('\n\n')
 
-		print("built using:\n{0}\n".format(p.parameters))
+		print("\nbuilt using:\n{0}\n".format(p.parameters))
 
 		# Set the parameters that are visible outside of the class's methods
 		self.num_hidden_layers 	= p.parameters['num_hidden_layers']
@@ -136,7 +135,7 @@ class ANN():
 
 		# If the model is being loaded from disk then load the weights
 		if trained_model != '':
-			print('Loading trained weights!')
+			print('\nLoading trained weights!')
 			# Load weights from disk
 			w = np.load(TRAINED_MODEL_DIR + str(trained_model) + "_weights.npy", allow_pickle=True)
 
@@ -148,6 +147,7 @@ class ANN():
 			self.trained = True
 
 		self.model = m
+		print('ANN() constructor finished\n********\n')
 
 	# trains the network on the provided parameters
 	# if testing is empty then no validation is done
