@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+
 //create and export ajax base function:
 export function createAJAXRequest(method, url) {
     let xhr = new XMLHttpRequest();
@@ -17,14 +19,14 @@ return vars;
 //ajax grabs the info from the url
 function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
     //for backend, find url we need (url1 is temporary):
-    let url1 = "http://localhost:8080/song/";
+    let url1 = "/song/";
     let url2 = url1 + song;
+    console.log(url2); //JD: for testing
+
+
     //sending song title to server and wait to get genre back
     let xhr = createAJAXRequest('GET', url2);
 
-    console.log(url2);// JD: for testing
-    console.log(xhr);// JD: for testing
-    console.log(xhr.onload);// JD: for testing
     //checking for errors
     if (!xhr) {
 	     alert('CORS not supported');
@@ -32,19 +34,15 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
     }
     //here is the callback function that we get the response in
     xhr.onload = function() {
-      //grab the response from swe team
-	     let responseStr = xhr.responseText;  // get the JSON string
-       console.log(responseStr); //to test
-       
-       let object = JSON.parse(responseStr);  // turn it into an object
+        //grab the response from swe team
+        let responseStr = xhr.responseText;  // get the JSON string
+        // console.log(responseStr); //to test
 
-       console.log(object.songGenre);// JD: for testing
-       //place the response on the screen
-       //for now just place on Landing Page, this is a html paragraph dom element
-       let temporaryResponse = "Sent Request " + object.songGenre
-       console.log(temporaryResponse);// JD: for testing
-       document.getElementById('placeGenreHere').textContent = temporaryResponse;
-	     //console.log(object); //to test
+        let object = JSON.parse(responseStr);  // turn it into an object
+
+        //place the response on the screen
+        document.getElementById('placeGenreHere').textContent = "songGenre: " + object.songGenre;
+        //console.log(object); //to test
     }
     xhr.send();
 }
