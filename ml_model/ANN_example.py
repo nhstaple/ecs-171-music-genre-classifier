@@ -21,7 +21,9 @@ g = input("Load a model from disk? (y/n)\t")
 MODEL_NAME = ''
 if g == 'y' or g == 'Y':
 	MODEL_NAME = input('Name of your model: \t')
-elif g != 'n' or g != 'N':
+elif g == 'n' or g == 'n':
+	print('Generating a new model')
+else:
 	MODEL_NAME = g
 	print('Model name: {}\n'.format(MODEL_NAME))
 
