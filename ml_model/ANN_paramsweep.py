@@ -103,11 +103,17 @@ def make_and_train_model(h_layers, h_nodes, h_activation, o_activation, loss):
     print("\nMade and Trained model with {} layers and {} nodes".format(h_layers, h_nodes))
     return net
 
+
+startLayers = int(input("Enter the starting # of layers: "))
+endLayers = int(input("Enter the last # of layers: "))
+startNodes = int(input("Enter the start # of nodes: "))
+endNodes = int(input("Enter the end # of nodes: "))
+
 #dataframe to hold results of grid search
-grid_vect = np.empty([4,11])
+grid_vect = np.empty([(endLayers-startLayers+1),(endNodes-startNodes+1)])
 # grid search for num of hidden layers and num of hidden nodes per layer
-for num_layers in range(1,5):
-    for num_nodes in range(8, 19):
+for num_layers in range(startLayers,endLayers+1):
+    for num_nodes in range(startNodes, endNodes+1):
 
         # make and train the model
         model = make_and_train_model(num_layers, num_nodes, "relu", "softmax", "categorical_crossentropy")
@@ -130,7 +136,6 @@ for num_layers in range(1,5):
                 for genre in result.res['prediction']:
                     if genre == sample_category and counter < num:
                         matches = matches + 1
-                    # print("{0}: {1}".format(genre, result.res['prediction'][genre]))
                     if counter >= num:
                         break
                     else:
@@ -139,7 +144,7 @@ for num_layers in range(1,5):
                 'Classification for top {0} predictions:\t{1}\n'.format(
                     num, matches / SAMPLES_TO_PREDICT)
         print(top_predictions)
-        grid_vect[num_layers-1][num_nodes-8] = (matches / SAMPLES_TO_PREDICT)
+        grid_vect[num_layers-startLayers][num_nodes-startNodes] = (matches / SAMPLES_TO_PREDICT)
 
-grid = pd.DataFrame(grid_vect, index = range(1,5), columns = range(8, 19))
+grid = pd.DataFrame(grid_vect, index = range(startLayers,endLayers+1), columns = range(startNodes, endNodes+1))
 print(grid)
