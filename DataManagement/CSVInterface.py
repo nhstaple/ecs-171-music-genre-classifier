@@ -2,6 +2,8 @@
 import pandas as pd
 from sklearn.model_selection import KFold
 
+# import sys
+# sys.path.append('../')
 
 class featRead:
 
@@ -10,12 +12,12 @@ class featRead:
 		for key in csvs:
 			if(key == 'features.csv'):
 				print('Reading features.csv')
-				features = pd.read_csv('features.csv', index_col=0, header=[0,1,2])
+				features = pd.read_csv('../features.csv', index_col=0, header=[0,1,2])
 				self.tableDF['features'] = features
 
 			elif(key == 'tracks.csv'):
 				print('Reading tracks.csv')
-				tracks = pd.read_csv('tracks.csv', index_col=0, header=[0, 1])
+				tracks = pd.read_csv('../tracks.csv', index_col=0, header=[0, 1])
 				self.tableDF['album'] = tracks['album'].copy()
 				self.tableDF['track'] = tracks['track'].copy()
 				self.tableDF['artist'] = tracks['artist'].copy()
@@ -23,7 +25,7 @@ class featRead:
 
 			elif(key == 'echonest.csv'):
 				print('Reading echonest.csv')
-				echonest = pd.read_csv('echonest.csv', index_col=0, header=[0, 1, 2])
+				echonest = pd.read_csv('../echonest.csv', index_col=0, header=[0, 1, 2])
 				echo_audio_feat = echonest.iloc[:, echonest.columns.get_level_values(1) == 'audio_features'].copy()
 				echo_meta_data = echonest.iloc[:, echonest.columns.get_level_values(1) == 'metadata'].copy()
 				echo_social_feat = echonest.iloc[:, echonest.columns.get_level_values(1) == 'social_features'].copy()
@@ -34,7 +36,7 @@ class featRead:
 
 			elif(key == 'genres.csv'):
 				print('Reading genres.csv')
-				genres = pd.read_csv('genres.csv', index_col=0)
+				genres = pd.read_csv('../genres.csv', index_col=0)
 				self.tableDF['genres'] = genres
 			else:
 				print(key + ' is not a vaild csv file name')
