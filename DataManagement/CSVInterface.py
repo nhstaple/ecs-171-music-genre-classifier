@@ -78,6 +78,14 @@ class featRead:
 			subset = subset.loc[(subset['subset'] == sub) | (subset['subset'] == 'medium') | (subset['subset'] == 'small')]
 			newDF = frame[frame.index.isin(subset.index)].copy()
 			return newDF
+		elif(sub == 'cleanLarge'):
+			genres = self.tableDF['track']
+			genres = genres['genre_top']
+			#full set genre_top not complete
+			genres = genres.dropna()
+
+			newDF = frame[frame.index.isin(genres.index)].copy()
+			return newDF
 
 		else:
 			print('Not a vaild set type')
