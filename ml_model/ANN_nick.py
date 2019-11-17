@@ -11,7 +11,7 @@ from ANN_encode import encode, decode
 import random
 
 # TODO change to a list of features
-indepent_features = 'mfcc'
+indepent_features = ['mfcc', 'spectral_contrast']
 
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
