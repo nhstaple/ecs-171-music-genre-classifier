@@ -1,0 +1,8 @@
+Classification for top 1 predictions:	0.501
+Classification for top 2 predictions:	0.7
+Classification for top 3 predictions:	0.814
+Classification for top 4 predictions:	0.875
+Classification for top 5 predictions:	0.924
+Classification for top 6 predictions:	0.964
+Classification for top 7 predictions:	0.99
+Classification for top 8 predictions:	1.0

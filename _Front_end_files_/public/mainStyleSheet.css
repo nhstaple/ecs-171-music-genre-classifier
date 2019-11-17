@@ -1,0 +1,36 @@
+main {
+  min-height: 100vh
+}
+div.pageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: inherit;
+  flex-direction: column;
+  background-color: #667D9D
+}
+#LandingPage {
+  font-size: 40px;
+  weight: bold;
+  color: #002855;
+  margin:40px;
+  margin-top:-100px;
+}
+#textInput {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+#songInputP {
+  font-size: 50px;
+  color: #E9CC66;
+  margin-right: 20px;
+}
+#buttonStyle {
+  font-size: 25px;
+  margin-left: 10px;
+  margin-right: 25px;
+  background-color:#E5E9EF;
+  color:#002855;
+  height: 45px;
+}
