@@ -9,10 +9,12 @@ class featRead:
 		self.tableDF = {}
 		for key in csvs:
 			if(key == 'features.csv'):
+				print('Reading features.csv')
 				features = pd.read_csv('features.csv', index_col=0, header=[0,1,2])
 				self.tableDF['features'] = features
 
 			elif(key == 'tracks.csv'):
+				print('Reading tracks.csv')
 				tracks = pd.read_csv('tracks.csv', index_col=0, header=[0, 1])
 				self.tableDF['album'] = tracks['album'].copy()
 				self.tableDF['track'] = tracks['track'].copy()
@@ -20,6 +22,7 @@ class featRead:
 				self.tableDF['set'] = tracks['set'].copy()
 
 			elif(key == 'echonest.csv'):
+				print('Reading echonest.csv')
 				echonest = pd.read_csv('echonest.csv', index_col=0, header=[0, 1, 2])
 				echo_audio_feat = echonest.iloc[:, echonest.columns.get_level_values(1) == 'audio_features'].copy()
 				echo_meta_data = echonest.iloc[:, echonest.columns.get_level_values(1) == 'metadata'].copy()
@@ -30,6 +33,7 @@ class featRead:
 
 
 			elif(key == 'genres.csv'):
+				print('Reading genres.csv')
 				genres = pd.read_csv('genres.csv', index_col=0)
 				self.tableDF['genres'] = genres
 			else:
@@ -78,6 +82,14 @@ class featRead:
 			subset = subset.loc[(subset['subset'] == sub) | (subset['subset'] == 'medium') | (subset['subset'] == 'small')]
 			newDF = frame[frame.index.isin(subset.index)].copy()
 			return newDF
+		elif(sub == 'cleanLarge'):
+			genres = self.tableDF['track']
+			genres = genres['genre_top']
+			#full set genre_top not complete
+			genres = genres.dropna()
+
+			newDF = frame[frame.index.isin(genres.index)].copy()
+			return newDF
 
 		else:
 			print('Not a vaild set type')
@@ -104,6 +116,4 @@ class featRead:
 	def mergeFrames(self, f1, f2):
 		combined = pd.merge(f1, f2, on='track_id', how='outer')
 		return combined
-
-
 
