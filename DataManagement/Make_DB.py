@@ -6,24 +6,16 @@ conn = sqlite3.connect('features.db')
 #new_conn = 
 engine = create_engine("sqlite://", echo=False)
 
-features_db = pd.read_csv('fma_metadata/features.csv')
+features_db = pd.read_csv('fma_metadata/features.csv', index_col = 0, header = [0,1,2])
+tracks_db = pd.read_csv('fma_metadata/tracks.csv', index_col = 0, header = [0,1])
+#features_db = pd.read_pickle('features.pkl')
+features_db.columns = [''.join(col).strip() for col in features_db.columns.values]
+tracks_db.columns = [''.join(col).strip() for col in tracks_db.columns.values]
+final_db = pd.merge(features_db, tracks_db[['trackgenre_top']], on = 'track_id', how = 'left')
+#final_db.rename(index={0: "track_id"})
 
-column_names = []
-for(columnName, columnData) in features_db.iteritems():
-	s = columnData.values[0]
-	d = columnData.values[1]
-	
-	type_feature = ''.join([i for i in s if not i.isdigit()])
-	new_column_name = columnName  + type_feature+"." + d
-	columnName = new_column_name
-	column_names.append(columnName)
+final_db.to_csv('make_db.csv')
 
-features_db.columns = column_names
 
-features_db = features_db.rename(columns ={'featurestatistics.number': 'track_id'})
-features_db = features_db.iloc[3:]
-features_db.to_csv('updated_features.csv')
 
-#features_db.to_sql('features', con = engine)
-#print(engine.execute("SELECT * FROM features WHERE track_id == 2").fetchall())
 
