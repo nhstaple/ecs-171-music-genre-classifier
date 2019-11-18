@@ -18,7 +18,7 @@ from ANN_result import Result
 TRAINED_MODEL_DIR = './trained_models/'
 
 import sys
-sys.path.append('../backend/')
+sys.path.append('../Back_End/')
 import song_result_interface
 
 # ANN - Artificial Neural Network
