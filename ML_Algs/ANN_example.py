@@ -30,8 +30,8 @@ else:
 ## Process Data
 # Load the Data Management's interface
 import sys
-sys.path.append('../backend/')
-sys.path.append('../DataManagement/')
+sys.path.append('../Back_End/')
+sys.path.append('../Data_Management/')
 import CSVInterface
 import song_result_interface
 

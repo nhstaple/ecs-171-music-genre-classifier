@@ -30,7 +30,7 @@ else:
 ## Process Data
 # Load the Data Management's interface
 import sys
-sys.path.append('../DataManagement/')
+sys.path.append('../Data_Management/')
 import CSVInterface
 
 print('Initializing Data Management interface...')

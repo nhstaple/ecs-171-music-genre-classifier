@@ -22,7 +22,7 @@ TOP_CAT_COUNT = 1
 
 # Process Data
 # Load the Data Management's interface
-sys.path.append('../DataManagement/')
+sys.path.append('../Data_Management/')
 
 print('Initializing Data Management interface...')
 # reads the data from the csv
