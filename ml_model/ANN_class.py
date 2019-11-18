@@ -17,6 +17,10 @@ from ANN_result import Result
 
 TRAINED_MODEL_DIR = './trained_models/'
 
+import sys
+sys.path.append('../backend/')
+import song_result_interface
+
 # ANN - Artificial Neural Network
 # constructor
 # ANN
@@ -199,12 +203,10 @@ class ANN():
 			print("ERROR! Trained to predict on an untrained network.\nSample\n{0}".format(sample))
 			exit()
 
-		result = Result(
-			title='',
-			artist=''
-		)
-
-		prediction = self.model.predict(sample)[0]
+		result = sample
+		X = sample['X']
+		prediction = self.model.predict(X)[0]
+		
 		# print('Showing Results for Prediction')
 
 		max_category = {
@@ -223,11 +225,12 @@ class ANN():
 
 		max_hist = sorted(max_hist, key = lambda i: i['value'],reverse=True) 
 
-		result.res['prediction'] = dict()
+		result['prediction']['genre'] = dict()
 		for i in range(0, num_predictions):
+			if classes[i] == sample['top_genre']: result['prediction']['score'] = i
 			index = max_hist[i]['index']
 			probability = max_hist[i]['value']
-			result.res['prediction'][classes[index]] = probability
+			result['prediction']['genre'][classes[index]] = probability
 		
 		return result
 

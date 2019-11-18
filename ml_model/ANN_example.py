@@ -11,7 +11,7 @@ from ANN_encode import encode, decode
 import random
 
 # TODO change to a list of features
-indepent_features = 'mfcc'
+indepent_features = ['mfcc', 'spectral_contrast']
 
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
@@ -30,8 +30,10 @@ else:
 ## Process Data
 # Load the Data Management's interface
 import sys
+sys.path.append('../backend/')
 sys.path.append('../DataManagement/')
 import CSVInterface
+import song_result_interface
 
 print('Initializing Data Management interface...')
 # reads the data from the csv
@@ -83,6 +85,7 @@ trainx, testx, trainy, testy = train_test_split(
 )
 
 sample = trainx[0].copy()
+
 print('Data done!\n\n********')
 
 ## Build the neural network
@@ -121,7 +124,7 @@ else:
 	history, callback = net.train(
 		trainx,
 		trainy,
-		num_iter=500,
+		num_iter=300,
 		testing=(testx, np.array(testy)),
 		batch=100
 	)
@@ -152,14 +155,18 @@ for num in range(1, num_to_check + 1):
 	# keeps track of number of matches
 	matches = 0
 	for i in range(0, samples):
-		sample = np.array(testx[i].copy())
-		sample = pd.DataFrame([sample], columns=X.columns)
-		result = net.predict(sample.values)
-		counter = 0
-		sample_category = decode(testy[i])
+		sample = song_result_interface.result.copy()
 
-		for genre in result.res['prediction']:
-			if genre == sample_category and counter < num:
+		X = pd.DataFrame([np.array(testx[i].copy())])
+
+		sample['X'] = X.values
+		sample['top_genre'] = decode(testy[i])
+
+		sample = net.predict(sample)
+		counter = 0
+
+		for genre in sample['prediction']['genre']:
+			if genre == sample['top_genre'] and counter < num:
 				matches = matches + 1
 			# print("{0}: {1}".format(genre, result.res['prediction'][genre]))
 			if counter >= num: break
