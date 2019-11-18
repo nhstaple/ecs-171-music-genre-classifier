@@ -121,31 +121,46 @@ class featRead:
 		combined = pd.merge(f1, f2, on='track_id', how='outer')
 		return combined
 
-	def getSong(self, songTitle):
-		track = self.tableDF['track']
-		tracks = self.tableDF['tracks']
-		titles = track[['title']]
-		titles = titles['title'].str.lower()
-		titles = titles.to_frame()
 
-		res = titles.loc[titles['title'] == songTitle]
-		results = res.to_dict()
-		results = results['title']
 
-		#make a list of dictionaries
-		ans = []
 
-		for key in results:
-			song = tracks.loc[key]
-			songTitle = song[[('track', 'title')]].values
-			artistName = song[[('artist', 'name')]].values
-			date = song[[('track', 'date_created')]].values
+def getResults(songTitle):
+	tracks = pd.read_pickle('tracks.pkl')
+	track = tracks['track']
+	features = pd.read_pickle('features.pkl')
+	
+	titles = track[['title']]
+	titles = titles['title'].str.lower()
+	titles = titles.to_frame()
 
-			d = {}
-			d['track_id'] = key
-			d['song_title'] = songTitle
-			d['artist_name'] = artistName
-			d['date'] = date
-			ans.append(d)
+	res = titles.loc[titles['title'] == songTitle]
+	results = res.to_dict()
+	results = results['title']
 
-		return ans
+	#make a list of dictionaries
+	ans = []
+	featList = []
+	for key in results:
+		song = tracks.loc[key]
+		songTitle = song[[('track', 'title')]].values
+		artistName = song[[('artist', 'name')]].values
+		date = song[[('track', 'date_created')]].values
+		top_g = song[[('track', 'genre_top')]].values
+		subset = song[[('set', 'subset')]].values
+
+		d = {}
+		d['track_id'] = key
+		d['song_title'] = songTitle
+		d['artist_name'] = artistName
+		d['date'] = date
+		d['top_genre'] = top_g
+		d['set'] = subset
+		ans.append(d)
+		featList.append(key)
+
+	feat = features.loc[featList, :]
+	ret = {}
+	ret['track_data'] = ans
+	ret['features'] = feat
+
+	return ret
