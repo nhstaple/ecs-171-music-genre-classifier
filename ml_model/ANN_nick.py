@@ -154,7 +154,9 @@ for num in range(1, num_to_check + 1):
 	for i in range(0, samples):
 		sample = np.array(testx[i].copy())
 		sample = pd.DataFrame([sample], columns=X.columns)
+
 		result = net.predict(sample.values)
+		
 		counter = 0
 		sample_category = decode(testy[i])
 

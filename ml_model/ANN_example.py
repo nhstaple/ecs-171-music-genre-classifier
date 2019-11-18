@@ -42,20 +42,60 @@ reader = CSVInterface.featRead()
 # D = { X | Y }
 # D[X][Y]
 D = {}
-print('reading all features')
+print('reading all features. NOTE using placeholder functionality for DataManagements interface. We are just given features and return a distribution of probalities.')
+# print('We also score our prediction and provide a threshold for how large a list you need to construct of the sorted predictions to have a 100% gurantee of having the y_actual.')
+# print('Our prediction is part of a pipeline that sets the prediction field from the back ends interface, the field backend/song_result_interface.result[predictions].')
+
+# result = {
+#  # data team
+#	'song_id' : int(),
+#	'title': 'Song Title From Front End',
+#
+#	## add more info like year or record label
+#	'metadata': {  # for front end team
+#		'artist': str()
+#	},
+#
+#	## get data for ml prediction
+#	'subset': str(), # small, medium, full...
+#	'X': [[]], # the features for the song with matching title, use pd.DataFrame.values
+#	'top_genre':  str(), # from tracks.csv
+#
+#	# the result of the ml team's prediction
+#	# ml team interface
+#	'prediction': {
+#		'threshold': int(), # build a list of threshold length to guarantee it will contain the answer
+#		'genres': {  # list of 16 of genre probabilities sorted by most likely to least likely
+#		},
+#		'score': int() # position the actual top_genre is in the list of  prediction.genres
+#	},
+#
+#	# back end team
+#	'error': '' # init to empty string. front end team will have to handle: error, 1 result, more than 1 results.
+#}
+
 # X
 D['X'] =  {
 	'small'	: reader.getSubset(
-				reader.getFrame('features')
+				reader.getFrame('features'),
+				sub='small'
 			),
-	'full'	: reader.getFrame('features')
+	'cleanLarge' : reader.getSubset(
+				reader.getFrame('features'),
+				sub='cleanLarge'
+			)
 }
 
+# Y
 D['Y'] = {
 	'small'	: reader.getSubset(
-		reader.getFrame('track')['genre_top']
+		reader.getFrame('track')['genre_top'],
+		sub='small'
 	),
-	'full'	: reader.getFrame('track')['genre_top']
+	'cleanLarge': reader.getSubset(
+		reader.getFrame('track')['genre_top'],
+		sub='cleanLarge'
+	),
 }
 
 # Show all the weights prior to training
@@ -75,12 +115,12 @@ print('Y')
 # the dependent var
 Y = pd.DataFrame(D['Y']['small'], columns=['genre_top'])
 
-print('train/test split')
+print('train/validation split')
 # Test and train split using encoded Y labels (vector of 0s with one 1)
-trainx, testx, trainy, testy = train_test_split(
+trainx, valx, trainy, valy = train_test_split(
 	X.values,
 	encode(Y), # one hot encoder, see ANN_encode.py
-	test_size=0.34,
+	test_size=0.10,	# validation size
 	random_state=EXPERIMENT_SEED
 )
 
@@ -116,17 +156,16 @@ else:
 	# Show the weights
 	# net.show_weights(net.num_hidden_layers + 1)
 
-	input('Press enter to train the model...')
-
 	# Train the network
 	# returns history of training process, and a callback object that can
 	# extract information about the model at the end of events ANN_callbacks.py
 	history, callback = net.train(
 		trainx,
 		trainy,
-		num_iter=300,
-		testing=(testx, np.array(testy)),
-		batch=100
+		num_iter=100,
+		test_ratio=0.34,
+		batch=100,
+		interactive=False
 	)
 
 # Set the sample to a specific value. I recommend producing a synthetic sample
@@ -145,35 +184,66 @@ else:
 samples = 0
 # The number of test samples to check
 samples = int(input('Begin prediction on test set.\nNumber of samples:\t'))
-# the number of results to check
-num_to_check = int(input('Number of predictions to check:\t'))
+
+if samples >= valx.shape[0]:
+	samples = valx.shape[0]
+	print('Too bad... you wanted too many samples. Using the max:\t{}'.format(samples))
+	input('Press enter to continue...')
 
 print('\n')
-top_predictions = '\nResults\n'
-for num in range(1, num_to_check + 1):
-	print('Computing top {}'.format(num))
-	# keeps track of number of matches
-	matches = 0
-	for i in range(0, samples):
-		sample = song_result_interface.result.copy()
 
-		X = pd.DataFrame([np.array(testx[i].copy())])
+total_score = {
+	'iterations': 0,
+	'sum': 0
+}
 
-		sample['X'] = X.values
-		sample['top_genre'] = decode(testy[i])
+def predict(sample_index=0, sample=song_result_interface.result.copy(), interactive=False):
+	# ignore these commands back end's job
+	total_score['iterations'] = total_score['iterations'] + 1
+	X = pd.DataFrame([np.array(valx[sample_index].copy())])
+	sample['X'] = X.values
+	sample['top_genre'] = decode(valy[sample_index])
+	#####
 
-		sample = net.predict(sample)
-		counter = 0
+	# ML & Al job, just updates sample['prediction']
+	sample = net.predict(sample)
 
-		for genre in sample['prediction']['genre']:
-			if genre == sample['top_genre'] and counter < num:
-				matches = matches + 1
-			# print("{0}: {1}".format(genre, result.res['prediction'][genre]))
-			if counter >= num: break
-			else: counter = counter + 1
-	top_predictions = top_predictions + 'Classification for top {0} predictions:\t{1}\n'.format(num, matches / samples)
+	# ignore this
+	total_score['sum'] = sample['prediction']['score'] + total_score['sum']
+	######
 
-print(top_predictions)
+	# showing results
+	if interactive:
+		print('\n\n')
+		prediction = sample['prediction']
+		genres = prediction['genres']
+		score = prediction['score']
+		answer = sample['top_genre']
+		result = prediction['result']
+
+		print('Title:\t{}'.format(sample['title']))
+		print('Artist:\t{}'.format(sample['metadata']['artist']))
+		print('Answer:\t{0}\nResult:\t{1}'.format(answer, result))
+		print('Score : {0}/{1}\t{2}'.format(score, 16, score/16))
+		counter = 1
+		for genre in genres:
+			if counter <= 8:
+				print('{0}\t {1}:\t{2:.4f}'.format(counter, genre, genres[genre]))
+			counter = counter +  1
+		input('Press enter to continue...')
+	return sample
+
+results = []
+
+for index in range(0, samples):
+	if samples <= 8 and samples >= 1:
+		results.append(predict(index, interactive=True))
+	else:
+		results.append(predict(index, interactive=False))
+
+tot_score = total_score['sum'] / (16*total_score['iterations'])
+
+print('Total score:\t{}'.format(tot_score))
 
 ## Save the Model
 # For the ML team: copy and paste this file and name it one word, <your name>

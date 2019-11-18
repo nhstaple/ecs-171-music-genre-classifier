@@ -9,7 +9,7 @@ result = {
 
 	## add more info like year or record label
 	'metadata': {  # for front end team
-		'artist': str()
+		'artist': 'placeholder'
 	},
 
 	## get data for ml prediction
@@ -20,6 +20,7 @@ result = {
 	# the result of the ml team's prediction
 	# ml team interface
 	'prediction': {
+		'result': str(), # the top item of genres
 		'threshold': int(), # build a list of threshold length to guarantee it will contain the answer
 		'genres': {  # list of 16 of genre probabilities sorted by most likely to least likely
 		},

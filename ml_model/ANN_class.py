@@ -156,30 +156,63 @@ class ANN():
 	# trains the network on the provided parameters
 	# if testing is empty then no validation is done
 	# returns the history and weights
-	def train(self, X, Y, num_iter=100, testing=(), batch=1):
+	def train(self, X, Y, num_iter=100, testing=(), batch=1, test_ratio=0.00, interactive=False):
+		print('Training model with {0} epochs, batch size {1}'.format(num_iter, batch))
+
+		if interactive:
+			self.show_weights(self.num_hidden_layers + 1)
+			input('Press enter to train the model...')
+
 		# The callback object.
 		c = Callback()
 
 		# The accuracy record
 		hist = 0
 
-		# If there was a testing set
-		if len(testing) and batch < 0:
-			hist = self.model.fit(X, np.array(Y), epochs=num_iter, callbacks=[c], validation_data=testing)
-		elif len(testing) and batch >= 0:
-			hist = self.model.fit(X, np.array(Y), epochs=num_iter, callbacks=[c], validation_data=testing, batch_size=batch)
-		# Else don't validate
-		elif batch < 0:
-			hist = self.model.fit(X, np.array(Y), epochs=num_iter, callbacks=[c])
+		test_provided = False
+
+		if batch < 1:
+			print('error bad batch size:\t{}'.format(batch))
+
+		if len(testing) == 0:
+			test_provided = False
+
+			# If there was a testing set
+			if test_ratio < 0.00:
+				print('error invalid ratio {}'.format(test_ratio))
+
+			if not (test_ratio > 0.00 and test_ratio <= 2/3):
+				print('error invalid ratio {}'.format(test_ratio))
+				test_ratio = 1/3
 		else:
+			if test_ratio != 0.00:
+				print('warning invalided param when test set provided {}'.format(test_ratio))
+			test_provided = True
+			
+		if test_provided and batch < 0:
+			print('Training with provided data and default batch size.')
+			hist = self.model.fit(X, np.array(Y), epochs=num_iter, callbacks=[c], validation_data=testing)
+		elif test_provided and batch >= 1:
+			print('Training with provided data and batch size of {}.'.format(batch))
 			hist = self.model.fit(X, np.array(Y), epochs=num_iter, callbacks=[c], validation_data=testing, batch_size=batch)
+		elif (not test_provided) and batch < 0:
+			print('Training with validation ratio of {} default bath size.'.format(test_ratio))
+			hist = self.model.fit(X, np.array(Y), epochs=num_iter, callbacks=[c], validation_split=test_ratio)
+		elif (not test_provided) and batch >= 1:
+			print('Training with validation ratio of {0} and batch size of {1}.'.format(test_ratio, batch))
+			hist = self.model.fit(X, np.array(Y), epochs=num_iter, callbacks=[c], validation_split=test_ratio, batch_size=batch)
+
+		if interactive:
+			self.show_weights(self.num_hidden_layers + 1)
+			input('Press enter to continue...')
 
 		self.trained = True
-
 		return hist, c
 	
 	# Print the weights of the network
 	def show_weights(self, num=1):
+		print('Displaying the weights for {} layers.'.format(num))
+
 		if num < 1:
 			num = len(self.model.layers) - 1
 			return
@@ -206,12 +239,12 @@ class ANN():
 		result = sample
 		X = sample['X']
 		prediction = self.model.predict(X)[0]
-		
+
 		# print('Showing Results for Prediction')
 
 		max_category = {
-			'index': 0,
-			'value': -1.00
+			'index': 0,		# the index the item is in the classes list
+			'value': -1.00	# the value of the prediction
 		}
 
 		max_hist = []
@@ -225,13 +258,18 @@ class ANN():
 
 		max_hist = sorted(max_hist, key = lambda i: i['value'],reverse=True) 
 
-		result['prediction']['genre'] = dict()
+		result['prediction']['genres'] = dict()
+		initial = False
 		for i in range(0, num_predictions):
-			if classes[i] == sample['top_genre']: result['prediction']['score'] = i
+			if not initial: initial = True; result['prediction']['result'] = classes[max_hist[i]['index']]
 			index = max_hist[i]['index']
 			probability = max_hist[i]['value']
-			result['prediction']['genre'][classes[index]] = probability
-		
+			result['prediction']['genres'][classes[index]] = probability
+
+		for i in range(0, len(max_hist)):
+			pred = classes[max_hist[i]['index']]
+			if pred == sample['top_genre']:
+				result['prediction']['score'] = i # + 1 # plus one if you want to penalize always
 		return result
 
 	def save_to_disk(self, model_name='test'):
