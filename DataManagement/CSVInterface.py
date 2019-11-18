@@ -17,7 +17,9 @@ class featRead:
 
 			elif(key == 'tracks.csv'):
 				print('Reading tracks.csv')
+				#change back path to ../tracks.csv
 				tracks = pd.read_csv('../tracks.csv', index_col=0, header=[0, 1])
+				self.tableDF['tracks'] = tracks.copy()
 				self.tableDF['album'] = tracks['album'].copy()
 				self.tableDF['track'] = tracks['track'].copy()
 				self.tableDF['artist'] = tracks['artist'].copy()
@@ -119,3 +121,31 @@ class featRead:
 		combined = pd.merge(f1, f2, on='track_id', how='outer')
 		return combined
 
+	def getSong(self, songTitle):
+		track = self.tableDF['track']
+		tracks = self.tableDF['tracks']
+		titles = track[['title']]
+		titles = titles['title'].str.lower()
+		titles = titles.to_frame()
+
+		res = titles.loc[titles['title'] == songTitle]
+		results = res.to_dict()
+		results = results['title']
+
+		#make a list of dictionaries
+		ans = []
+
+		for key in results:
+			song = tracks.loc[key]
+			songTitle = song[[('track', 'title')]].values
+			artistName = song[[('artist', 'name')]].values
+			date = song[[('track', 'date_created')]].values
+
+			d = {}
+			d['track_id'] = key
+			d['song_title'] = songTitle
+			d['artist_name'] = artistName
+			d['date'] = date
+			ans.append(d)
+
+		return ans
