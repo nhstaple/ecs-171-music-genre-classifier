@@ -76,7 +76,7 @@ var PageTwo =
                     id: "actual_genre"
                 }, _react.default.createElement("div", {
                     id: "actual_genre_name"
-                }, "Actual: ", this.props.actualGenre), _react.default.createElement("div", {
+                }, "Actual: ", this.props.parentStates.actualGenre), _react.default.createElement("div", {
                     id: "actual_genre_probability"
                 }, this.props.parentStates.actualScore, " Confidence")), _react.default.createElement("div", {
                     id: "model_stats"

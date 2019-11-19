@@ -37,7 +37,7 @@ class PageTwo extends React.Component{
                     </div>
                     <div id="actual_genre">
                         <div id="actual_genre_name">
-                            Actual: {this.props.actualGenre}
+                            Actual: {this.props.parentStates.actualGenre}
                         </div>
                         <div id="actual_genre_probability">
                             {this.props.parentStates.actualScore} Confidence
