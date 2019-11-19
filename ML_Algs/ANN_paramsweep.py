@@ -1,4 +1,3 @@
-import CSVInterface
 import sys
 from sklearn.model_selection import train_test_split
 import numpy as np
@@ -11,18 +10,21 @@ from ANN_encode import encode, decode
 import random
 
 # TODO change to a list of features
-indepent_features = 'mfcc'
+indepent_features = ['mfcc', 'spectral_contrast']
 
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
-EPOCHS = 250
-BATCH_SIZE = 100
-SAMPLES_TO_PREDICT = 100
+EPOCHS = 300
+BATCH_SIZE = 10
+SAMPLES_TO_PREDICT = 500
 TOP_CAT_COUNT = 1
 
 # Process Data
 # Load the Data Management's interface
+sys.path.append('../Back_End/')
 sys.path.append('../Data_Management/')
+import song_result_interface
+import CSVInterface
 
 print('Initializing Data Management interface...')
 # reads the data from the csv
@@ -100,7 +102,8 @@ def make_and_train_model(h_layers, h_nodes, h_activation, o_activation, loss):
         testing=(testx, np.array(testy)),
         batch=BATCH_SIZE
     )
-    print("\nMade and Trained model with {} layers and {} nodes".format(h_layers, h_nodes))
+    print("\nMade and Trained model with {} layers and {} nodes".format(
+        h_layers, h_nodes))
     return net
 
 
@@ -108,17 +111,19 @@ startLayers = int(input("Enter the starting # of layers: "))
 endLayers = int(input("Enter the last # of layers: "))
 startNodes = int(input("Enter the start # of nodes: "))
 endNodes = int(input("Enter the end # of nodes: "))
+maxAccuracy = 0.0
 
-#dataframe to hold results of grid search
-grid_vect = np.empty([(endLayers-startLayers+1),(endNodes-startNodes+1)])
+# dataframe to hold results of grid search
+grid_vect = np.empty([(endLayers-startLayers+1), (endNodes-startNodes+1)])
 # grid search for num of hidden layers and num of hidden nodes per layer
-for num_layers in range(startLayers,endLayers+1):
+for num_layers in range(startLayers, endLayers+1):
     for num_nodes in range(startNodes, endNodes+1):
 
         # make and train the model
-        model = make_and_train_model(num_layers, num_nodes, "relu", "softmax", "categorical_crossentropy")
+        model = make_and_train_model(
+            num_layers, num_nodes, "relu", "softmax", "categorical_crossentropy")
 
-        print("\nLayers: {0}\nNodes: {1}".format(num_layers,num_nodes))
+        print("\nLayers: {0}\nNodes: {1}".format(num_layers, num_nodes))
         # Predicting
         # Let's see how accurate the model is for the top @num_to_check many categories
         top_predictions = '\nResults\n'
@@ -127,15 +132,20 @@ for num_layers in range(startLayers,endLayers+1):
             # keeps track of number of matches
             matches = 0
             for i in range(0, SAMPLES_TO_PREDICT):
-                this_sample = np.array(testx[i].copy())
-                this_sample = pd.DataFrame([this_sample], columns=X.columns)
-                result = model.predict(this_sample.values)
-                counter = 0
-                sample_category = decode(testy[i])
+                this_sample = song_result_interface.result.copy()
 
-                for genre in result.res['prediction']:
-                    if genre == sample_category and counter < num:
+                X = pd.DataFrame([np.array(testx[i].copy())])
+
+                this_sample['X'] = X.values
+                this_sample['top_genre'] = decode(testy[i])
+
+                this_sample = model.predict(this_sample)
+                counter = 0
+
+                for genre in this_sample['prediction']['genre']:
+                    if genre == this_sample['top_genre'] and counter < num:
                         matches = matches + 1
+                    # print("{0}: {1}".format(genre, result.res['prediction'][genre]))
                     if counter >= num:
                         break
                     else:
@@ -144,7 +154,12 @@ for num_layers in range(startLayers,endLayers+1):
                 'Classification for top {0} predictions:\t{1}\n'.format(
                     num, matches / SAMPLES_TO_PREDICT)
         print(top_predictions)
-        grid_vect[num_layers-startLayers][num_nodes-startNodes] = (matches / SAMPLES_TO_PREDICT)
+        grid_vect[num_layers-startLayers][num_nodes -
+                                          startNodes] = (matches / SAMPLES_TO_PREDICT)
+        if(matches/SAMPLES_TO_PREDICT > maxAccuracy):
+            maxAccuracy = matches/SAMPLES_TO_PREDICT
+            model.save_to_disk("best_parameter_sweep_model")
 
-grid = pd.DataFrame(grid_vect, index = range(startLayers,endLayers+1), columns = range(startNodes, endNodes+1))
+grid = pd.DataFrame(grid_vect, index=range(
+    startLayers, endLayers+1), columns=range(startNodes, endNodes+1))
 print(grid)
