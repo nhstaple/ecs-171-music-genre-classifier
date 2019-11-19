@@ -7,27 +7,26 @@ from sklearn.model_selection import KFold
 
 class featRead:
 
-	def __init__(self, csvs=['features.csv', 'tracks.csv', 'echonest.csv', 'genres.csv']):	
+	def __init__(self, pkls=['features.pkl', 'tracks.pkl', 'echonest.pkl', 'genres.pkl']):	
 		self.tableDF = {}
-		for key in csvs:
-			if(key == 'features.csv'):
-				print('Reading features.csv')
-				features = pd.read_csv('../features.csv', index_col=0, header=[0,1,2])
+		for key in pkls:
+			if(key == 'features.pkl'):
+				print('Reading features.pkl')
+				features = pd.read_pickle('../features.pkl')
 				self.tableDF['features'] = features
 
-			elif(key == 'tracks.csv'):
-				print('Reading tracks.csv')
-				#change back path to ../tracks.csv
-				tracks = pd.read_csv('../tracks.csv', index_col=0, header=[0, 1])
+			elif(key == 'tracks.pkl'):
+				print('Reading tracks.pkl')
+				tracks = pd.read_pickle('../tracks.pkl')
 				self.tableDF['tracks'] = tracks.copy()
 				self.tableDF['album'] = tracks['album'].copy()
 				self.tableDF['track'] = tracks['track'].copy()
 				self.tableDF['artist'] = tracks['artist'].copy()
 				self.tableDF['set'] = tracks['set'].copy()
 
-			elif(key == 'echonest.csv'):
-				print('Reading echonest.csv')
-				echonest = pd.read_csv('../echonest.csv', index_col=0, header=[0, 1, 2])
+			elif(key == 'echonest.pkl'):
+				print('Reading echonest.pkl')
+				echonest = pd.read_pickle('../echonest.pkl')
 				echo_audio_feat = echonest.iloc[:, echonest.columns.get_level_values(1) == 'audio_features'].copy()
 				echo_meta_data = echonest.iloc[:, echonest.columns.get_level_values(1) == 'metadata'].copy()
 				echo_social_feat = echonest.iloc[:, echonest.columns.get_level_values(1) == 'social_features'].copy()
@@ -36,12 +35,12 @@ class featRead:
 				self.tableDF['echo_social_feat'] = echo_social_feat
 
 
-			elif(key == 'genres.csv'):
-				print('Reading genres.csv')
-				genres = pd.read_csv('../genres.csv', index_col=0)
+			elif(key == 'genres.pkl'):
+				print('Reading genres.pkl')
+				genres = pd.read_pickle('../genres.pkl')
 				self.tableDF['genres'] = genres
 			else:
-				print(key + ' is not a vaild csv file name')
+				print(key + ' is not a vaild file name')
 				break;
 
 	#lists all of the data frames names contained by the featRead object
@@ -121,46 +120,3 @@ class featRead:
 		combined = pd.merge(f1, f2, on='track_id', how='outer')
 		return combined
 
-
-
-
-def getResults(songTitle):
-	tracks = pd.read_pickle('tracks.pkl')
-	track = tracks['track']
-	features = pd.read_pickle('features.pkl')
-	
-	titles = track[['title']]
-	titles = titles['title'].str.lower()
-	titles = titles.to_frame()
-
-	res = titles.loc[titles['title'] == songTitle]
-	results = res.to_dict()
-	results = results['title']
-
-	#make a list of dictionaries
-	ans = []
-	featList = []
-	for key in results:
-		song = tracks.loc[key]
-		songTitle = song[[('track', 'title')]].values
-		artistName = song[[('artist', 'name')]].values
-		date = song[[('track', 'date_created')]].values
-		top_g = song[[('track', 'genre_top')]].values
-		subset = song[[('set', 'subset')]].values
-
-		d = {}
-		d['track_id'] = key
-		d['song_title'] = songTitle
-		d['artist_name'] = artistName
-		d['date'] = date
-		d['top_genre'] = top_g
-		d['set'] = subset
-		ans.append(d)
-		featList.append(key)
-
-	feat = features.loc[featList, :]
-	ret = {}
-	ret['track_data'] = ans
-	ret['features'] = feat
-
-	return ret
