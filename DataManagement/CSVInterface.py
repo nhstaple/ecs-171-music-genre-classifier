@@ -120,3 +120,37 @@ class featRead:
 		combined = pd.merge(f1, f2, on='track_id', how='outer')
 		return combined
 
+	def getRandomSong(self, subset='small'):
+		tracks = self.tableDF['tracks']
+		tracks = self.getSubset(tracks, subset)
+		track = tracks['track']
+		features = self.tableDF['features']
+
+		titles = track[['title']]
+		song = titles.sample()
+		song = song.to_dict()
+		song = song['title']
+
+		for key in song:
+			s = tracks.loc[key]
+			songTitle = s[[('track', 'title')]].values
+			artistName = s[[('artist', 'name')]].values
+			date = s[[('track', 'date_created')]].values
+			top_g = s[[('track', 'genre_top')]].values
+			subset = s[[('set', 'subset')]].values
+
+			d = {}
+			d['track_id'] = key
+			d['song_title'] = songTitle
+			d['artist_name'] = artistName
+			d['date'] = date
+			d['top_genre'] = top_g
+			d['set'] = subset
+
+			feat = features.loc[[key],:]
+
+		ret = {}
+		ret['track_data'] = d
+		ret['features'] = feat
+		
+		return ret
