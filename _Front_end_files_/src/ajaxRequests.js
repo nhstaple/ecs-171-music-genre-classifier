@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 //create and export ajax base function:
 export function createAJAXRequest(method, url) {
     let xhr = new XMLHttpRequest();
+    console.log("METHOD: " + method + " URL: " + url);
     xhr.open(method, url, true);  // call its open method
     return xhr;
 }
@@ -22,8 +23,7 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
     let url1 = "/song/";
     let url2 = url1 + song;
     console.log(url2); //JD: for testing
-
-
+    
     //sending song title to server and wait to get genre back
     let xhr = createAJAXRequest('GET', url2);
 
@@ -36,7 +36,7 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
     xhr.onload = function() {
         //grab the response from swe team
         let responseStr = xhr.responseText;  // get the JSON string
-        // console.log(responseStr); //to test
+        console.log(responseStr); //to test
 
         let object = JSON.parse(responseStr);  // turn it into an object
 

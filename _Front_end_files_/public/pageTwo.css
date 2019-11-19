@@ -1,0 +1,122 @@
+/* 
+title hex code: #DEB31A
+
+title font: league gothic
+
+subtext font: carlito
+
+subtext hexcode: #737373 
+
+buttons & input field color: #667d9d
+*/
+
+@font-face {
+  font-family: 'carlito';
+  src: url('/assets/fonts/carlito/Carlito-Regular.ttf');
+}
+
+main {
+    min-height: 100vh;
+    background-image: url('/assets/pageTwo.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+#page_two_contents{
+    display: flex;
+    flex-direction: column;
+    min-height: inherit;
+    width: 100%;
+}
+
+#back_button{
+    position: absolute;
+    border-radius: 5px;
+    height: 4vh;
+    width: 8vw;
+    background-color: #667d9d;
+    color: white;
+}
+
+#title_and_artist{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    padding: 10px;
+    flex: 1;
+}
+
+#songTitle{
+    font-size: 3em;
+    color: #DEB31A;
+    font-family: 'league-gothic', sans-serif;
+}
+
+#artist{
+    font-size: 1em;
+    color: #737373;
+    font-family: 'carlito', sans-serif;
+}
+
+#predicted_genre{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    font-size: 2em;
+    color: #737373;
+}
+
+#predicted_genre_name{
+    font-size: 5em;
+    color: #DEB31A;
+    font-family: 'league-gothic', sans-serif;
+}
+
+#predicted_genre_probability{
+    font-size: 1em;
+    color: #737373;
+    font-family: 'carlito', sans-serif;
+}
+
+#actual_genre{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 10px;
+    color: #737373;
+}
+
+#actual_genre_name{
+    font-size: 2em;
+    color: #DEB31A;
+    font-family: 'league-gothic', sans-serif;
+}
+
+#actual_genre_probability{
+    font-size: 1em;
+    color: #737373;
+    font-family: 'carlito', sans-serif;
+}
+
+#model_stats{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    font-size: 2em;
+    color: #737373;
+}
+
+#model_score{
+    padding: 10px;
+    font-family: 'carlito', sans-serif;
+}
