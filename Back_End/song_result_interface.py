@@ -1,6 +1,8 @@
 
 # results = CSVInterface.getSong(title='Song Title From Front End')
 
+# 0 <= len(results) 
+
 # ANN_result.py
 result = {
   # data team
@@ -21,8 +23,8 @@ result = {
 	# ml team interface
 	'prediction': {
 		'result': str(), # the top item of genres
-		'threshold': int(), # build a list of threshold length to guarantee it will contain the answer
 		'genres': {  # list of 16 of genre probabilities sorted by most likely to least likely
+		'threshold': int(), # build a list of threshold length to guarantee it will contain the answer
 		},
 		'score': int() # position the actual top_genre is in the list of  prediction.genres
 	},
