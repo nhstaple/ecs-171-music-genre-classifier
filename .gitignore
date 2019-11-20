@@ -4,3 +4,7 @@ Data/echonest.csv
 Data/features.csv
 Data/genres.csv
 Data/tracks.csv
+Data/tracks.pkl
+Data/genres.pkl
+Data/features.pkl
+Data/echonest.pkl
