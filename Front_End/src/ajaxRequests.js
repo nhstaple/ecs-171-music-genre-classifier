@@ -18,6 +18,7 @@ return vars;
 }
 //create actual ajax request to send song title, and receive a response from the swe team:
 //ajax grabs the info from the url
+
 function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
     //for backend, find url we need (url1 is temporary):
     let url1 = "/song/";
@@ -39,6 +40,8 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
         console.log(responseStr); //to test
 
         let object = JSON.parse(responseStr);  // turn it into an object
+
+        console.log(object);
 
         //place the response on the screen
         document.getElementById('placeGenreHere').textContent = "songGenre: " + object.songGenre;

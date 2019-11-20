@@ -29,7 +29,8 @@ class PageTwo extends React.Component{
                     <button id="back_button" onClick={this.gotolandingPage}>Go Back</button>
                     <div id="predicted_genre">
                         <div id="predicted_genre_name">
-                            {this.props.parentStates.predictedGenre}
+                            <p id="placeGenreHere">
+                            </p>
                         </div>
                         <div id="predicted_genre_probability">
                             {this.props.parentStates.predictedScore} Confidence
