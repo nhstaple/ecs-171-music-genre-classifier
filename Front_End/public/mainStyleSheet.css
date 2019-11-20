@@ -1,0 +1,87 @@
+/* 
+title hex code: #DEB31A
+
+title font: league gothic
+
+subtext font: carlito
+
+subtext hexcode: #737373 
+
+buttons & input field color: #667d9d
+*/
+
+@font-face {
+  font-family: 'carlito';
+  src: url('/assets/fonts/carlito/Carlito-Regular.ttf');
+}
+
+main {
+  min-height: 100vh
+}
+div.pageContainer {
+  display: flex;
+  align-items: center;
+  min-height: inherit;
+  flex-direction: column;
+  background-image: url('/assets/pageOne.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+div.boxContent{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+div.title{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+#LandingPage {
+  font-size: 40px;
+  weight: bold;
+  color: #DEB31A;
+  font-size: 10em;
+  font-family: 'league-gothic', sans-serif;
+}
+
+#description{
+  color: #737373;
+  font-family: 'carlito', sans-serif;
+  font-size: 3em;
+}
+
+#textInput {
+  display: flex;
+  flex-direction: column;
+  width: 55%;
+  justify-content: center;
+  margin-top: 100px;
+  font-family: 'carlito', sans-serif;
+}
+#songInput {
+  font-size: 5px;
+  color: #E9CC66;
+  width: 100%;
+  margin-right: 20px;
+  background-color: #667d9d ;
+}
+
+div.buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+#buttonStyle {
+  font-size: 25px;
+  color: white;
+  background-color:#667d9d;
+  height: 45px;
+  margin: 3px;
+}
