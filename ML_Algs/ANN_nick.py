@@ -11,7 +11,7 @@ from ANN_encode import encode, decode
 import random
 
 # TODO change to a list of features
-indepent_features = 'mfcc'
+indepent_features = ['mfcc', 'spectral_contrast']
 
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
@@ -30,7 +30,7 @@ else:
 ## Process Data
 # Load the Data Management's interface
 import sys
-sys.path.append('../DataManagement/')
+sys.path.append('../Data_Management/')
 import CSVInterface
 
 print('Initializing Data Management interface...')
@@ -101,7 +101,7 @@ else:
 	# Use this to test your own architecture
 	net = ANN(p=Parameter(
 		num_input=len(sample),
-		num_hidden_layers=2,
+		num_hidden_layers=8,
 		nodes_per_hidden=16,
 		num_output=NUM_GENRES,
 		hidden_activation='relu',
@@ -123,7 +123,7 @@ else:
 		trainy,
 		num_iter=500,
 		testing=(testx, np.array(testy)),
-		batch=100
+		batch=10
 	)
 
 # Set the sample to a specific value. I recommend producing a synthetic sample
@@ -154,7 +154,9 @@ for num in range(1, num_to_check + 1):
 	for i in range(0, samples):
 		sample = np.array(testx[i].copy())
 		sample = pd.DataFrame([sample], columns=X.columns)
+
 		result = net.predict(sample.values)
+		
 		counter = 0
 		sample_category = decode(testy[i])
 
