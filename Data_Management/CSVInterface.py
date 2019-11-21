@@ -1,6 +1,9 @@
 
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import KFold
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import f_classif
 
 # import sys
 # sys.path.append('../')
@@ -154,3 +157,17 @@ class featRead:
 		ret['features'] = feat
 		
 		return ret
+
+	def selectN(self, n = 50):
+		featureData = self.getSubset(self.getFrame('features'), sub='cleanLarge')
+		genreData = self.getSubset(self.getFrame('track')['genre_top'], sub='cleanLarge')
+		Xdf = pd.DataFrame(featureData)
+		Ydf = pd.DataFrame(genreData)
+		bestfeatures = SelectKBest(score_func=f_classif, k=n)
+		fit = bestfeatures.fit(Xdf, np.ravel(Ydf))
+		dfscores = pd.DataFrame(fit.scores_)
+		dfcolumns = pd.DataFrame(Xdf.columns)
+		featureScores = pd.concat([dfcolumns,dfscores],axis=1)
+		featureScores.columns = ['Specs','Score']  #naming the dataframe columns
+		indices = featureScores.nlargest(n,'Score').index #indices of n best features
+		return indices
