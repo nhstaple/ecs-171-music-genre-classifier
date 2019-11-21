@@ -50,7 +50,6 @@ class PageTwo extends React.Component{
                         </div>
                     </div>
                     <div id="model_stats">
-                        <img src={require('./sampleImage.png')}/>
                         <div id="model_score">
                             <p id="modelScore">
                             </p>

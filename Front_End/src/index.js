@@ -64,7 +64,20 @@ function (_React$Component) {
 
       var song = _this.state.songTitle;
       setTimeout(function () {
-        ajaxRequests.sbm(song);
+        ajaxRequests.sbm(song, 'False');
+      }, 1000);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "gotoFeelingLucky", function () {
+      _this.setState({
+        landingPage: false,
+        secondPageState: true
+      }); //call ajaxrequest, must wait for page to render.
+
+
+      var song = _this.state.songTitle;
+      setTimeout(function () {
+        ajaxRequests.sbm(song, 'True');
       }, 1000);
     });
 
@@ -78,13 +91,13 @@ function (_React$Component) {
       // States are hardcoded for now
       landingPage: true,
       secondPageState: false,
-      songTitle: 'What You Know',
-      artist: 'By: Two Door Cinema Club',
-      predictedGenre: 'Electronic',
-      predictedScore: '90%',
-      actualGenre: 'Alternative',
-      actualScore: '80%',
-      modelScore: '*Model Score*'
+      songTitle: '',
+      artist: '',
+      predictedGenre: '',
+      predictedScore: '',
+      actualGenre: '',
+      actualScore: '',
+      modelScore: ''
     };
     return _this;
   } //create goto page state functions
@@ -123,7 +136,7 @@ function (_React$Component) {
           onClick: this.gotoPageTwoState
         }, " Search "), _react.default.createElement("button", {
           id: "buttonStyle",
-          onClick: this.gotoPageTwoState
+          onClick: this.gotoFeelingLucky
         }, " Feeling Lucky "))))));
       } else if (this.state.secondPageState === true) {
         return _react.default.createElement(_pageTwo.default, {

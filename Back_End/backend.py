@@ -19,21 +19,28 @@ def test():
 
 # use url: http://localhost:8080/song/songName, 
 # which the songName is the song title and can be changed
-@app.route('/song/<string:name>', methods=['GET'])
-def findOneSong(name):
+@app.route('/song/<string:name>/<string:randomFlag>/', methods=['GET'])
+def findOneSong(name, randomFlag):
 	# songList = [song for song in songArray if song == name]
 
 	# for song in songArray:
 	# 	if song == name:
 	# 		return jsonify({'songGenre' : 'Dance'})
 
-
 	# get data from database
-	randomFlag = False
-
-	data = pandasDB.DataBase().query(name, randomFlag)
-	sample = data['track_data'][0]
-
+	if(randomFlag == 'True'):
+		data = pandasDB.DataBase().query(name, True)
+		sample = data['track_data']
+		songName = data['track_data']['song_title'][0]
+		actualGenre = data['track_data']['top_genre'][0]
+		artist = data['track_data']['artist_name'][0]
+	else:
+		data = pandasDB.DataBase().query(name, False)
+		sample = data['track_data'][0]
+		songName = data['track_data'][0]['song_title'][0]
+		actualGenre = data['track_data'][0]['top_genre'][0]
+		artist = data['track_data'][0]['artist_name'][0]
+	
 	# Data:
 	# -track id
 	# -song_title
@@ -43,9 +50,6 @@ def findOneSong(name):
 	# -set
 	# -X
 
-	#send data to ML
-	neuralNet = ANN_class.ANN(trained_model='best')
-
 	indepent_features = ['mfcc', 'spectral_contrast']
 
 	total_score = {
@@ -53,7 +57,8 @@ def findOneSong(name):
 		'sum': 0
 	}
 	total_score['iterations'] = total_score['iterations'] + 1
-	
+
+	neuralNet = ANN_class.ANN(trained_model='best')
 	sample['prediction'] = {}
 	sample['X'] = sample['X'][['mfcc', 'spectral_contrast']]
 	sample = neuralNet.predict(sample)
@@ -61,19 +66,17 @@ def findOneSong(name):
 	total_score['sum'] = sample['prediction']['score'] + total_score['sum']
 
 	predictedGenre = sample['prediction']['result']
-	actualGenre = data['track_data'][0]['top_genre'][0]
 
 	# send ML results to front end
 
 	return jsonify({
-
-		'songName' : name,
-		'artist' : data['track_data'][0]['artist_name'][0],
+		'songName' : songName,
+		'artist' : artist,
 		'songGenre' : predictedGenre,
 		'predictedScore' : str(sample['prediction']['genres'][predictedGenre]),
 		'actualGenre' : actualGenre,
 		'actualScore' : str(sample['prediction']['genres'][actualGenre]),
-		'modelScore' : 'Score: ' + str(total_score['sum'])
+		'modelScore' : str(total_score['sum'])
 	})
 
 @app.route('/song', methods=['POST'])

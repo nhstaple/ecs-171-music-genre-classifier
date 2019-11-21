@@ -92,9 +92,7 @@ function (_React$Component) {
         id: "actualScore"
       }))), _react.default.createElement("div", {
         id: "model_stats"
-      }, _react.default.createElement("img", {
-        src: require('./sampleImage.png')
-      }), _react.default.createElement("div", {
+      }, _react.default.createElement("div", {
         id: "model_score"
       }, _react.default.createElement("p", {
         id: "modelScore"

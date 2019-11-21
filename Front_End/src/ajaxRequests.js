@@ -19,10 +19,10 @@ return vars;
 //create actual ajax request to send song title, and receive a response from the swe team:
 //ajax grabs the info from the url
 
-function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
+function makeAJAXRequest(song = getUrlVars()(["songTitle"]), random='True'){
     //for backend, find url we need (url1 is temporary):
     let url1 = "/song/";
-    let url2 = url1 + song;
+    let url2 = url1 + song + "/" + random + "/";
     console.log(url2); //JD: for testing
     
     //sending song title to server and wait to get genre back
@@ -50,7 +50,7 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
         document.getElementById('predictedScore').textContent = object.predictedScore + " confidence";
         document.getElementById('actualGenre').textContent = "Actual: " + object.actualGenre;
         document.getElementById('actualScore').textContent = object.actualScore + " confidence";
-        document.getElementById('modelScore').textContent = object.modelScore;
+        document.getElementById('modelScore').textContent = "Score: " + object.modelScore;
         
         //console.log(object); //to test
     }
@@ -58,10 +58,10 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
 
 }
 //at this point, user has clicked the search button, so we will need to send the request:
-export function sbm(id){
+export function sbm(id, random){
     //this function makes request and sends it:
     //Backend: uncomment to test
-    makeAJAXRequest(id);
+    makeAJAXRequest(id, random);
     //below works, testing placing a response onto screen:
     // let temporaryResponse = "Sent Request " + id
     // document.getElementById('placeGenreHere').textContent = temporaryResponse

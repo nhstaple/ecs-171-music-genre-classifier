@@ -13,13 +13,13 @@ class MainPage extends React.Component{
       // States are hardcoded for now
       landingPage: true,
       secondPageState: false,
-      songTitle: 'What You Know',
-      artist: 'By: Two Door Cinema Club',
-      predictedGenre: 'Electronic',
-      predictedScore: '90%',
-      actualGenre: 'Alternative',
-      actualScore: '80%',
-      modelScore: '*Model Score*'
+      songTitle: '',
+      artist: '',
+      predictedGenre: '',
+      predictedScore: '',
+      actualGenre: '',
+      actualScore: '',
+      modelScore: ''
     }
   }
   //create goto page state functions
@@ -37,7 +37,16 @@ class MainPage extends React.Component{
     })
     //call ajaxrequest, must wait for page to render.
     const song = this.state.songTitle
-    setTimeout(function() {ajaxRequests.sbm(song); }, 1000);
+    setTimeout(function() {ajaxRequests.sbm(song, 'False'); }, 1000);
+  }
+  gotoFeelingLucky = () => {
+    this.setState({
+      landingPage: false,
+      secondPageState: true,
+    })
+    //call ajaxrequest, must wait for page to render.
+    const song = this.state.songTitle
+    setTimeout(function () {ajaxRequests.sbm(song, 'True');}, 1000);
   }
   handleTextChange = (event) =>{
     this.setState({
@@ -68,7 +77,7 @@ class MainPage extends React.Component{
                 />
                 <div className="buttons">
                   <button id="buttonStyle" onClick={this.gotoPageTwoState}> Search </button>
-                  <button id="buttonStyle" onClick={this.gotoPageTwoState}> Feeling Lucky </button>
+                  <button id="buttonStyle" onClick={this.gotoFeelingLucky}> Feeling Lucky </button>
                 </div>
               </div>
             </div>
