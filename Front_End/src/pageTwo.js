@@ -61,9 +61,13 @@ function (_React$Component) {
         id: "title_and_artist"
       }, _react.default.createElement("div", {
         id: "songTitle"
-      }, this.props.parentStates.songTitle), _react.default.createElement("div", {
+      }, _react.default.createElement("p", {
+        id: "songName"
+      })), _react.default.createElement("div", {
         id: "artist"
-      }, this.props.parentStates.artist))), _react.default.createElement("button", {
+      }, _react.default.createElement("p", {
+        id: "artist"
+      })))), _react.default.createElement("button", {
         id: "back_button",
         onClick: this.gotolandingPage
       }, "Go Back"), _react.default.createElement("div", {
@@ -74,19 +78,27 @@ function (_React$Component) {
         id: "placeGenreHere"
       })), _react.default.createElement("div", {
         id: "predicted_genre_probability"
-      }, this.props.parentStates.predictedScore, " Confidence")), _react.default.createElement("div", {
+      }, _react.default.createElement("p", {
+        id: "predictedScore"
+      }))), _react.default.createElement("div", {
         id: "actual_genre"
       }, _react.default.createElement("div", {
         id: "actual_genre_name"
-      }, "Actual: ", this.props.parentStates.actualGenre), _react.default.createElement("div", {
+      }, _react.default.createElement("p", {
+        id: "actualGenre"
+      })), _react.default.createElement("div", {
         id: "actual_genre_probability"
-      }, this.props.parentStates.actualScore, " Confidence")), _react.default.createElement("div", {
+      }, _react.default.createElement("p", {
+        id: "actualScore"
+      }))), _react.default.createElement("div", {
         id: "model_stats"
       }, _react.default.createElement("img", {
         src: require('./sampleImage.png')
       }), _react.default.createElement("div", {
         id: "model_score"
-      }, this.props.parentStates.modelScore))));
+      }, _react.default.createElement("p", {
+        id: "modelScore"
+      })))));
     }
   }]);
 

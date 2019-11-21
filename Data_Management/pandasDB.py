@@ -1,15 +1,15 @@
 import pandas as pd 
 
 
+
 class DataBase:
 
 	#Constructor creates df's that are needed.
 	#Assumes that pkl files are in thee same directory
-	def __init__(self, pkls=['tracks.pkl', 'features.pkl']):
+	def __init__(self, pkls=['/Data/tracks.pkl', '/Data/features.pkl']):
 		self.tables = {}
-
 		for pkl in pkls:
-			if(pkl == 'tracks.pkl'):
+			if(pkl == '/Data/tracks.pkl'):
 				key = 'tracks'
 			else:
 				key = 'features'
@@ -52,7 +52,6 @@ class DataBase:
 
 			else:
 				print('Not a vaild set type')
-
 
 	def getRandomSong(self, subset='small'):
 		tracks = self.tables['tracks']
@@ -105,7 +104,7 @@ class DataBase:
 		titles = titles.to_frame()
 
 		#get querey hits as a dictionary
-		res = titles.loc[titles['title'] == songTitle]
+		res = titles.loc[titles['title'] == songTitle.lower()]
 		results = res.to_dict()
 		results = results['title']
 

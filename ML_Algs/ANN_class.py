@@ -15,7 +15,7 @@ from ANN_callback import Callback
 from ANN_encode import encode
 from ANN_result import Result
 
-TRAINED_MODEL_DIR = './trained_models/'
+TRAINED_MODEL_DIR = '../ML_Algs/trained_models/'
 
 import sys
 sys.path.append('../Back_End/')
@@ -58,7 +58,7 @@ class ANN():
 			print('Loading a model from disk!\nParameters loaded from disk:')
 			parameter_frame = pd.read_csv(
 				TRAINED_MODEL_DIR + str(trained_model) + '_parameters.csv',
-			 	names=Parameter.keys
+			 	names=Parameter.keys,
 			)
 			# Adjust the parameters for construction
 			for feature in parameter_frame:

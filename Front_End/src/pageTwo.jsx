@@ -19,10 +19,12 @@ class PageTwo extends React.Component{
                     <h1>
                         <div id="title_and_artist">
                             <div id="songTitle">
-                                {this.props.parentStates.songTitle}
+                                <p id="songName">
+                                </p>
                             </div>
                             <div id="artist">
-                                {this.props.parentStates.artist}
+                                <p id="artist">
+                                </p>
                             </div>
                         </div>
                     </h1>
@@ -33,21 +35,25 @@ class PageTwo extends React.Component{
                             </p>
                         </div>
                         <div id="predicted_genre_probability">
-                            {this.props.parentStates.predictedScore} Confidence
+                            <p id="predictedScore">
+                            </p>
                         </div>
                     </div>
                     <div id="actual_genre">
                         <div id="actual_genre_name">
-                            Actual: {this.props.parentStates.actualGenre}
+                            <p id="actualGenre">
+                            </p>
                         </div>
                         <div id="actual_genre_probability">
-                            {this.props.parentStates.actualScore} Confidence
+                            <p id="actualScore">
+                            </p>
                         </div>
                     </div>
                     <div id="model_stats">
                         <img src={require('./sampleImage.png')}/>
                         <div id="model_score">
-                            {this.props.parentStates.modelScore}
+                            <p id="modelScore">
+                            </p>
                         </div>
                     </div>
                 </div>

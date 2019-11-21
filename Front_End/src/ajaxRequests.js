@@ -44,10 +44,18 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"])){
         console.log(object);
 
         //place the response on the screen
-        document.getElementById('placeGenreHere').textContent = "songGenre: " + object.songGenre;
+        document.getElementById('songName').textContent = object.songName;
+        document.getElementById('artist').textContent = object.artist;
+        document.getElementById('placeGenreHere').textContent = object.songGenre;
+        document.getElementById('predictedScore').textContent = object.predictedScore + " confidence";
+        document.getElementById('actualGenre').textContent = "Actual: " + object.actualGenre;
+        document.getElementById('actualScore').textContent = object.actualScore + " confidence";
+        document.getElementById('modelScore').textContent = object.modelScore;
+        
         //console.log(object); //to test
     }
     xhr.send();
+
 }
 //at this point, user has clicked the search button, so we will need to send the request:
 export function sbm(id){

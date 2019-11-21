@@ -37,7 +37,7 @@ class MainPage extends React.Component{
     })
     //call ajaxrequest, must wait for page to render.
     const song = this.state.songTitle
-    setTimeout(function() { ajaxRequests.sbm(song); }, 1000);
+    setTimeout(function() {ajaxRequests.sbm(song); }, 1000);
   }
   handleTextChange = (event) =>{
     this.setState({
