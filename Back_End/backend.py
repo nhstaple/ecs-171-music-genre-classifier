@@ -32,7 +32,6 @@ def findOneSong(name):
 	randomFlag = False
 
 	data = pandasDB.DataBase().query(name, randomFlag)
-	print("DATA: {}".format(data))
 	sample = data['track_data'][0]
 
 	# Data:
@@ -60,8 +59,6 @@ def findOneSong(name):
 	sample = neuralNet.predict(sample)
 
 	total_score['sum'] = sample['prediction']['score'] + total_score['sum']
-
-	print("MY RESULTS: {}".format(sample['prediction']))
 
 	predictedGenre = sample['prediction']['result']
 	actualGenre = data['track_data'][0]['top_genre'][0]
