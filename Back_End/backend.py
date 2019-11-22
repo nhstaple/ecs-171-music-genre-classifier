@@ -56,11 +56,10 @@ def findOneSong(name, randomFlag):
 	# -X
 	if(error == False):
 		#need to implement .selectN() to get N most influential featues for new models
-		independent_features = ['mfcc', 'spectral_contrast']
-
+		independent_features = neuralNet.get_features()
 		# neuralNet = ANN_class.ANN(trained_model='best')
 		sample['prediction'] = {}
-		sample['X'] = sample['X'][independent_features]
+		sample['X'] = sample['X'].iloc[:,independent_features]
 		sample = neuralNet.predict(sample)
 
 		predictedGenre = sample['prediction']['result']
