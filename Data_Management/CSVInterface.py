@@ -194,7 +194,7 @@ class featRead:
            215, 443, 511, 199, 289, 313, 339, 230, 200, 488,
            498, 282, 304, 392, 479, 334, 195, 402, 75, 410,
            177, 192]
-           if n > 200:
-           	print("mRMR is not computed for the number of features you asked for. Using max: 200")
-           	n = 200
+		if(n > 200):
+			print("mRMR is not computed for the number of features you asked for. Using max: 200")
+			n = 200
 		return indices[0:n]
