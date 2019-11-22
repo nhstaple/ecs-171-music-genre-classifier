@@ -15,7 +15,7 @@ Users can enter in a song title and the result will be a predicted genre.
 + **anything else:**
 
 ## Data Managment
-+ **Data format:**
++ **Data file format:**
 + **Anything else:**
 
 ## Machine Learning Group
