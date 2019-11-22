@@ -1,6 +1,9 @@
 # ECS171 music genre classifier
 This is a Music Genre Classifier built as a website for ECS 171 - Introduction to Machine Learning.
-Users can enter in a song title and the result will be a predicted genre.
+Users can enter in a song title and the result will be a predicted genre. 
+
+## Installation for Local Machine:
++ **Insert Instructions**
 
 ## Languages
 + **Front end programming languages:** JavaScript (ES6), HTML, CSS
