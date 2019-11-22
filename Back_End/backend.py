@@ -27,6 +27,7 @@ def findOneSong(name, randomFlag):
 	# 	if song == name:
 	# 		return jsonify({'songGenre' : 'Dance'})
 
+	error = False
 	# get data from database
 	if(randomFlag == 'True'):
 		data = pandasDB.DataBase().query(name, True)
@@ -36,10 +37,14 @@ def findOneSong(name, randomFlag):
 		artist = data['track_data']['artist_name'][0]
 	else:
 		data = pandasDB.DataBase().query(name, False)
-		sample = data['track_data'][0]
-		songName = data['track_data'][0]['song_title'][0]
-		actualGenre = data['track_data'][0]['top_genre'][0]
-		artist = data['track_data'][0]['artist_name'][0]
+		print(data)
+		if(not data['track_data']):
+			error = True
+		else:
+			sample = data['track_data'][0]
+			songName = data['track_data'][0]['song_title'][0]
+			actualGenre = data['track_data'][0]['top_genre'][0]
+			artist = data['track_data'][0]['artist_name'][0]
 	
 	# Data:
 	# -track id
@@ -49,35 +54,42 @@ def findOneSong(name, randomFlag):
 	# -top_genre
 	# -set
 	# -X
+	if(error == False):
+		indepent_features = ['mfcc', 'spectral_contrast']
 
-	indepent_features = ['mfcc', 'spectral_contrast']
+		total_score = {
+			'iterations': 0,
+			'sum': 0
+		}
+		total_score['iterations'] = total_score['iterations'] + 1
 
-	total_score = {
-		'iterations': 0,
-		'sum': 0
-	}
-	total_score['iterations'] = total_score['iterations'] + 1
+		# neuralNet = ANN_class.ANN(trained_model='best')
+		sample['prediction'] = {}
+		sample['X'] = sample['X'][['mfcc', 'spectral_contrast']]
+		sample = neuralNet.predict(sample)
 
-	neuralNet = ANN_class.ANN(trained_model='best')
-	sample['prediction'] = {}
-	sample['X'] = sample['X'][['mfcc', 'spectral_contrast']]
-	sample = neuralNet.predict(sample)
+		
+		total_score['sum'] = sample['prediction']['score'] + total_score['sum']
 
-	total_score['sum'] = sample['prediction']['score'] + total_score['sum']
-
-	predictedGenre = sample['prediction']['result']
+		predictedGenre = sample['prediction']['result']
 
 	# send ML results to front end
 
-	return jsonify({
-		'songName' : songName,
-		'artist' : artist,
-		'songGenre' : predictedGenre,
-		'predictedScore' : str(sample['prediction']['genres'][predictedGenre]),
-		'actualGenre' : actualGenre,
-		'actualScore' : str(sample['prediction']['genres'][actualGenre]),
-		'modelScore' : str(total_score['sum'])
-	})
+	if(error == True):
+		return jsonify({
+			'error' : error
+		})
+	else:
+		return jsonify({
+			'songName' : songName,
+			'artist' : artist,
+			'songGenre' : predictedGenre,
+			'predictedScore' : str(sample['prediction']['genres'][predictedGenre]),
+			'actualGenre' : actualGenre,
+			'actualScore' : str(sample['prediction']['genres'][actualGenre]),
+			'modelScore' : str(total_score['sum']),
+			'error' : error
+		})
 
 @app.route('/song', methods=['POST'])
 def findOneSong2():
@@ -90,4 +102,5 @@ def findOneSong2():
 
 
 if __name__ == '__main__':
+	neuralNet = ANN_class.ANN(trained_model='best')
 	app.run(debug=True, port=8080) #run app on port 8080 in debug mode

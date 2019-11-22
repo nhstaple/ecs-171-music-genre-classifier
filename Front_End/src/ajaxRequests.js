@@ -41,6 +41,10 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"]), random='True'){
 
         let object = JSON.parse(responseStr);  // turn it into an object
 
+        if(object.error === true){
+            alert("song is not in the database");
+            return;
+        }
         console.log(object);
 
         //place the response on the screen

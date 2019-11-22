@@ -42,7 +42,7 @@ class DataBase:
 				newDF = frame[frame.index.isin(subset.index)].copy()
 				return newDF
 			elif(sub == 'cleanLarge'):
-				genres = self.tableDF['track']
+				genres = tracks['track']
 				genres = genres['genre_top']
 				#full set genre_top not complete
 				genres = genres.dropna()
@@ -53,7 +53,7 @@ class DataBase:
 			else:
 				print('Not a vaild set type')
 
-	def getRandomSong(self, subset='small'):
+	def getRandomSong(self, subset='medium'):
 		tracks = self.tables['tracks']
 		tracks = self.getSubset(tracks, subset)
 		track = tracks['track']
@@ -102,6 +102,7 @@ class DataBase:
 		titles = track[['title']]
 		titles = titles['title'].str.lower()
 		titles = titles.to_frame()
+		titles = self.getSubset(titles, 'cleanLarge')
 
 		#get querey hits as a dictionary
 		res = titles.loc[titles['title'] == songTitle.lower()]
