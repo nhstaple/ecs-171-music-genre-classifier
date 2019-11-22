@@ -46,8 +46,6 @@ print('Initializing Data Management interface...')
 # reads the data from the csv
 reader = CSVInterface.featRead()
 
-#get the features
-indepent_features = reader.selectN(n=FEATURE_COUNT)
 # D = { X | Y }
 # D[X][Y]
 D = {}
@@ -113,6 +111,9 @@ D['Y'] = {
 # The data after removing outliers
 # data = outlier_method(RawData)
 
+#get the features
+indepent_features = reader.selectN(n=FEATURE_COUNT)
+
 print('Constructing datasets')
 print('X')
 # the ind vars
@@ -157,7 +158,8 @@ else:
 		hidden_activation=DEFAULT_H_ACTIVATION,
 		output_activation=DEFAULT_O_ACTIVATION,
 		initialize=False,
-		loss_function=DEFAULT_LOSS
+		loss_function=DEFAULT_LOSS,
+		features = indepent_features
 	))
 
 	# Show the weights

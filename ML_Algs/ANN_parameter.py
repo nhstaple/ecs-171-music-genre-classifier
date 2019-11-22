@@ -17,6 +17,7 @@ DEF_HIDDEN_ACTIVATION = 'sigmoid'
 DEF_OUTPUT_ACTIVATION = 'sigmoid'
 DEF_LEARNING_RATE = 10
 DEF_LOSS_FUNCTION = 'mean_squared_error'
+DEF_FEATURES = [0]
 
 # Make a parameter object to be passed to the constructor of the ANN
 # Interface for the .csv file
@@ -45,7 +46,8 @@ class Parameter():
 		output_activation=DEF_OUTPUT_ACTIVATION,
 		initialize=True,
 		learning_rate=DEF_LEARNING_RATE,
-		loss_function=DEF_LOSS_FUNCTION):
+		loss_function=DEF_LOSS_FUNCTION,
+		features = DEF_FEATURES):
 
 		self.parameters = {
 			'num_input': num_input,
@@ -56,5 +58,6 @@ class Parameter():
 			'output_activation': output_activation,
 			'initialize': initialize,
 			'learning_rate':learning_rate,
-			'loss_function': loss_function
+			'loss_function': loss_function,
+			'features':features
 		}

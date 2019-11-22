@@ -79,6 +79,7 @@ class ANN():
 		self.initialize 		= p.parameters['initialize']
 		self.learning_rate 		= p.parameters['learning_rate']
 		self.loss_function 		= p.parameters['loss_function']
+		self.features			= p.parameters['features']
 
 		m = Sequential()
 		# If init is set then initialize the weights and biases
@@ -150,6 +151,11 @@ class ANN():
 
 			# Set the trained flag
 			self.trained = True
+		
+		# If the model is being loaded from disk, then load the features list
+		if trained_model != '':
+			print('\nLoading feature set!')
+			self.features = np.load(TRAINED_MODEL_DIR + str(trained_model) + "_features.npy", allow_pickle=True)
 
 		self.model = m
 		print('ANN() constructor finished\n********\n')
@@ -290,9 +296,13 @@ class ANN():
 		w = np.array(w)
 		np.save(TRAINED_MODEL_DIR + model_name + '_weights', w)
 
+		# Save independent feature indices to disk
+		np.save(TRAINED_MODEL_DIR + model_name + '_features',self.get_features())
+
 		f1 = TRAINED_MODEL_DIR + model_name + '_parameters.csv'
 		f2 = TRAINED_MODEL_DIR + model_name + '_weights.npy'
-		print('Saved\n\t{0}\n\t{1}\n'.format(f1, f2))
+		f3 = TRAINED_MODEL_DIR + model_name + '_features.npy'
+		print('Saved\n\t{0}\n\t{1}\n\t{2}\n'.format(f1, f2, f3))
 	
 	#Returns the mean score of the model
 	def get_mean_score(self):
@@ -300,6 +310,9 @@ class ANN():
 		for i in range(0,len(self.scores)):
 			total_score += self.scores[i]
 		return total_score/(len(self.scores))
+
+	def get_features(self):
+		return self.features
 
 test = False
 
