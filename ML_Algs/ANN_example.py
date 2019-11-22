@@ -192,14 +192,13 @@ if samples >= valx.shape[0]:
 
 print('\n')
 
-total_score = {
-	'iterations': 0,
-	'sum': 0
-}
+#total_score = {
+#	'iterations': 0,
+#	'sum': 0
+#}
 
 def predict(sample_index=0, sample=song_result_interface.result.copy(), interactive=False):
 	# ignore these commands back end's job
-	total_score['iterations'] = total_score['iterations'] + 1
 	X = pd.DataFrame([np.array(valx[sample_index].copy())])
 	sample['X'] = X.values
 	sample['top_genre'] = decode(valy[sample_index])
@@ -207,10 +206,6 @@ def predict(sample_index=0, sample=song_result_interface.result.copy(), interact
 
 	# ML & Al job, just updates sample['prediction']
 	sample = net.predict(sample)
-
-	# ignore this
-	total_score['sum'] = sample['prediction']['score'] + total_score['sum']
-	######
 
 	# showing results
 	if interactive:
@@ -241,9 +236,12 @@ for index in range(0, samples):
 	else:
 		results.append(predict(index, interactive=False))
 
-tot_score = total_score['sum'] / (16*total_score['iterations'])
+total_score = 0.0
+for x in range(0,len(net.scores)):
+	total_score += net.scores[x]
+tot_score = total_score / len(net.scores)
 
-print('Total score:\t{}'.format(tot_score))
+print('Average Rank of Actual Genre:\t{}'.format(tot_score))
 
 ## Save the Model
 # For the ML team: copy and paste this file and name it one word, <your name>
