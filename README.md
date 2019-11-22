@@ -5,23 +5,23 @@ Users can enter in a song title and the result will be a predicted genre.
 ## Installation for Local Machine:
 + **Insert Instructions**
 
-## Languages
+### Languages
 + **Front end programming languages:** JavaScript (ES6), HTML, CSS
 + **Back end programming languages:** Python (version >= 3)
 
-## Front End
+### Front End
 + **Frameworks:** React
 + **Modules:** node.js, webpack, npm
 
-## Back End
+### Back End
 + **Libraries:** add libraries used
 + **anything else:**
 
-## Data Managment
+### Data Managment
 + **Data file format:**
 + **Anything else:**
 
-## Machine Learning Group
+### Machine Learning Group
 + **Model used:** insert what model we used
 + **Training:** how to train?
 + **Prediction:** how to predict?
