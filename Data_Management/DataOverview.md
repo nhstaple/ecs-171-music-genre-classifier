@@ -34,7 +34,7 @@ Track is assigned to same split across all of the subsets.
 
 ### Per-track table preview
 
-![Per-Track Table](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/per-track.PNG)
+![Per-Track Table](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/per-track.PNG)
 
 Per-Track Columns:
 * bit_rate
@@ -59,10 +59,10 @@ Per-Track Columns:
 * title
 
 ### Per-Album table
-![Per-Album](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/per-album.PNG "Per-Album Table")
+![Per-Album](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/per-album.PNG "Per-Album Table")
 
 ### Per-Artist table preview
-![Per-Artist](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/per-artist.PNG "Per-Artist Table") 
+![Per-Artist](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/per-artist.PNG "Per-Artist Table") 
 
 * ative_year_begin
 * active_year_end
@@ -84,7 +84,7 @@ Per-Track Columns:
 
 
 ### Per-Set table preview
-![Per-Set](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/per-set.PNG "Per-Set Table")
+![Per-Set](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/per-set.PNG "Per-Set Table")
 
 * Split
 * Subset
@@ -98,7 +98,7 @@ track. The *genres_top* feature contains the tracks Root Genre. Finally, the
 when going from the *genres* to *genre_top*.
 
 ### Root Genres
-![Top Genres](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/top_genres.PNG "Top Genres Table")
+![Top Genres](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/top_genres.PNG "Top Genres Table")
 
 
 ## Features
@@ -118,7 +118,7 @@ harmonic and melodic characterisitics of music. Spectrum is projected onto
 12 bins each representing 12 distinct chroma  of the musical octave.
 
 ### Visualization of Chroma Gram
-![Chroma Gram](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/chroma_gram.PNG "Chroma Gram")
+![Chroma Gram](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/chroma_gram.PNG "Chroma Gram")
 
 * Tonnetz 
 	* tonnetz: tonal centroid features. 
