@@ -10,9 +10,6 @@ from ANN_class import ANN
 from ANN_encode import encode, decode
 import random
 
-# TODO change to a list of features
-indepent_features = ['mfcc', 'spectral_contrast']
-
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
 
@@ -39,6 +36,8 @@ print('Initializing Data Management interface...')
 # reads the data from the csv
 reader = CSVInterface.featRead()
 
+#get the features
+indepent_features = reader.selectN(n=50)
 # D = { X | Y }
 # D[X][Y]
 D = {}
@@ -107,9 +106,7 @@ D['Y'] = {
 print('Constructing datasets')
 print('X')
 # the ind vars
-X =  pd.DataFrame(D['X']['small'][
-		indepent_features]
-	)
+X =  pd.DataFrame(D['X']['small'].iloc[:, indepent_features])
 
 print('Y')
 # the dependent var
