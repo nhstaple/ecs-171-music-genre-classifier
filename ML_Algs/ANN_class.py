@@ -52,6 +52,7 @@ class ANN():
 		# Initialize the network's weights prior to training
 		init=False):
 
+		self.scores = []
 		self.trained = False
 		# Check if the user provided an already trained model and set the hyperparameters
 		if trained_model != '':
@@ -268,8 +269,11 @@ class ANN():
 
 		for i in range(0, len(max_hist)):
 			pred = classes[max_hist[i]['index']]
+			# check if sample['top_genre'] is a list
+			# go through list and see if pred is in the list and set the score
 			if pred == sample['top_genre']:
-				result['prediction']['score'] = i # + 1 # plus one if you want to penalize always
+				result['prediction']['score'] = i+1 #score [1,16]
+		self.scores.append(result['prediction']['score'])
 		return result
 
 	def save_to_disk(self, model_name='test'):
@@ -289,7 +293,13 @@ class ANN():
 		f1 = TRAINED_MODEL_DIR + model_name + '_parameters.csv'
 		f2 = TRAINED_MODEL_DIR + model_name + '_weights.npy'
 		print('Saved\n\t{0}\n\t{1}\n'.format(f1, f2))
-
+	
+	#Returns the mean score of the model
+	def get_mean_score(self):
+		total_score = 0.0
+		for i in range(0,len(self.scores)):
+			total_score += self.scores[i]
+		return total_score/(len(self.scores))
 
 test = False
 

@@ -1,6 +1,9 @@
 
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import KFold
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import f_classif
 
 # import sys
 # sys.path.append('../')
@@ -154,3 +157,44 @@ class featRead:
 		ret['features'] = feat
 		
 		return ret
+
+	def selectN(self, n = 50):
+		featureData = self.getSubset(self.getFrame('features'), sub='cleanLarge')
+		genreData = self.getSubset(self.getFrame('track')['genre_top'], sub='cleanLarge')
+		Xdf = pd.DataFrame(featureData)
+		Ydf = pd.DataFrame(genreData)
+		bestfeatures = SelectKBest(score_func=f_classif, k=n)
+		fit = bestfeatures.fit(Xdf, np.ravel(Ydf))
+		dfscores = pd.DataFrame(fit.scores_)
+		dfcolumns = pd.DataFrame(Xdf.columns)
+		featureScores = pd.concat([dfcolumns,dfscores],axis=1)
+		featureScores.columns = ['Specs','Score']  #naming the dataframe columns
+		indices = featureScores.nlargest(n,'Score').index #indices of n best features
+		return indices
+
+	def selectmRMR(self, n = 50):
+		indices = [435, 295, 412, 314, 312, 275, 437, 331,
+           384, 317, 515, 449, 323, 377, 354, 462, 450, 321,
+           509, 387, 272, 315, 294, 517, 461, 292, 430, 277,
+           508, 379, 174, 428, 411, 386, 325, 375, 319, 426,
+           208, 510, 281, 352, 297, 436, 311, 385, 451, 440,
+           330, 399, 431, 380, 507, 394, 229, 303, 318, 467,
+           388, 373, 415, 301, 285, 406, 355, 381, 444, 429,
+           250, 279, 206, 376, 358, 327, 173, 414, 398, 338,
+           460, 299, 383, 416, 198, 468, 506, 438, 287, 196,
+           433, 445, 389, 335, 305, 278, 212, 382, 172, 395,
+           404, 427, 344, 310, 211, 231, 390, 329, 274, 204,
+           372, 458, 397, 214, 505, 166, 336, 293, 169, 378,
+           320, 209, 514, 343, 328, 356, 391, 471, 159, 205,
+           441, 234, 307, 497, 464, 290, 207, 276, 403, 459,
+           176, 283, 333, 238, 288, 175, 194, 452, 324, 442,
+           232, 434, 465, 298, 210, 254, 228, 472, 309, 362,
+           213, 496, 171, 405, 448, 286, 340, 401, 193, 291,
+           280, 302, 233, 454, 243, 308, 423, 253, 164, 170,
+           215, 443, 511, 199, 289, 313, 339, 230, 200, 488,
+           498, 282, 304, 392, 479, 334, 195, 402, 75, 410,
+           177, 192]
+           if n > 200:
+           	print("mRMR is not computed for the number of features you asked for. Using max: 200")
+           	n = 200
+		return indices[0:n]
