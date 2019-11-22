@@ -293,7 +293,9 @@ class ANN():
 		f1 = TRAINED_MODEL_DIR + model_name + '_parameters.csv'
 		f2 = TRAINED_MODEL_DIR + model_name + '_weights.npy'
 		print('Saved\n\t{0}\n\t{1}\n'.format(f1, f2))
-	def get_mean_score():
+	
+	#Returns the mean score of the model
+	def get_mean_score(self):
 		total_score = 0.0
 		for i in range(0,len(self.scores)):
 			total_score += self.scores[i]

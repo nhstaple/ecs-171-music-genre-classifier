@@ -1,5 +1,5 @@
 # ANN_example.py
-
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
@@ -12,6 +12,16 @@ import random
 
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
+FEATURE_COUNT = 200
+VALIDATION_PERCENT = 0.1
+DEFAULT_LAYERS = 2
+DEFAULT_NODES = 16
+DEFAULT_H_ACTIVATION = 'relu'
+DEFAULT_O_ACTIVATION = 'softmax'
+DEFAULT_LOSS = 'categorical_crossentropy'
+DEFAULT_BATCH = 100
+DEFAULT_EPOCHS = 500
+TEST_RATIO = 0.34
 
 # Load model or train model?
 g = input("Load a model from disk? (y/n)\t") 
@@ -37,7 +47,7 @@ print('Initializing Data Management interface...')
 reader = CSVInterface.featRead()
 
 #get the features
-indepent_features = reader.selectN(n=50)
+indepent_features = reader.selectN(n=FEATURE_COUNT)
 # D = { X | Y }
 # D[X][Y]
 D = {}
@@ -117,7 +127,7 @@ print('train/validation split')
 trainx, valx, trainy, valy = train_test_split(
 	X.values,
 	encode(Y), # one hot encoder, see ANN_encode.py
-	test_size=0.10,	# validation size
+	test_size=VALIDATION_PERCENT,	# validation size
 	random_state=EXPERIMENT_SEED
 )
 
@@ -141,13 +151,13 @@ else:
 	# Use this to test your own architecture
 	net = ANN(p=Parameter(
 		num_input=len(sample),
-		num_hidden_layers=2,
-		nodes_per_hidden=16,
+		num_hidden_layers=DEFAULT_LAYERS,
+		nodes_per_hidden=DEFAULT_NODES,
 		num_output=NUM_GENRES,
-		hidden_activation='relu',
-		output_activation='softmax',
+		hidden_activation=DEFAULT_H_ACTIVATION,
+		output_activation=DEFAULT_O_ACTIVATION,
 		initialize=False,
-		loss_function='categorical_crossentropy'
+		loss_function=DEFAULT_LOSS
 	))
 
 	# Show the weights
@@ -159,9 +169,9 @@ else:
 	history, callback = net.train(
 		trainx,
 		trainy,
-		num_iter=100,
-		test_ratio=0.34,
-		batch=100,
+		num_iter=DEFAULT_EPOCHS,
+		test_ratio=TEST_RATIO,
+		batch=DEFAULT_BATCH,
 		interactive=False
 	)
 
@@ -182,17 +192,14 @@ samples = 0
 # The number of test samples to check
 samples = int(input('Begin prediction on test set.\nNumber of samples:\t'))
 
-if samples >= valx.shape[0]:
+if samples > valx.shape[0]:
 	samples = valx.shape[0]
 	print('Too bad... you wanted too many samples. Using the max:\t{}'.format(samples))
 	input('Press enter to continue...')
 
 print('\n')
 
-#total_score = {
-#	'iterations': 0,
-#	'sum': 0
-#}
+val_scores = []
 
 def predict(sample_index=0, sample=song_result_interface.result.copy(), interactive=False):
 	# ignore these commands back end's job
@@ -203,7 +210,7 @@ def predict(sample_index=0, sample=song_result_interface.result.copy(), interact
 
 	# ML & Al job, just updates sample['prediction']
 	sample = net.predict(sample)
-
+	val_scores.append(sample['prediction']['score'])
 	# showing results
 	if interactive:
 		print('\n\n')
@@ -233,12 +240,29 @@ for index in range(0, samples):
 	else:
 		results.append(predict(index, interactive=False))
 
-total_score = 0.0
-for x in range(0,len(net.scores)):
-	total_score += net.scores[x]
-tot_score = total_score / len(net.scores)
+print('Average Rank of Actual Genre:\t{}',net.get_mean_score())
 
-print('Average Rank of Actual Genre:\t{}'.format(tot_score))
+#histogram of validation scores
+n_bins = 8
+
+plt.hist(val_scores, bins=n_bins)
+
+plt.show()
+
+if(MODEL_NAME == ''):
+	#plot of training accuracy over time
+	training_error = []
+	for x in history.history['categorical_accuracy']:
+		training_error.append(x)
+
+	plt.plot(training_error, label = "training accuracy")
+	plt.xlabel("epoch")
+	plt.ylabel("accuracy")
+	plt.title("accuracy vs epoch")
+	plt.legend()
+
+	plt.show()
+
 
 ## Save the Model
 # For the ML team: copy and paste this file and name it one word, <your name>
@@ -248,3 +272,5 @@ if MODEL_NAME == '':
 	if g == 'Y' or g == 'y':
 		g = input('model name: ')
 		net.save_to_disk(g)
+	elif g == "N" or g == 'n':
+		print("Discarded Model")
