@@ -55,21 +55,13 @@ def findOneSong(name, randomFlag):
 	# -set
 	# -X
 	if(error == False):
-		indepent_features = ['mfcc', 'spectral_contrast']
-
-		total_score = {
-			'iterations': 0,
-			'sum': 0
-		}
-		total_score['iterations'] = total_score['iterations'] + 1
+		#need to implement .selectN() to get N most influential featues for new models
+		independent_features = ['mfcc', 'spectral_contrast']
 
 		# neuralNet = ANN_class.ANN(trained_model='best')
 		sample['prediction'] = {}
-		sample['X'] = sample['X'][['mfcc', 'spectral_contrast']]
+		sample['X'] = sample['X'][independent_features]
 		sample = neuralNet.predict(sample)
-
-		
-		total_score['sum'] = sample['prediction']['score'] + total_score['sum']
 
 		predictedGenre = sample['prediction']['result']
 
@@ -87,7 +79,7 @@ def findOneSong(name, randomFlag):
 			'predictedScore' : str(sample['prediction']['genres'][predictedGenre]*100),
 			'actualGenre' : actualGenre,
 			'actualScore' : str(sample['prediction']['genres'][actualGenre]*100),
-			'modelScore' : str(total_score['sum']),
+			'modelScore' : str(neuralNet.get_mean_score()),
 			'error' : error
 		})
 
