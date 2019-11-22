@@ -93,5 +93,5 @@ def findOneSong2():
 
 
 if __name__ == '__main__':
-	neuralNet = ANN_class.ANN(trained_model='best')
+	neuralNet = ANN_class.ANN(trained_model='matt')
 	app.run(debug=True, port=8080) #run app on port 8080 in debug mode
