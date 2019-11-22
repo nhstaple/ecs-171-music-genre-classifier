@@ -13,7 +13,7 @@ class MainPage extends React.Component{
       // States are hardcoded for now
       landingPage: true,
       secondPageState: false,
-      songTitle: '',
+      songTitle: 'enter song',
       artist: '',
       predictedGenre: '',
       predictedScore: '',
