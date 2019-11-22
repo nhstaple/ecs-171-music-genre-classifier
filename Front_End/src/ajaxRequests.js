@@ -53,8 +53,9 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"]), random='True'){
         document.getElementById('placeGenreHere').textContent = object.songGenre;
         document.getElementById('predictedScore').textContent = object.predictedScore + "% probability";
         document.getElementById('actualGenre').textContent = "Actual: " + object.actualGenre;
+        document.getElementById('songScore').textContent = "Song Rank: " + object.songScore;
         document.getElementById('actualScore').textContent = object.actualScore + "% probability";
-        document.getElementById('modelScore').textContent = "Rank: " + object.modelScore;
+        document.getElementById('modelScore').textContent = "Model Rank: " + object.modelScore;
         
         //console.log(object); //to test
     }

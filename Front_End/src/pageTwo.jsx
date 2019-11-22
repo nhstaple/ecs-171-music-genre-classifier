@@ -49,6 +49,12 @@ class PageTwo extends React.Component{
                             </p>
                         </div>
                     </div>
+                    <div id = "song_stats">
+                        <div id = "song_score">
+                            <p id = "songScore">
+                            </p>
+                        </div>
+                    </div>
                     <div id="model_stats">
                         <div id="model_score">
                             <p id="modelScore">

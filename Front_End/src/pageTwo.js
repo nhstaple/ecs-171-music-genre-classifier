@@ -91,6 +91,12 @@ function (_React$Component) {
       }, _react.default.createElement("p", {
         id: "actualScore"
       }))), _react.default.createElement("div", {
+        id: "song_stats"
+      }, _react.default.createElement("div", {
+        id: "song_score"
+      }, _react.default.createElement("p", {
+        id: "songScore"
+      }))), _react.default.createElement("div", {
         id: "model_stats"
       }, _react.default.createElement("div", {
         id: "model_score"

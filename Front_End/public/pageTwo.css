@@ -105,6 +105,22 @@ main {
     font-family: 'carlito', sans-serif;
 }
 
+#song_stats{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    font-size: 2em;
+    color: #737373;
+}
+
+#song_score{
+    padding: 10px;
+    font-family: 'carlito', sans-serif;
+}
+
 #model_stats{
     display: flex;
     flex-direction: column;

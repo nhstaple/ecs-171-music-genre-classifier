@@ -78,6 +78,7 @@ def findOneSong(name, randomFlag):
 			'predictedScore' : str(sample['prediction']['genres'][predictedGenre]*100),
 			'actualGenre' : actualGenre,
 			'actualScore' : str(sample['prediction']['genres'][actualGenre]*100),
+			'songScore' : str(sample['prediction']['score']),
 			'modelScore' : str(neuralNet.get_mean_score()),
 			'error' : error
 		})
