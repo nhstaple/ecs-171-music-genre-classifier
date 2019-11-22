@@ -84,9 +84,9 @@ def findOneSong(name, randomFlag):
 			'songName' : songName,
 			'artist' : artist,
 			'songGenre' : predictedGenre,
-			'predictedScore' : str(sample['prediction']['genres'][predictedGenre]),
+			'predictedScore' : str(sample['prediction']['genres'][predictedGenre]*100),
 			'actualGenre' : actualGenre,
-			'actualScore' : str(sample['prediction']['genres'][actualGenre]),
+			'actualScore' : str(sample['prediction']['genres'][actualGenre]*100),
 			'modelScore' : str(total_score['sum']),
 			'error' : error
 		})
