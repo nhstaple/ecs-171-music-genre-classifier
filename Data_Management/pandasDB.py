@@ -57,7 +57,7 @@ class DataBase:
 
         #Returns a dictionary containing inforamtion of a random song.
         #@subset: from which subset do you want to select a ranom song.
-        def getRandomSong(self, subset='medium'):
+	def getRandomSong(self, subset='medium'):
 		tracks = self.tables['tracks']
 		tracks = self.getSubset(tracks, subset)
 		track = tracks['track']
