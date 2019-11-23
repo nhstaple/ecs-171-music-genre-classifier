@@ -34,7 +34,7 @@ Track is assigned to same split across all of the subsets.
 
 ### Per-track table preview
 
-![Per-Track Table](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/per-track.PNG)
+![Per-Track Table](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/per-track.PNG)
 
 Per-Track Columns:
 * bit_rate
@@ -59,10 +59,10 @@ Per-Track Columns:
 * title
 
 ### Per-Album table
-![Per-Album](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/per-album.PNG "Per-Album Table")
+![Per-Album](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/per-album.PNG "Per-Album Table")
 
 ### Per-Artist table preview
-![Per-Artist](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/per-artist.PNG "Per-Artist Table") 
+![Per-Artist](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/per-artist.PNG "Per-Artist Table") 
 
 * ative_year_begin
 * active_year_end
@@ -84,7 +84,7 @@ Per-Track Columns:
 
 
 ### Per-Set table preview
-![Per-Set](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/per-set.PNG "Per-Set Table")
+![Per-Set](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/per-set.PNG "Per-Set Table")
 
 * Split
 * Subset
@@ -98,7 +98,7 @@ track. The *genres_top* feature contains the tracks Root Genre. Finally, the
 when going from the *genres* to *genre_top*.
 
 ### Root Genres
-![Top Genres](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/top_genres.PNG "Top Genres Table")
+![Top Genres](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/top_genres.PNG "Top Genres Table")
 
 
 ## Features
@@ -109,16 +109,17 @@ The features table consits of the following features
 	obtaining vectors from chroma_cqt. Features are robust to dynamics,
 	timbre and articulation. Used commonly in audio matching and retrival
 	applications.
-	* chroma_cqt:  chromagram
+	* chroma_cqt:  Constant-Q transorm. Uses a logarithmically spaced
+	frequency axis.
 	* chroma_stft: Compute a chromogram from a waveform or power spectogram
-	Noramlized energy fro each chroma bin at each frame.
+
 
 Chroma feature relates to the twelve different pitch classes. They capture
 harmonic and melodic characterisitics of music. Spectrum is projected onto 
 12 bins each representing 12 distinct chroma  of the musical octave.
 
 ### Visualization of Chroma Gram
-![Chroma Gram](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/DataManagement/chroma_gram.PNG "Chroma Gram")
+![Chroma Gram](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/chroma_gram.PNG "Chroma Gram")
 
 * Tonnetz 
 	* tonnetz: tonal centroid features. 
@@ -127,7 +128,7 @@ harmonic and melodic characterisitics of music. Spectrum is projected onto
 	* mfcc: Mel-Frequency coeffecients 
 
 Mel-Frequency is a representation of the short-term power spectrum of a sound.
-MFCC's are teh coeffecients that collectively make up an MFC. Commonly used as
+MFCC's are the coeffecients that collectively make up an MFC. Commonly used as
 features in speech recognition. Finding use in other applications such as
 genre classification and audio similarity.
 
@@ -169,4 +170,5 @@ window for each feature. This way the feature table consists of 518 features.
 Features in the Echonest table are derived by a music analyzing program
 built by a company called Echonest, which derives information about the
 song and uses algorithms to rate them on various metrics defined by
-Echonest. (still looking for explanation on the 224 "temportal_features")
+Echonest. Could not find documentation explaining how features were calculated
+as they are proprietary. Therefore we did not use them in this project.
