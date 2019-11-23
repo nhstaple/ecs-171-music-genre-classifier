@@ -19,7 +19,9 @@ class DataBase:
 			except:
 				print('File ' + '../'+pkl + ' was not found!')
 
-
+        #Returns a subset of specified frame
+        #@frame: frame which we want subset from
+        #@sub: string specifyin subset
 	def getSubset(self, frame, sub='small'):
 			tracks = self.tables['tracks']
 			setDF = tracks['set']
@@ -46,14 +48,16 @@ class DataBase:
 				genres = genres['genre_top']
 				#full set genre_top not complete
 				genres = genres.dropna()
-
+                                #CleanLarge simply drops those samples that don't have a label i.e. top_genre
 				newDF = frame[frame.index.isin(genres.index)].copy()
 				return newDF
 
 			else:
 				print('Not a vaild set type')
 
-	def getRandomSong(self, subset='medium'):
+        #Returns a dictionary containing inforamtion of a random song.
+        #@subset: from which subset do you want to select a ranom song.
+        def getRandomSong(self, subset='medium'):
 		tracks = self.tables['tracks']
 		tracks = self.getSubset(tracks, subset)
 		track = tracks['track']
@@ -84,11 +88,12 @@ class DataBase:
 
 		ret = {}
 		ret['track_data'] = d
-		#ret['features'] = feat
 		
 		return ret
 
-
+        #Retruns list of dictionaries with song information of songs that were found in "DB".
+        #@songTitle: name of song to search for
+        #@randomFlag: Boolean. If true then title is ignored and random song is selected instead
 	def query(self, songTitle, randomFlag):
 
 		if(randomFlag == True):
