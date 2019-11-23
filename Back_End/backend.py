@@ -1,20 +1,24 @@
-from flask import Flask, jsonify, request #import objects from the Flask model
+from flask import Flask, jsonify, request, render_template #import objects from the Flask model
 import sys, os
 import pandas as pd
 sys.path.append(os.path.abspath(os.path.join('..', 'Data_Management'))) #path to Data_Management folder
 sys.path.append(os.path.abspath(os.path.join('..', 'ML_Algs'))) #path to ML_Algs folder
 import pandasDB
 import ANN_class
-app = Flask(__name__) #define app using Flask
+app = Flask(__name__, static_folder="../Front_End/build/", template_folder="../Front_End/build/") #define app using Flask
 
 # reference to https://www.youtube.com/watch?v=qH--M56OsUg
 # songArray is the example, which is like a data base
 songArray = ["one", "two","three"]
 
 # Homepage, which is for testing. It uses url: http://localhost:8080
-@app.route('/', methods=['GET'])
-def test():
-	return jsonify({'songGenre' : 'It works!'})
+# @app.route('/', methods=['GET'])
+# def test():
+# 	return jsonify({'songGenre' : 'It works!'})
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 
 # use url: http://localhost:8080/song/songName, 
@@ -95,4 +99,4 @@ def findOneSong2():
 
 if __name__ == '__main__':
 	neuralNet = ANN_class.ANN(trained_model='matt')
-	app.run(debug=True, port=8080) #run app on port 8080 in debug mode
+	app.run(debug=True, port=8080, host='0.0.0.0') #run app on port 8080 in debug mode

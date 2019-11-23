@@ -8,3 +8,8 @@ Data/tracks.pkl
 Data/genres.pkl
 Data/features.pkl
 Data/echonest.pkl
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
