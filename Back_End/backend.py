@@ -30,14 +30,13 @@ def findOneSong(name, randomFlag):
 	error = False
 	# get data from database
 	if(randomFlag == 'True'):
-		data = pandasDB.DataBase().query(name, True)
+		data = database.query(name, True)
 		sample = data['track_data']
 		songName = data['track_data']['song_title'][0]
 		actualGenre = data['track_data']['top_genre'][0]
 		artist = data['track_data']['artist_name'][0]
 	else:
-		data = pandasDB.DataBase().query(name, False)
-		print(data)
+		data = database.query(name, False)
 		if(not data['track_data']):
 			error = True
 		else:
@@ -94,5 +93,6 @@ def findOneSong2():
 
 
 if __name__ == '__main__':
+	database = pandasDB.DataBase()
 	neuralNet = ANN_class.ANN(trained_model='matt')
 	app.run(debug=True, port=8080) #run app on port 8080 in debug mode
