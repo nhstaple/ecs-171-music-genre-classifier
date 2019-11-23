@@ -7,27 +7,20 @@ import pandasDB
 import ANN_class
 app = Flask(__name__) #define app using Flask
 
-# reference to https://www.youtube.com/watch?v=qH--M56OsUg
-# songArray is the example, which is like a data base
-songArray = ["one", "two","three"]
-
 # Homepage, which is for testing. It uses url: http://localhost:8080
 @app.route('/', methods=['GET'])
 def test():
 	return jsonify({'songGenre' : 'It works!'})
 
 
-# use url: http://localhost:8080/song/songName, 
+# sample url: http://localhost:8080/song/enter song/True, 
 # which the songName is the song title and can be changed
 @app.route('/song/<string:name>/<string:randomFlag>/', methods=['GET'])
 def findOneSong(name, randomFlag):
-	# songList = [song for song in songArray if song == name]
 
-	# for song in songArray:
-	# 	if song == name:
-	# 		return jsonify({'songGenre' : 'Dance'})
-
+	# initialize error message
 	error = False
+
 	# get data from database
 	if(randomFlag == 'True'):
 		data = database.query(name, True)
@@ -37,6 +30,7 @@ def findOneSong(name, randomFlag):
 		artist = data['track_data']['artist_name'][0]
 	else:
 		data = database.query(name, False)
+		# if there is no this song title, query return a empty list call 'track_data'
 		if(not data['track_data']):
 			error = True
 		else:
@@ -53,6 +47,8 @@ def findOneSong(name, randomFlag):
 	# -top_genre
 	# -set
 	# -X
+
+	# when error == False, query found the input song title. otherwise, skip below because data is empty
 	if(error == False):
 		#need to implement .selectN() to get N most influential featues for new models
 		independent_features = neuralNet.get_features()
@@ -64,12 +60,7 @@ def findOneSong(name, randomFlag):
 		predictedGenre = sample['prediction']['result']
 
 	# send ML results to front end
-
-	if(error == True):
-		return jsonify({
-			'error' : error
-		})
-	else:
+	if(error == False):
 		return jsonify({
 			'songName' : songName,
 			'artist' : artist,
@@ -81,14 +72,10 @@ def findOneSong(name, randomFlag):
 			'modelScore' : str(neuralNet.get_mean_score()),
 			'error' : error
 		})
-
-@app.route('/song', methods=['POST'])
-def findOneSong2():
-	for song in songArray:
-		if song == request.json['name']:
-			return jsonify({'songGenre' : 'Dance'})
-
-	return jsonify({'songGenre' : 'I do not find it.'})
+	else:
+		return jsonify({
+			'error' : error
+		})
 
 
 
