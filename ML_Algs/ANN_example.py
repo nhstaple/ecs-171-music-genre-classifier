@@ -14,14 +14,15 @@ import random
 EXPERIMENT_SEED = 42
 FEATURE_COUNT = 200
 VALIDATION_PERCENT = 0.1
-DEFAULT_LAYERS = 2
-DEFAULT_NODES = 16
+DEFAULT_LAYERS = 1
+DEFAULT_NODES = len(classes) + 1
 DEFAULT_H_ACTIVATION = 'relu'
 DEFAULT_O_ACTIVATION = 'softmax'
 DEFAULT_LOSS = 'categorical_crossentropy'
-DEFAULT_BATCH = 100
-DEFAULT_EPOCHS = 500
+DEFAULT_BATCH = 200
+DEFAULT_EPOCHS = 120
 TEST_RATIO = 0.34
+DATA_SET = 'cleanLarge'
 
 # Load model or train model?
 g = input("Load a model from disk? (y/n)\t") 
@@ -41,10 +42,13 @@ sys.path.append('../Back_End/')
 sys.path.append('../Data_Management/')
 import CSVInterface
 import song_result_interface
+import pandasDB
 
 print('Initializing Data Management interface...')
 # reads the data from the csv
 reader = CSVInterface.featRead()
+
+DB = pandasDB.DataBase()
 
 # D = { X | Y }
 # D[X][Y]
@@ -112,16 +116,18 @@ D['Y'] = {
 # data = outlier_method(RawData)
 
 #get the features
-indepent_features = reader.selectN(n=FEATURE_COUNT)
+# indepent_features = reader.selectN(n=FEATURE_COUNT)
+indepent_features = ['mfcc', 'spectral_contrast']
 
 print('Constructing datasets')
 print('X')
 # the ind vars
-X =  pd.DataFrame(D['X']['small'].iloc[:, indepent_features])
+# X =  pd.DataFrame(D['X']['small'].iloc[:, indepent_features])
+X =  pd.DataFrame(D['X'][DATA_SET][indepent_features])
 
 print('Y')
 # the dependent var
-Y = pd.DataFrame(D['Y']['small'], columns=['genre_top'])
+Y = pd.DataFrame(D['Y'][DATA_SET], columns=['genre_top'])
 
 print('train/validation split')
 # Test and train split using encoded Y labels (vector of 0s with one 1)
@@ -152,8 +158,8 @@ else:
 	# Use this to test your own architecture
 	net = ANN(p=Parameter(
 		num_input=len(sample),
-		num_hidden_layers=DEFAULT_LAYERS,
-		nodes_per_hidden=DEFAULT_NODES,
+		num_hidden_layers=1,
+		nodes_per_hidden=len(sample) + 1,
 		num_output=NUM_GENRES,
 		hidden_activation=DEFAULT_H_ACTIVATION,
 		output_activation=DEFAULT_O_ACTIVATION,
@@ -203,16 +209,11 @@ print('\n')
 
 val_scores = []
 
-def predict(sample_index=0, sample=song_result_interface.result.copy(), interactive=False):
-	# ignore these commands back end's job
-	X = pd.DataFrame([np.array(valx[sample_index].copy())])
-	sample['X'] = X.values
-	sample['top_genre'] = decode(valy[sample_index])
-	#####
-
+def predict(sample=song_result_interface.result.copy(), interactive=False):
 	# ML & Al job, just updates sample['prediction']
 	sample = net.predict(sample)
 	val_scores.append(sample['prediction']['score'])
+
 	# showing results
 	if interactive:
 		print('\n\n')
@@ -222,8 +223,8 @@ def predict(sample_index=0, sample=song_result_interface.result.copy(), interact
 		answer = sample['top_genre']
 		result = prediction['result']
 
-		print('Title:\t{}'.format(sample['title']))
-		print('Artist:\t{}'.format(sample['metadata']['artist']))
+		print('Title:\t{}'.format(sample['song_title']))
+		print('Artist:\t{}'.format(sample['artist_name']))
 		print('Answer:\t{0}\nResult:\t{1}'.format(answer, result))
 		print('Score : {0}/{1}\t{2}'.format(score, 16, score/16))
 		counter = 1
@@ -237,10 +238,12 @@ def predict(sample_index=0, sample=song_result_interface.result.copy(), interact
 results = []
 
 for index in range(0, samples):
+	song = DB.query()['track_data']
+	song['X'] = song['X'][indepent_features].values
 	if samples <= 8 and samples >= 1:
-		results.append(predict(index, interactive=True))
+		results.append(predict(sample=song, interactive=True))
 	else:
-		results.append(predict(index, interactive=False))
+		results.append(predict(sample=song, interactive=False))
 
 print('Average Rank of Actual Genre:\t{}',net.get_mean_score())
 
@@ -248,6 +251,7 @@ print('Average Rank of Actual Genre:\t{}',net.get_mean_score())
 n_bins = 8
 
 plt.hist(val_scores, bins=n_bins)
+plt.title('Histogram of ranks on {}'.format(DATA_SET))
 
 plt.show()
 
@@ -260,7 +264,7 @@ if(MODEL_NAME == ''):
 	plt.plot(training_error, label = "training accuracy")
 	plt.xlabel("epoch")
 	plt.ylabel("accuracy")
-	plt.title("accuracy vs epoch")
+	plt.title("accuracy vs epoch on {}").format(DATA_SET)
 	plt.legend()
 
 	plt.show()

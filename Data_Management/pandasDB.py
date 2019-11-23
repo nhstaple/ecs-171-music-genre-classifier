@@ -6,7 +6,7 @@ class DataBase:
 
 	#Constructor creates df's that are needed.
 	#Assumes that pkl files are in thee same directory
-	def __init__(self, pkls=['/Data/tracks.pkl', '/Data/reducedFeat.pkl']):
+	def __init__(self, pkls=['/Data/tracks.pkl', '/Data/features.pkl']): # '/Data/reducedFeat.pkl']):
 		self.tables = {}
 		for pkl in pkls:
 			if(pkl == '/Data/tracks.pkl'):
@@ -84,7 +84,7 @@ class DataBase:
 			d['top_genre'] = top_g
 			d['set'] = subset
 			feat = features.loc[[key],:]
-			d['X'] = feat
+			d['X'] = pd.DataFrame(feat)
 
 		ret = {}
 		ret['track_data'] = d
@@ -94,7 +94,7 @@ class DataBase:
         #Retruns list of dictionaries with song information of songs that were found in "DB".
         #@songTitle: name of song to search for
         #@randomFlag: Boolean. If true then title is ignored and random song is selected instead
-	def query(self, songTitle, randomFlag):
+	def query(self, songTitle='', randomFlag=True):
 
 		if(randomFlag == True):
 			return self.getRandomSong()
@@ -134,7 +134,8 @@ class DataBase:
 			d['date'] = date
 			d['top_genre'] = top_g
 			d['set'] = subset
-			d['X'] = features.loc[[key],:]
+			d['X'] = pd.DataFrame(features.loc[[key],:])
+			print('dataframe\n{}'.format(d['X']))
 			ans.append(d)
 			#featList.append(key)
 
