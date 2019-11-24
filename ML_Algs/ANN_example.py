@@ -53,38 +53,6 @@ DB = pandasDB.DataBase()
 # D = { X | Y }
 # D[X][Y]
 D = {}
-print('reading all features. NOTE using placeholder functionality for DataManagements interface. We are just given features and return a distribution of probalities.')
-# print('We also score our prediction and provide a threshold for how large a list you need to construct of the sorted predictions to have a 100% gurantee of having the y_actual.')
-# print('Our prediction is part of a pipeline that sets the prediction field from the back ends interface, the field backend/song_result_interface.result[predictions].')
-
-# result = {
-#  # data team
-#	'song_id' : int(),
-#	'title': 'Song Title From Front End',
-#
-#	## add more info like year or record label
-#	'metadata': {  # for front end team
-#		'artist': str()
-#	},
-#
-#	## get data for ml prediction
-#	'subset': str(), # small, medium, full...
-#	'X': [[]], # the features for the song with matching title, use pd.DataFrame.values
-#	'top_genre':  str(), # from tracks.csv
-#
-#	# the result of the ml team's prediction
-#	# ml team interface
-#	'prediction': {
-#		'threshold': int(), # build a list of threshold length to guarantee it will contain the answer
-#		'genres': {  # list of 16 of genre probabilities sorted by most likely to least likely
-#		},
-#		'score': int() # position the actual top_genre is in the list of  prediction.genres
-#	},
-#
-#	# back end team
-#	'error': '' # init to empty string. front end team will have to handle: error, 1 result, more than 1 results.
-#}
-
 # X
 D['X'] =  {
 	'small'	: reader.getSubset(
@@ -122,7 +90,7 @@ indepent_features = ['mfcc', 'spectral_contrast']
 print('Constructing datasets')
 print('X')
 # the ind vars
-# X =  pd.DataFrame(D['X']['small'].iloc[:, indepent_features])
+# X =  pd.DataFrame(D['X'][DATA_SET].iloc[:, indepent_features])
 X =  pd.DataFrame(D['X'][DATA_SET][indepent_features])
 
 print('Y')
@@ -183,19 +151,6 @@ else:
 		interactive=False
 	)
 
-# Set the sample to a specific value. I recommend producing a synthetic sample
-# from the data set. Look into pandas.DataFrame.quantile(0, 1.00) to get the min and max to to
-# a standard the bounds for the distribution
-# for i in range(0, len(sample)):
-# 	sample[i] = random.uniform(-100, 100)
-
-# The software engineering team makes this ANN.predict() call, then
-# add missing information to ANN_result.Result, then adds it to a wrapper
-# to send to the front end!
-
-## Predicting
-# Let's see how accurate the model is for the top @num_to_check many categories
-# the number of test samples to predict
 samples = 0
 # The number of test samples to check
 samples = int(input('Begin prediction on test set.\nNumber of samples:\t'))
@@ -240,6 +195,7 @@ results = []
 for index in range(0, samples):
 	song = DB.query()['track_data']
 	song['X'] = song['X'][indepent_features].values
+	# song['X'] = song['X'].iloc[:, indepent_features].values
 	if samples <= 8 and samples >= 1:
 		results.append(predict(sample=song, interactive=True))
 	else:
@@ -264,7 +220,7 @@ if(MODEL_NAME == ''):
 	plt.plot(training_error, label = "training accuracy")
 	plt.xlabel("epoch")
 	plt.ylabel("accuracy")
-	plt.title("accuracy vs epoch on {}").format(DATA_SET)
+	plt.title("accuracy vs epoch on {}".format(DATA_SET))
 	plt.legend()
 
 	plt.show()
