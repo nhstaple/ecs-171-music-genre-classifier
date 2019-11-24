@@ -206,3 +206,41 @@ class featRead:
 			print("mRMR is not computed for the number of features you asked for. Using max: 200")
 			n = 200
 		return list(range(0,n))
+
+	def getBins(self):
+		med = self.getSubset(self.tableDF['tracks'], 'medium')
+		med = med['track']
+		#List containing our 16 bins
+		med_genres = list(med['genre_top'].unique())
+
+		#Sort entire clean dataset into bins
+		top_genres = self.getSubset(self.tableDF['tracks'], 'cleanLarge')
+		top_genres = top_genres['track']
+		top_genres = top_genres[['genre_top']]
+
+		tracks = self.tableDF['tracks']
+		features = self.tableDF['features']
+		genreBins = {}
+		for bins in med_genres:
+			res = top_genres.loc[top_genres['genre_top'] == bins]
+			results = res.to_dict()
+			results = results['genre_top']
+
+			ans = []
+
+			for key in results:
+				song = tracks.loc[key]
+				top_g = bins
+
+				d = {}
+				d['track_id'] = key
+				d['top_genre'] = bins
+				d['X'] = pd.DataFrame(features.loc[[key],:])
+				ans.append(d)
+
+
+			genreBins[bins] = ans
+
+		return genreBins
+
+		

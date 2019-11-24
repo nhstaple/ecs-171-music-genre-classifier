@@ -135,7 +135,7 @@ class DataBase:
 			d['top_genre'] = top_g
 			d['set'] = subset
 			d['X'] = pd.DataFrame(features.loc[[key],:])
-			print('dataframe\n{}'.format(d['X']))
+			#print('dataframe\n{}'.format(d['X']))
 			ans.append(d)
 			#featList.append(key)
 
