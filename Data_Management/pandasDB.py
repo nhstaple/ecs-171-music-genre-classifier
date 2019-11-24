@@ -6,7 +6,7 @@ class DataBase:
 
 	#Constructor creates df's that are needed.
 	#Assumes that pkl files are in thee same directory
-	def __init__(self, pkls=['/Data/tracks.pkl', '/Data/features.pkl']): # '/Data/reducedFeat.pkl']):
+	def __init__(self, pkls=['/Data/tracks.pkl', '/Data/reducedFeat.pkl']): # '/Data/reducedFeat.pkl']):
 		self.tables = {}
 		for pkl in pkls:
 			if(pkl == '/Data/tracks.pkl'):
