@@ -55,10 +55,10 @@ def findOneSong(name, randomFlag):
 	# when error == False, query found the input song title. otherwise, skip below because data is empty
 	if(error == False):
 		#need to implement .selectN() to get N most influential featues for new models
-		independent_features = neuralNet.get_features()
+		#independent_features = neuralNet.get_features()
 		# neuralNet = ANN_class.ANN(trained_model='best')
 		sample['prediction'] = {}
-		sample['X'] = sample['X'][independent_features]
+		#sample['X'] = sample['X'][independent_features]
 		sample = neuralNet.predict(sample)
 
 		predictedGenre = sample['prediction']['result']
