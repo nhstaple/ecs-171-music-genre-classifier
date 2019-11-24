@@ -58,7 +58,7 @@ def findOneSong(name, randomFlag):
 		independent_features = neuralNet.get_features()
 		# neuralNet = ANN_class.ANN(trained_model='best')
 		sample['prediction'] = {}
-		sample['X'] = sample['X'].iloc[:,independent_features]
+		sample['X'] = sample['X'][independent_features]
 		sample = neuralNet.predict(sample)
 
 		predictedGenre = sample['prediction']['result']

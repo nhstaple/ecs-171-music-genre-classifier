@@ -20,7 +20,7 @@ DEFAULT_H_ACTIVATION = 'relu'
 DEFAULT_O_ACTIVATION = 'softmax'
 DEFAULT_LOSS = 'categorical_crossentropy'
 DEFAULT_BATCH = 200
-DEFAULT_EPOCHS = 120
+DEFAULT_EPOCHS = 200
 TEST_RATIO = 0.34
 DATA_SET = 'cleanLarge'
 
@@ -214,7 +214,7 @@ plt.show()
 if(MODEL_NAME == ''):
 	#plot of training accuracy over time
 	training_error = []
-	for x in history.history['categorical_accuracy']:
+	for x in history.history['val_categorical_accuracy']:
 		training_error.append(x)
 
 	plt.plot(training_error, label = "training accuracy")
