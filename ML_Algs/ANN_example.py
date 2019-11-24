@@ -191,6 +191,7 @@ def predict(sample=song_result_interface.result.copy(), interactive=False):
 	return sample
 
 results = []
+avg_per_predic = []
 
 for index in range(0, samples):
 	song = DB.query()['track_data']
@@ -200,6 +201,7 @@ for index in range(0, samples):
 		results.append(predict(sample=song, interactive=True))
 	else:
 		results.append(predict(sample=song, interactive=False))
+	avg_per_predic.append(net.get_mean_score())
 
 print('Average Rank of Actual Genre:\t{}',net.get_mean_score())
 
@@ -208,6 +210,14 @@ n_bins = 8
 
 plt.hist(val_scores, bins=n_bins)
 plt.title('Histogram of ranks on {}'.format(DATA_SET))
+
+plt.show()
+
+plt.plot(avg_per_predic, label = "average rank per prediction")
+plt.xlabel("prediction")
+plt.ylabel("average rank")
+plt.title("average rank vs prediction on {}".format(DATA_SET))
+plt.legend()
 
 plt.show()
 
