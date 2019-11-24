@@ -38,6 +38,17 @@ main {
     color: white;
 }
 
+#random_button{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border-radius: 5px;
+    height: 4vh;
+    width: 8vw;
+    background-color: #667d9d;
+    color: white;
+}
+
 #title_and_artist{
     display: flex;
     flex-direction: column;
@@ -135,4 +146,9 @@ main {
 #model_score{
     padding: 10px;
     font-family: 'carlito', sans-serif;
+}
+
+#redirect_link{
+    text-align: center;
+    margin: 10px;
 }

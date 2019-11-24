@@ -6,10 +6,22 @@ class PageTwo extends React.Component{
         super(props);
     }
 
-    gotolandingPage = () =>{
-        console.log("ATTEMPTING TO LEAVE");
-        
+    gotolandingPage = () =>{        
         this.props.pageState();
+    }
+
+    gotoFeelingLucky = () => {
+        //clear page while loading new song
+        document.getElementById('songName').textContent = '';
+        document.getElementById('artist').textContent = '';
+        document.getElementById('placeGenreHere').textContent = 'LOADING...';
+        document.getElementById('predictedScore').textContent = '';
+        document.getElementById('actualGenre').textContent = '';
+        document.getElementById('songScore').textContent = '';
+        document.getElementById('actualScore').textContent = '';
+        document.getElementById('modelScore').textContent = '';
+        document.getElementById('redirect_link').textContent = '';
+        this.props.feelingLucky();
     }
 
     render() {
@@ -29,9 +41,11 @@ class PageTwo extends React.Component{
                         </div>
                     </h1>
                     <button id="back_button" onClick={this.gotolandingPage}>Go Back</button>
+                    <button id="random_button" onClick={this.gotoFeelingLucky}> Random Song </button>
                     <div id="predicted_genre">
                         <div id="predicted_genre_name">
                             <p id="placeGenreHere">
+                                LOADING...
                             </p>
                         </div>
                         <div id="predicted_genre_probability">
@@ -61,6 +75,7 @@ class PageTwo extends React.Component{
                             </p>
                         </div>
                     </div>
+                    <a id="redirect_link" style={{display: "table-cell"}} href="" target="_blank"/>
                 </div>
            </main>
         );

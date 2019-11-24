@@ -65,6 +65,14 @@ def findOneSong(name, randomFlag):
 
 	# send ML results to front end
 	if(error == False):
+
+		# construct youtube url
+		url = 'https://www.youtube.com' + '/results?'
+		artistURl = artist
+		query = 'search_query=' + songName + '+' + artist
+		redirect_link = url + query
+		redirect_link = redirect_link.replace(' ', '+')
+
 		return jsonify({
 			'songName' : songName,
 			'artist' : artist,
@@ -74,7 +82,8 @@ def findOneSong(name, randomFlag):
 			'actualScore' : str(sample['prediction']['genres'][actualGenre]*100),
 			'songScore' : str(sample['prediction']['score']),
 			'modelScore' : str(neuralNet.get_mean_score()),
-			'error' : error
+			'error' : error,
+			'redirect_link' : redirect_link
 		})
 	else:
 		return jsonify({

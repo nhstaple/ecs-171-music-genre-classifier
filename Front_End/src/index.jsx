@@ -13,7 +13,7 @@ class MainPage extends React.Component{
       // States are hardcoded for now
       landingPage: true,
       secondPageState: false,
-      songTitle: 'enter song',
+      songTitle: '',
       artist: '',
       predictedGenre: '',
       predictedScore: '',
@@ -44,6 +44,7 @@ class MainPage extends React.Component{
       landingPage: false,
       secondPageState: true,
     })
+    
     //call ajaxrequest, must wait for page to render.
     const song = this.state.songTitle
     setTimeout(function () {ajaxRequests.sbm(song, 'True');}, 1000);
@@ -70,10 +71,9 @@ class MainPage extends React.Component{
               <div id="textInput">
                 <input
                   id="songInput"
+                  placeholder="Enter Song Title"
                   style={{height: 40, fontSize:40}}
-                  placholder="enter in song title"
                   onChange={this.handleTextChange}
-                  value={this.state.songTitle}
                 />
                 <div className="buttons">
                   <button id="buttonStyle" onClick={this.gotoPageTwoState}> Search </button>
@@ -86,7 +86,7 @@ class MainPage extends React.Component{
       );
     } else if(this.state.secondPageState === true) {
       return (
-        <PageTwo pageState={this.gotolandingPage} parentStates={this.state} />   
+        <PageTwo pageState={this.gotolandingPage} parentStates={this.state} feelingLucky={this.gotoFeelingLucky}/>   
       );
     }
   }

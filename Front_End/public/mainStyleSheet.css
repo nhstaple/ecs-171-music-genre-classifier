@@ -15,6 +15,11 @@ buttons & input field color: #667d9d
   src: url('/assets/fonts/carlito/Carlito-Regular.ttf');
 }
 
+::placeholder{
+  color: #E9CC66;
+  opacity: 0.5;
+}
+
 main {
   min-height: 100vh
 }
@@ -64,6 +69,7 @@ div.title{
   margin-top: 100px;
   font-family: 'carlito', sans-serif;
 }
+
 #songInput {
   font-size: 5px;
   color: #E9CC66;

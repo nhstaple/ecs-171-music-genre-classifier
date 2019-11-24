@@ -91,7 +91,7 @@ function (_React$Component) {
       // States are hardcoded for now
       landingPage: true,
       secondPageState: false,
-      songTitle: 'enter song',
+      songTitle: '',
       artist: '',
       predictedGenre: '',
       predictedScore: '',
@@ -122,13 +122,12 @@ function (_React$Component) {
           id: "textInput"
         }, _react.default.createElement("input", {
           id: "songInput",
+          placeholder: "Enter Song Title",
           style: {
             height: 40,
             fontSize: 40
           },
-          placholder: "enter in song title",
-          onChange: this.handleTextChange,
-          value: this.state.songTitle
+          onChange: this.handleTextChange
         }), _react.default.createElement("div", {
           className: "buttons"
         }, _react.default.createElement("button", {
@@ -141,7 +140,8 @@ function (_React$Component) {
       } else if (this.state.secondPageState === true) {
         return _react.default.createElement(_pageTwo.default, {
           pageState: this.gotolandingPage,
-          parentStates: this.state
+          parentStates: this.state,
+          feelingLucky: this.gotoFeelingLucky
         });
       }
     }

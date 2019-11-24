@@ -44,9 +44,22 @@ function (_React$Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(PageTwo).call(this, props));
 
     _defineProperty(_assertThisInitialized(_this), "gotolandingPage", function () {
-      console.log("ATTEMPTING TO LEAVE");
-
       _this.props.pageState();
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "gotoFeelingLucky", function () {
+      //clear page while loading new song
+      document.getElementById('songName').textContent = '';
+      document.getElementById('artist').textContent = '';
+      document.getElementById('placeGenreHere').textContent = 'LOADING...';
+      document.getElementById('predictedScore').textContent = '';
+      document.getElementById('actualGenre').textContent = '';
+      document.getElementById('songScore').textContent = '';
+      document.getElementById('actualScore').textContent = '';
+      document.getElementById('modelScore').textContent = '';
+      document.getElementById('redirect_link').textContent = '';
+
+      _this.props.feelingLucky();
     });
 
     return _this;
@@ -70,13 +83,16 @@ function (_React$Component) {
       })))), _react.default.createElement("button", {
         id: "back_button",
         onClick: this.gotolandingPage
-      }, "Go Back"), _react.default.createElement("div", {
+      }, "Go Back"), _react.default.createElement("button", {
+        id: "random_button",
+        onClick: this.gotoFeelingLucky
+      }, " Random Song "), _react.default.createElement("div", {
         id: "predicted_genre"
       }, _react.default.createElement("div", {
         id: "predicted_genre_name"
       }, _react.default.createElement("p", {
         id: "placeGenreHere"
-      })), _react.default.createElement("div", {
+      }, "LOADING...")), _react.default.createElement("div", {
         id: "predicted_genre_probability"
       }, _react.default.createElement("p", {
         id: "predictedScore"
@@ -102,7 +118,14 @@ function (_React$Component) {
         id: "model_score"
       }, _react.default.createElement("p", {
         id: "modelScore"
-      })))));
+      }))), _react.default.createElement("a", {
+        id: "redirect_link",
+        style: {
+          display: "table-cell"
+        },
+        href: "",
+        target: "_blank"
+      })));
     }
   }]);
 

@@ -22,6 +22,9 @@ return vars;
 function makeAJAXRequest(song = getUrlVars()(["songTitle"]), random='True'){
     //for backend, find url we need (url1 is temporary):
     let url1 = "/song/";
+    if(song == ""){
+        song = "RANDOM";
+    }
     let url2 = url1 + song + "/" + random + "/";
     console.log(url2); //JD: for testing
     
@@ -43,6 +46,9 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"]), random='True'){
 
         if(object.error === true){
             alert("song is not in the database");
+
+            //remove loading screen
+            document.getElementById('placeGenreHere').textContent = '';
             return;
         }
         console.log(object);
@@ -56,7 +62,8 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"]), random='True'){
         document.getElementById('songScore').textContent = "Song Rank: " + object.songScore;
         document.getElementById('actualScore').textContent = object.actualScore + "% probability";
         document.getElementById('modelScore').textContent = "Model Rank: " + object.modelScore;
-        
+        document.getElementById('redirect_link').href = object.redirect_link;
+        document.getElementById('redirect_link').textContent = "YouTube Search";
         //console.log(object); //to test
     }
     xhr.send();
