@@ -1,4 +1,13 @@
+# ANN_paramsweep.py
 import sys
+sys.path.append('../Back_End/')
+sys.path.append('../Data_Management/')
+
+import pandasDB
+import song_result_interface
+import CSVInterface
+
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
@@ -8,68 +17,88 @@ from ANN_result import Result
 from ANN_class import ANN
 from ANN_encode import encode, decode
 import random
-
-# TODO change to a list of features
 indepent_features = ['mfcc', 'spectral_contrast']
 
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
-EPOCHS = 300
-BATCH_SIZE = 10
-SAMPLES_TO_PREDICT = 500
-TOP_CAT_COUNT = 1
+FEATURE_COUNT = 200
+VALIDATION_PERCENT = 0.1
+DEFAULT_LAYERS = 1
+DEFAULT_NODES = len(classes) + 1
+DEFAULT_H_ACTIVATION = 'relu'
+DEFAULT_O_ACTIVATION = 'softmax'
+DEFAULT_LOSS = 'categorical_crossentropy'
+DEFAULT_BATCH = 200
+DEFAULT_EPOCHS = 200
+TEST_RATIO = 0.34
+DATA_SET = 'cleanLarge'
 
 # Process Data
-# Load the Data Management's interface
-sys.path.append('../Back_End/')
-sys.path.append('../Data_Management/')
-import song_result_interface
-import CSVInterface
-
+# Load Data
 print('Initializing Data Management interface...')
 # reads the data from the csv
 reader = CSVInterface.featRead()
 
+DB = pandasDB.DataBase()
+
 # D = { X | Y }
 # D[X][Y]
 D = {}
-print('reading all features')
 # X
 D['X'] = {
     'small'	: reader.getSubset(
-        reader.getFrame('features')
+        reader.getFrame('features'),
+        sub='small'
     ),
-    'full'	: reader.getFrame('features')
+    'cleanLarge': reader.getSubset(
+        reader.getFrame('features'),
+        sub='cleanLarge'
+    )
 }
 
+# Y
 D['Y'] = {
     'small'	: reader.getSubset(
-        reader.getFrame('track')['genre_top']
+        reader.getFrame('track')['genre_top'],
+        sub='small'
     ),
-    'full'	: reader.getFrame('track')['genre_top']
+    'cleanLarge': reader.getSubset(
+        reader.getFrame('track')['genre_top'],
+        sub='cleanLarge'
+    ),
 }
+
+# Show all the weights prior to training
+# net.show_weights(net.num_hidden_layers + 1)
+
+# The data after removing outliers
+# data = outlier_method(RawData)
+
+# get the features
+# indepent_features = reader.selectN(n=FEATURE_COUNT)
+indepent_features = ['mfcc', 'spectral_contrast']
 
 print('Constructing datasets')
 print('X')
 # the ind vars
-X = pd.DataFrame(D['X']['small'][
-    indepent_features]
-)
+# X =  pd.DataFrame(D['X'][DATA_SET].iloc[:, indepent_features])
+X = pd.DataFrame(D['X'][DATA_SET][indepent_features])
 
 print('Y')
 # the dependent var
-Y = pd.DataFrame(D['Y']['small'], columns=['genre_top'])
+Y = pd.DataFrame(D['Y'][DATA_SET], columns=['genre_top'])
 
-print('train/test split')
+print('train/validation split')
 # Test and train split using encoded Y labels (vector of 0s with one 1)
-trainx, testx, trainy, testy = train_test_split(
+trainx, valx, trainy, valy = train_test_split(
     X.values,
     encode(Y),  # one hot encoder, see ANN_encode.py
-    test_size=0.34,
+    test_size=VALIDATION_PERCENT,  # validation size
     random_state=EXPERIMENT_SEED
 )
 
 sample = trainx[0].copy()
+
 print('Data done!\n\n********')
 
 # Build the neural network
@@ -77,89 +106,88 @@ print('\nBuilding neural net')
 print('input : {}'.format(len(sample)))
 print('output: {}\n'.format(NUM_GENRES))
 
+net = 0
+history = 0
+callback = 0
 
-def make_and_train_model(h_layers, h_nodes, h_activation, o_activation, loss):
-
+def make_and_train_model(h_layers, h_nodes):
     # create an ANN with specified parameters
     net = ANN(p=Parameter(
         num_input=len(sample),
         num_hidden_layers=h_layers,
         nodes_per_hidden=h_nodes,
         num_output=NUM_GENRES,
-        hidden_activation=h_activation,
-        output_activation=o_activation,
+        hidden_activation=DEFAULT_H_ACTIVATION,
+        output_activation=DEFAULT_O_ACTIVATION,
         initialize=False,
-        loss_function=loss
+        loss_function=DEFAULT_LOSS,
+        features=indepent_features
     ))
-
-    # Train the network
-    # returns history of training process, and a callback object that can
-    # extract information about the model at the end of events ANN_callbacks.py
-    history, callback = net.train(
-        trainx,
-        trainy,
-        num_iter=EPOCHS,
-        testing=(testx, np.array(testy)),
-        batch=BATCH_SIZE
-    )
-    print("\nMade and Trained model with {} layers and {} nodes".format(
-        h_layers, h_nodes))
     return net
 
+layers = [1,2,3,4,5,6]
+nodes = [4,8,16,32]
+minScore = 16
+samples = 500
 
-startLayers = int(input("Enter the starting # of layers: "))
-endLayers = int(input("Enter the last # of layers: "))
-startNodes = int(input("Enter the start # of nodes: "))
-endNodes = int(input("Enter the end # of nodes: "))
-maxAccuracy = 0.0
+# create a grid to store parameter sweep scores in
+grid_vect = np.empty([len(layers), len(nodes)])
 
-# dataframe to hold results of grid search
-grid_vect = np.empty([(endLayers-startLayers+1), (endNodes-startNodes+1)])
 # grid search for num of hidden layers and num of hidden nodes per layer
-for num_layers in range(startLayers, endLayers+1):
-    for num_nodes in range(startNodes, endNodes+1):
+for num_layers in layers:
+    for num_nodes in nodes:
 
         # make and train the model
-        model = make_and_train_model(
-            num_layers, num_nodes, "relu", "softmax", "categorical_crossentropy")
+        model = make_and_train_model(num_layers, num_nodes)
+        # Train the network
+        # returns history of training process, and a callback object that can
+        # extract information about the model at the end of events ANN_callbacks.py
+        history, callback = model.train(
+            trainx,
+            trainy,
+            num_iter=DEFAULT_EPOCHS,
+            test_ratio=TEST_RATIO,
+            batch=DEFAULT_BATCH,
+            interactive=False
+        )
 
         print("\nLayers: {0}\nNodes: {1}".format(num_layers, num_nodes))
         # Predicting
-        # Let's see how accurate the model is for the top @num_to_check many categories
-        top_predictions = '\nResults\n'
-        for num in range(1, TOP_CAT_COUNT+1):
-            print('Computing top {}'.format(num))
-            # keeps track of number of matches
-            matches = 0
-            for i in range(0, SAMPLES_TO_PREDICT):
-                this_sample = song_result_interface.result.copy()
+        # Let's see how accurate the model is according to the mean score
+        print("\nRunning predictions on {} samples.".format(samples))
+        for index in range(0, samples):
+	        song = DB.query()['track_data']
+	        song['X'] = song['X'][indepent_features].values
+	        # song['X'] = song['X'].iloc[:, indepent_features].values
+	        model.predict(song)
 
-                X = pd.DataFrame([np.array(testx[i].copy())])
+        print(model.get_mean_score())
 
-                this_sample['X'] = X.values
-                this_sample['top_genre'] = decode(testy[i])
+        #add this model's score to the grid
+        grid_vect[layers.index(num_layers)][nodes.index(num_nodes)] = model.get_mean_score()
 
-                this_sample = model.predict(this_sample)
-                counter = 0
+        #if this model is the best, save it
+        if(model.get_mean_score() < minScore):
+            minScore = model.get_mean_score()
+            model.save_to_disk("paramsweep_model")
+        
+        #plot of training/testing accuracy over time
+        training_accuracy = []
+        testing_accuracy = []
+        for x in history.history['val_categorical_accuracy']:
+            testing_accuracy.append(x)
+        for x in history.history['categorical_accuracy']:
+            training_accuracy.append(x)
 
-                for genre in this_sample['prediction']['genre']:
-                    if genre == this_sample['top_genre'] and counter < num:
-                        matches = matches + 1
-                    # print("{0}: {1}".format(genre, result.res['prediction'][genre]))
-                    if counter >= num:
-                        break
-                    else:
-                        counter = counter + 1
-            top_predictions = top_predictions + \
-                'Classification for top {0} predictions:\t{1}\n'.format(
-                    num, matches / SAMPLES_TO_PREDICT)
-        print(top_predictions)
-        grid_vect[num_layers-startLayers][num_nodes -
-                                          startNodes] = (matches / SAMPLES_TO_PREDICT)
-        if(matches/SAMPLES_TO_PREDICT > maxAccuracy):
-            maxAccuracy = matches/SAMPLES_TO_PREDICT
-            model.save_to_disk("best_parameter_sweep_model")
+        plt.plot(training_accuracy, label = "training accuracy")
+        plt.plot(testing_accuracy, label = "testing accuracy")
+        plt.xlabel("epoch")
+        plt.ylabel("categorical accuracy")
+        plt.title("categorical accuracy vs epoch on {}".format(DATA_SET))
+        plt.legend()
 
-grid = pd.DataFrame(grid_vect, index=range(
-    startLayers, endLayers+1), columns=range(startNodes, endNodes+1))
+        plt.show()
+
+#create a dataframe from the grid to better display it
+grid = pd.DataFrame(grid_vect, index=layers, columns=nodes)
 print(grid)
