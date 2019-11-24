@@ -150,6 +150,8 @@ class featRead:
 			d['top_genre'] = top_g
 			d['set'] = subset
 
+			print(top_g)
+
 			feat = features.loc[[key],:]
 
 		ret = {}
@@ -198,9 +200,9 @@ class featRead:
 		# 	print("mRMR is not computed for the number of features you asked for. Using max: 200")
 		# 	n = 200
 		# return indices[0:n]
-
 	#feature "DB" now only holds these columns in this order
-	if(n > 200):
-		print("mRMR is not computed for the number of features you asked for. Using max: 200")
-		n = 200
-	return list(range(0,n))
+
+		if n > 200:
+			print("mRMR is not computed for the number of features you asked for. Using max: 200")
+			n = 200
+		return list(range(0,n))

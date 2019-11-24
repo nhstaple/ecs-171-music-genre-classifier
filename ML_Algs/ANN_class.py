@@ -265,6 +265,7 @@ class ANN():
 
 		max_hist = sorted(max_hist, key = lambda i: i['value'],reverse=True) 
 
+		result['prediction'] = dict()
 		result['prediction']['genres'] = dict()
 		initial = False
 		for i in range(0, num_predictions):
@@ -277,7 +278,7 @@ class ANN():
 			pred = classes[max_hist[i]['index']]
 			# check if sample['top_genre'] is a list
 			# go through list and see if pred is in the list and set the score
-			if pred == sample['top_genre']:
+			if pred in sample['top_genre']:
 				result['prediction']['score'] = i+1 #score [1,16]
 		self.scores.append(result['prediction']['score'])
 		return result
