@@ -12,12 +12,18 @@ import random
 
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
-FEATURE_COUNT = 200
 VALIDATION_PERCENT = 0.1
 DATA_SET = 'cleanLarge'
 
-
+#get input for loaded model
 MODEL_NAME = input('Name of model to load: \t')
+#second model can be loaded to create a plot comparing both models
+g = input("Load second model for comparison? (y/n)\t") 
+MODEL_NAME_2 = ''
+if g == 'y' or g == 'Y':
+	MODEL_NAME_2 = input('Name of second model: \t')
+elif g == 'n' or g == 'n':
+	print('Plotting 1 model')
 
 ## Process Data
 # Load the Data Management's interface
@@ -61,20 +67,12 @@ D['Y'] = {
 	),
 }
 
-# Show all the weights prior to training
-# net.show_weights(net.num_hidden_layers + 1)
-
-# The data after removing outliers
-# data = outlier_method(RawData)
-
 #get the features
-# indepent_features = reader.selectN(n=FEATURE_COUNT)
 indepent_features = ['mfcc', 'spectral_contrast']
 
 print('Constructing datasets')
 print('X')
 # the ind vars
-# X =  pd.DataFrame(D['X'][DATA_SET].iloc[:, indepent_features])
 X =  pd.DataFrame(D['X'][DATA_SET][indepent_features])
 
 print('Y')
@@ -101,6 +99,8 @@ callback = 0
 # Use this for pre trained models
 
 net = ANN(trained_model=MODEL_NAME)
+if(MODEL_NAME_2 != ''):
+	net2 = ANN(trained_model=MODEL_NAME_2)
 
 samples = 0
 # The number of test samples to check
@@ -114,49 +114,35 @@ if samples > valx.shape[0]:
 print('\n')
 
 val_scores = []
+val_scores2 = []
 
-def predict(sample=song_result_interface.result.copy(), interactive=False):
+def predict(pred_model, score_arr, sample=song_result_interface.result.copy(), interactive=False):
 	# ML & Al job, just updates sample['prediction']
-	sample = net.predict(sample)
-	val_scores.append(sample['prediction']['score'])
+	sample = pred_model.predict(sample)
+	score_arr.append(sample['prediction']['score'])
 
-	# showing results
-	if interactive:
-		print('\n\n')
-		prediction = sample['prediction']
-		genres = prediction['genres']
-		score = prediction['score']
-		answer = sample['top_genre']
-		result = prediction['result']
-
-		print('Title:\t{}'.format(sample['song_title']))
-		print('Artist:\t{}'.format(sample['artist_name']))
-		print('Answer:\t{0}\nResult:\t{1}'.format(answer, result))
-		print('Score : {0}/{1}\t{2}'.format(score, 16, score/16))
-		counter = 1
-		for genre in genres:
-			if counter <= 8:
-				print('{0}\t {1}:\t{2:.4f}'.format(counter, genre, genres[genre]))
-			counter = counter +  1
-		input('Press enter to continue...')
+	#return results
 	return sample
 
 results = []
+results2 = []
 avg_per_predic = []
+avg_per_predic2 = []
 
 #calculate the avg rank of all predictions every time a new prediction is made
 for index in range(0, samples):
 	song = DB.query()['track_data']
 	song['X'] = song['X'][indepent_features].values
-	# song['X'] = song['X'].iloc[:, indepent_features].values
-	if samples <= 8 and samples >= 1:
-		results.append(predict(sample=song, interactive=True))
-	else:
-		results.append(predict(sample=song, interactive=False))
+	results.append(predict(pred_model=net, score_arr=val_scores, sample=song, interactive=False))
 	avg_per_predic.append(net.get_mean_score())
+	if(MODEL_NAME_2 != ''):
+		results2.append(predict(pred_model=net2, score_arr=val_scores2, sample=song, interactive=False))
+		avg_per_predic2.append(net2.get_mean_score())
 
 #print average per prediction
-plt.plot(avg_per_predic, label = "average rank per prediction")
+plt.plot(avg_per_predic, label = "model 1")
+if(MODEL_NAME_2 != ''):
+	plt.plot(avg_per_predic2, label = "model 2")
 plt.xlabel("prediction")
 plt.ylabel("average rank")
 plt.title("average rank vs prediction on {}".format(DATA_SET))
