@@ -35,7 +35,7 @@ Users can enter in a song title and the result will be a predicted genre.
 
 ### Data Managment
 + [Data Overview](Data_Management/DataOverview.md)
-+ **Data file format:**
++ [Data Format](Data_Management/dataCheck.ipynb)
 
 + **Anything else:**
 
