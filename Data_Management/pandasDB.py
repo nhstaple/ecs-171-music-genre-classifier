@@ -48,7 +48,7 @@ class DataBase:
 				genres = genres['genre_top']
 				#full set genre_top not complete
 				genres = genres.dropna()
-                                #CleanLarge simply drops those samples that don't have a label i.e. top_genre
+                                #CleanLarge simply drops those samples that don't have a label i.e. genre_top
 				newDF = frame[frame.index.isin(genres.index)].copy()
 				return newDF
 
@@ -81,7 +81,7 @@ class DataBase:
 			d['song_title'] = songTitle
 			d['artist_name'] = artistName
 			d['date'] = date
-			d['top_genre'] = top_g
+			d['genre_top'] = top_g
 			d['set'] = subset
 			feat = features.loc[[key],:]
 			d['X'] = pd.DataFrame(feat)
@@ -132,7 +132,7 @@ class DataBase:
 			d['song_title'] = songTitle
 			d['artist_name'] = artistName
 			d['date'] = date
-			d['top_genre'] = top_g
+			d['genre_top'] = top_g
 			d['set'] = subset
 			d['X'] = pd.DataFrame(features.loc[[key],:])
 			#print('dataframe\n{}'.format(d['X']))

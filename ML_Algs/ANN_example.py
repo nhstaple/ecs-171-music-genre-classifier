@@ -1,6 +1,7 @@
 # ANN_example.py
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from tensorflow.keras.metrics import categorical_accuracy
 import numpy as np
 import pandas as pd
 from genres import classes, NUM_GENRES
@@ -77,20 +78,15 @@ D['Y'] = {
 	),
 }
 
-# Show all the weights prior to training
-# net.show_weights(net.num_hidden_layers + 1)
-
 # The data after removing outliers
 # data = outlier_method(RawData)
 
 #get the features
-# indepent_features = reader.selectN(n=FEATURE_COUNT)
 indepent_features = ['mfcc', 'spectral_contrast']
 
 print('Constructing datasets')
 print('X')
 # the ind vars
-# X =  pd.DataFrame(D['X'][DATA_SET].iloc[:, indepent_features])
 X =  pd.DataFrame(D['X'][DATA_SET][indepent_features])
 
 print('Y')
@@ -136,9 +132,6 @@ else:
 		features = indepent_features
 	))
 
-	# Show the weights
-	# net.show_weights(net.num_hidden_layers + 1)
-
 	# Train the network
 	# returns history of training process, and a callback object that can
 	# extract information about the model at the end of events ANN_callbacks.py
@@ -163,19 +156,24 @@ if samples > valx.shape[0]:
 print('\n')
 
 val_scores = []
+val_accuracy = []
 
 def predict(sample=song_result_interface.result.copy(), interactive=False):
 	# ML & Al job, just updates sample['prediction']
 	sample = net.predict(sample)
 	val_scores.append(sample['prediction']['score'])
-
+	#accuracy = 1 iff score ==1, else = 0
+	if(sample['prediction']['score'] == 1):
+		val_accuracy.append(1)
+	else:
+		val_accuracy.append(0)
 	# showing results
 	if interactive:
 		print('\n\n')
 		prediction = sample['prediction']
 		genres = prediction['genres']
 		score = prediction['score']
-		answer = sample['top_genre']
+		answer = sample['genre_top']
 		result = prediction['result']
 
 		print('Title:\t{}'.format(sample['song_title']))
@@ -203,10 +201,17 @@ for index in range(0, samples):
 		results.append(predict(sample=song, interactive=False))
 	avg_per_predic.append(net.get_mean_score())
 
+#calculate the mean accuracy where
+#accuracy = 1 iff genre_top == 1st prediction genre, else = 0
+totalAcc = 0
+for value in val_accuracy:
+	totalAcc += value
+meanAcc = totalAcc/len(val_accuracy)
+print("Mean Accuracy: {}\n", meanAcc)
 print('Average Rank of Actual Genre:\t{}',net.get_mean_score())
 
 #histogram of validation scores
-n_bins = 8
+n_bins = 16
 
 plt.hist(val_scores, bins=n_bins)
 plt.title('Histogram of ranks on {}'.format(DATA_SET))
