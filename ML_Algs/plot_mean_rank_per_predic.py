@@ -14,26 +14,10 @@ import random
 EXPERIMENT_SEED = 42
 FEATURE_COUNT = 200
 VALIDATION_PERCENT = 0.1
-DEFAULT_LAYERS = 1
-DEFAULT_NODES = len(classes) + 1
-DEFAULT_H_ACTIVATION = 'relu'
-DEFAULT_O_ACTIVATION = 'softmax'
-DEFAULT_LOSS = 'categorical_crossentropy'
-DEFAULT_BATCH = 200
-DEFAULT_EPOCHS = 200
-TEST_RATIO = 0.34
 DATA_SET = 'cleanLarge'
 
-# Load model or train model?
-g = input("Load a model from disk? (y/n)\t") 
-MODEL_NAME = ''
-if g == 'y' or g == 'Y':
-	MODEL_NAME = input('Name of your model: \t')
-elif g == 'n' or g == 'n':
-	print('Generating a new model')
-else:
-	MODEL_NAME = g
-	print('Model name: {}\n'.format(MODEL_NAME))
+
+MODEL_NAME = input('Name of model to load: \t')
 
 ## Process Data
 # Load the Data Management's interface
@@ -110,46 +94,13 @@ sample = trainx[0].copy()
 
 print('Data done!\n\n********')
 
-## Build the neural network
-print('\nBuilding neural net')
-print('input : {}'.format(len(sample)))
-print('output: {}\n'.format(NUM_GENRES))
-
 net = 0
 history = 0
 callback = 0
 
 # Use this for pre trained models
-if MODEL_NAME != '':
-	net = ANN(trained_model=MODEL_NAME)
-else:
-	# Use this to test your own architecture
-	net = ANN(p=Parameter(
-		num_input=len(sample),
-		num_hidden_layers=1,
-		nodes_per_hidden=len(sample) + 1,
-		num_output=NUM_GENRES,
-		hidden_activation=DEFAULT_H_ACTIVATION,
-		output_activation=DEFAULT_O_ACTIVATION,
-		initialize=False,
-		loss_function=DEFAULT_LOSS,
-		features = indepent_features
-	))
 
-	# Show the weights
-	# net.show_weights(net.num_hidden_layers + 1)
-
-	# Train the network
-	# returns history of training process, and a callback object that can
-	# extract information about the model at the end of events ANN_callbacks.py
-	history, callback = net.train(
-		trainx,
-		trainy,
-		num_iter=DEFAULT_EPOCHS,
-		test_ratio=TEST_RATIO,
-		batch=DEFAULT_BATCH,
-		interactive=False
-	)
+net = ANN(trained_model=MODEL_NAME)
 
 samples = 0
 # The number of test samples to check
@@ -193,6 +144,7 @@ def predict(sample=song_result_interface.result.copy(), interactive=False):
 results = []
 avg_per_predic = []
 
+#calculate the avg rank of all predictions every time a new prediction is made
 for index in range(0, samples):
 	song = DB.query()['track_data']
 	song['X'] = song['X'][indepent_features].values
@@ -203,8 +155,6 @@ for index in range(0, samples):
 		results.append(predict(sample=song, interactive=False))
 	avg_per_predic.append(net.get_mean_score())
 
-print('Average Rank of Actual Genre:\t{}',net.get_mean_score())
-
 #print average per prediction
 plt.plot(avg_per_predic, label = "average rank per prediction")
 plt.xlabel("prediction")
@@ -213,15 +163,3 @@ plt.title("average rank vs prediction on {}".format(DATA_SET))
 plt.legend()
 
 plt.show()
-
-
-## Save the Model
-# For the ML team: copy and paste this file and name it one word, <your name>
-# ANN_<your name>.py
-if MODEL_NAME == '':
-	g = input("Save model? (y/n)\t") 
-	if g == 'Y' or g == 'y':
-		g = input('model name: ')
-		net.save_to_disk(g)
-	elif g == "N" or g == 'n':
-		print("Discarded Model")
