@@ -30,7 +30,7 @@ def findOneSong(name, randomFlag):
 		data = database.query(name, True)
 		sample = data['track_data']
 		songName = data['track_data']['song_title'][0]
-		actualGenre = data['track_data']['top_genre'][0]
+		actualGenre = data['track_data']['genre_top'][0]
 		artist = data['track_data']['artist_name'][0]
 	else:
 		data = database.query(name, False)
@@ -40,7 +40,7 @@ def findOneSong(name, randomFlag):
 		else:
 			sample = data['track_data'][0]
 			songName = data['track_data'][0]['song_title'][0]
-			actualGenre = data['track_data'][0]['top_genre'][0]
+			actualGenre = data['track_data'][0]['genre_top'][0]
 			artist = data['track_data'][0]['artist_name'][0]
 	
 	# Data:
@@ -48,17 +48,13 @@ def findOneSong(name, randomFlag):
 	# -song_title
 	# -artist_name
 	# -data
-	# -top_genre
+	# -genre_top
 	# -set
 	# -X
 
 	# when error == False, query found the input song title. otherwise, skip below because data is empty
 	if(error == False):
-		#need to implement .selectN() to get N most influential featues for new models
-		#independent_features = neuralNet.get_features()
-		# neuralNet = ANN_class.ANN(trained_model='best')
 		sample['prediction'] = {}
-		#sample['X'] = sample['X'][independent_features]
 		sample = neuralNet.predict(sample)
 
 		predictedGenre = sample['prediction']['result']

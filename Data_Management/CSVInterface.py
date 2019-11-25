@@ -147,7 +147,7 @@ class featRead:
 			d['song_title'] = songTitle
 			d['artist_name'] = artistName
 			d['date'] = date
-			d['top_genre'] = top_g
+			d['genre_top'] = top_g
 			d['set'] = subset
 
 			print(top_g)
@@ -214,15 +214,15 @@ class featRead:
 		med_genres = list(med['genre_top'].unique())
 
 		#Sort entire clean dataset into bins
-		top_genres = self.getSubset(self.tableDF['tracks'], 'cleanLarge')
-		top_genres = top_genres['track']
-		top_genres = top_genres[['genre_top']]
+		genre_tops = self.getSubset(self.tableDF['tracks'], 'cleanLarge')
+		genre_tops = genre_tops['track']
+		genre_tops = genre_tops[['genre_top']]
 
 		tracks = self.tableDF['tracks']
 		features = self.tableDF['features']
 		genreBins = {}
 		for bins in med_genres:
-			res = top_genres.loc[top_genres['genre_top'] == bins]
+			res = genre_tops.loc[genre_tops['genre_top'] == bins]
 			results = res.to_dict()
 			results = results['genre_top']
 
@@ -234,7 +234,7 @@ class featRead:
 
 				d = {}
 				d['track_id'] = key
-				d['top_genre'] = bins
+				d['genre_top'] = bins
 				d['X'] = pd.DataFrame(features.loc[[key],:])
 				ans.append(d)
 

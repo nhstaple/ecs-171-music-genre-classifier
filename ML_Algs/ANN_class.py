@@ -276,9 +276,9 @@ class ANN():
 
 		for i in range(0, len(max_hist)):
 			pred = classes[max_hist[i]['index']]
-			# check if sample['top_genre'] is a list
+			# check if sample['genre_top'] is a list
 			# go through list and see if pred is in the list and set the score
-			if pred in sample['top_genre']:
+			if pred in sample['genre_top']:
 				result['prediction']['score'] = i+1 #score [1,16]
 		self.scores.append(result['prediction']['score'])
 		return result
