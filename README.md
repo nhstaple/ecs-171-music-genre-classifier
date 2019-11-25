@@ -37,8 +37,6 @@ Users can enter in a song title and the result will be a predicted genre.
 + [Data Overview](Data_Management/DataOverview.md)
 + [Data Format](Data_Management/dataCheck.ipynb)
 
-+ **Anything else:**
-
 ### Machine Learning Group
 + **Model used:** insert what model we used
 + **Training:** how to train?
