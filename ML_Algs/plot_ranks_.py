@@ -94,7 +94,7 @@ if(MODEL_NAME_2 != ''):
 
 samples = 0
 # The number of test samples to check
-samples = 1000
+samples = 100
 
 print('\n')
 
@@ -116,11 +116,23 @@ for index in range(0, samples):
 	song = net.naive_predict(song)
 	naive.append(song['prediction']['score'])
 
+sweep_avg = 0
+matt_avg = 0
+naive_avg = 0
+for i in range(0, samples):
+	sweep_avg = sweep_avg + val_scores[i]
+	matt_avg = matt_avg + val_scores2[i]
+	naive_avg = naive_avg + naive[i]
+
+sweep_avg = sweep_avg / samples
+matt_avg = matt_avg / samples
+naive_avg = naive_avg / samples
+
 #print average per prediction
-plt.plot(val_scores, label = "model 1")
+plt.plot(val_scores, label = "optimal param sweep {}".format(sweep_avg))
 if MODEL_NAME_2 != '':
-	plt.plot(val_scores2, label = "model 2")
-plt.plot(naive, label='naive model')
+	plt.plot(val_scores2, label = "matt's model {}".format(matt_avg))
+plt.plot(naive, label='naive model {}'.format(naive_avg))
 plt.xlabel("prediction")
 plt.ylabel("rank")
 plt.title("rank of predictions on {}".format(DATA_SET))
