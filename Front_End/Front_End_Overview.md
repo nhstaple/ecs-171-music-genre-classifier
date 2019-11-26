@@ -16,10 +16,15 @@ BELOW is what cameron added, not sure if this is useful, but I put it here just 
 + **NAME:** gotolandingPage = () => {}
 + **DESCRIPTION:** This function indicates that the user should be on the first page by setting the state boolean variables landingPage to true and secondPageState to false.  Once these state variables change, the render function will execute and choose what component to show based on these variables.
 + **NAME:** gotoPageTwoState = () => {}
-+ **DESCRIPTION:** <br /> <br />
++ **DESCRIPTION:** This function indicates that the user should be on the second page by setting the state boolean variables landingPage to false and secondPageState to true.  Once these state variables change, the render function will execute and choose what component to show based on these variables.  This function also retrieves the given song title from the state variable songTitle (which is set by the user in the input field) and creates an AJAX request containing the songTitle and a boolean representing that the Search Button was pressed.<br /> <br />
 + **NAME:** gotoFeelingLucky = () => {}
-+ **DESCRIPTION:** <br /> <br />
++ **DESCRIPTION:** This function is identical to gotoPageTwoState with the exception that the AJAX request contains a boolean representing that the Feeling Lucky button was pressed.<br /> <br />
 + **NAME:** handleTextChange = () => {}
-+ **DESCRIPTION:** <br /> <br />
-
-
++ **DESCRIPTION:** This function retrieves the song title entered in the input field by the user and saves it in the state variable songTitle.<br /> <br />
+## pageTwo.jsx
++ **NAME:** render()
++ **DESCRIPTION:** This function returns JSX code that will build the HTML for the results page.  This page features the song title, artist, predicted genre, predicted genre probability, actual genre, actual genre probability, song rank and model rank.  There is also a back button that goes back to the first page, random button that will reroll results for a random song, and a YouTube search link that will search for the given song and artist.  When there is initially no data, the predicted genre text is replaced with 'Loading...' until a response is received from the backend.<br /> <br /> 
++ **NAME:** gotolandingPage = () => {}
++ **DESCRIPTION:** This function wraps the gotolandingPage function of index.jsx.  It will get called when the Go Back button is pushed.<br /> <br /> 
++ **NAME:** gotoFeelingLucky = () => {}
++ **DESCRIPTION:** This function wraps the gotoFeelingLucky function of index.jsx.  It will get called when the Random Song button is pushed.  It will also set all of the text on this page to empty while the new random data is being retrieved.<br /> <br /> 
