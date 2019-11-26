@@ -72,3 +72,30 @@
 #### NAME: get_features(self)
 + **SYNOPSIS:** Returns features of class 
 + **DESCRIPTION:** Refer to synopsis <br /> <br />
+
+# TODO
+naive_predict(self, sample, num_predictions=16)
+
+
+### Example code
+Loading a trained network
+```
+from ANN_class import ANN
+
+# load a model from disc in folder './trained_models'
+trained_net = ANN(model_name='name')
+```
+
+Creating a new untrained network
+```
+from ANN_class import ANN, Parameter
+from ANN_encode import encode
+import numpy as np
+
+
+# create a new network parameterized by a ANN_parameter.Parameter() object
+untrained_net=ANN(p=Parameter())
+X = dataframe.drop(columns=['dependent variable']).values
+Y = encode(dataframe['dependent variable])
+
+```

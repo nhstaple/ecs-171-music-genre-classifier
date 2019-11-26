@@ -236,8 +236,7 @@ class ANN():
 			print(self.model.layers[index].get_weights()[0])
 			index = index - 1
 
-	def naive_predict(self, sample):
-		num_predictions = 16
+	def naive_predict(self, sample, num_predictions=16):
 		if not self.trained:
 			print("ERROR! Trained to predict on an untrained network.\nSample\n{0}".format(sample))
 			exit()

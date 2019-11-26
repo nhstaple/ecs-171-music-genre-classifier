@@ -15,15 +15,16 @@ import random
 EXPERIMENT_SEED = 42
 FEATURE_COUNT = 200
 VALIDATION_PERCENT = 0.1
-DEFAULT_LAYERS = 4
-DEFAULT_NODES = 32
+DEFAULT_LAYERS = 1
+DEFAULT_NODES = 189 + 16 + 1
 DEFAULT_H_ACTIVATION = 'relu'
 DEFAULT_O_ACTIVATION = 'softmax'
 DEFAULT_LOSS = 'categorical_crossentropy'
 DEFAULT_BATCH = 200
-DEFAULT_EPOCHS = 100
+DEFAULT_EPOCHS = 50
 TEST_RATIO = 0.34
 DATA_SET = 'cleanLarge'
+MRMR = False
 
 # Load model or train model?
 g = input("Load a model from disk? (y/n)\t") 
@@ -77,9 +78,6 @@ D['Y'] = {
 		sub='cleanLarge'
 	),
 }
-
-# The data after removing outliers
-# data = outlier_method(RawData)
 
 #get the features
 indepent_features = ['mfcc', 'spectral_contrast']
@@ -146,7 +144,7 @@ else:
 
 samples = 0
 # The number of test samples to check
-samples = int(input('Begin prediction on test set.\nNumber of samples:\t'))
+samples = int(input('Begin prediction on test set. <= 8 samples will run in interactive mode.\nNumber of samples:\t'))
 
 if samples > valx.shape[0]:
 	samples = valx.shape[0]
@@ -158,7 +156,7 @@ print('\n')
 val_scores = []
 val_accuracy = []
 
-def predict(sample=song_result_interface.result.copy(), interactive=False):
+def predict(sample, interactive=False):
 	# ML & Al job, just updates sample['prediction']
 	sample = net.predict(sample)
 	val_scores.append(sample['prediction']['score'])
@@ -188,18 +186,14 @@ def predict(sample=song_result_interface.result.copy(), interactive=False):
 		input('Press enter to continue...')
 	return sample
 
-results = []
-avg_per_predic = []
-
 for index in range(0, samples):
 	song = DB.query()['track_data']
 	song['X'] = song['X'][indepent_features].values
 	# song['X'] = song['X'].iloc[:, indepent_features].values
 	if samples <= 8 and samples >= 1:
-		results.append(predict(sample=song, interactive=True))
+		song = predict(sample=song, interactive=True)
 	else:
-		results.append(predict(sample=song, interactive=False))
-	avg_per_predic.append(net.get_mean_score())
+		song = predict(sample=song, interactive=False)
 
 #calculate the mean accuracy where
 #accuracy = 1 iff genre_top == 1st prediction genre, else = 0
@@ -218,21 +212,18 @@ plt.title('Histogram of ranks on {}'.format(DATA_SET))
 
 plt.show()
 
-plt.plot(avg_per_predic, label = "average rank per prediction")
-plt.xlabel("prediction")
-plt.ylabel("average rank")
-plt.title("average rank vs prediction on {}".format(DATA_SET))
-plt.legend()
-
-plt.show()
-
 if(MODEL_NAME == ''):
 	#plot of training accuracy over time
 	training_error = []
+	testing_error = []
 	for x in history.history['val_categorical_accuracy']:
+		testing_error.append(x)
+
+	for x in history.history['categorical_accuracy']:
 		training_error.append(x)
 
 	plt.plot(training_error, label = "training accuracy")
+	plt.plot(testing_error, label = "testing accuracy")
 	plt.xlabel("epoch")
 	plt.ylabel("accuracy")
 	plt.title("accuracy vs epoch on {}".format(DATA_SET))
