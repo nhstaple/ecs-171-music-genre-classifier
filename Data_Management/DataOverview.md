@@ -98,7 +98,7 @@ track. The *genres_top* feature contains the tracks Root Genre. Finally, the
 when going from the *genres* to *genre_top*.
 
 ### Root Genres
-![Top Genres](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/genre_tops.PNG "Top Genres Table")
+![Top Genres](https://github.com/nhstaple/ecs-171-music-genre-classifier/blob/master/Data_Management/top_genres.PNG)
 
 
 ## Features
