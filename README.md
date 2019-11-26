@@ -9,12 +9,12 @@ Users can enter in a song title and the result will be a predicted genre. We hav
 + &nbsp;&nbsp;&nbsp;&nbsp;Tensorflow ('pip3 install tensorflow')
 + &nbsp;&nbsp;&nbsp;&nbsp;Pandas ('pip3 install pandas')
 + &nbsp;&nbsp;&nbsp;&nbsp;Flask ('pip3 install flask')
-+ **Insert Instructions**
-+ &nbsp;&nbsp;&nbsp;&nbsp;**Step 1:** Download https://os.unil.cloud.switch.ch/fma/fma_metadata.zip
-+ &nbsp;&nbsp;&nbsp;&nbsp;**Step 2:** Move all downloaded files to the Data directory
-+ &nbsp;&nbsp;&nbsp;&nbsp;**Step 3:** Navigate to the Data_Management folder and run 'python3 Make_DB.py' and 'python3 makePick.py' in terminal
-+ &nbsp;&nbsp;&nbsp;&nbsp;**Step 4:** Navigate to the backend folder and run 'python3 backend.py' (IMPORTANT: make sure you run it while you are in the Back_End folder or else it won't work)
-+ &nbsp;&nbsp;&nbsp;&nbsp;**Step 5:** Open a new terminal tab and navigate to the Front_End folder and run 'npm install' and then 'npm start'
++ **Instructions to Run the Website**
++ &nbsp;&nbsp;&nbsp;&nbsp;**Step 1:** Navigate to the Front_End folder and run 'npm install' and then 'npm run build'
++ &nbsp;&nbsp;&nbsp;&nbsp;**Step 2:** Navigate to the backend folder and run 'python3 backend.py' (IMPORTANT: make sure you run it while you are in the Back_End folder or else it won't work)
+
+&nbsp;&nbsp;&nbsp;&nbsp;**Alternatively:** To view the website go to musicClassifier.5iq4aycavk.us-west-2.elasticbeanstalk.com 
+
 
 ### Languages
 + **Front end programming languages:** JavaScript (ES6), HTML, CSS
