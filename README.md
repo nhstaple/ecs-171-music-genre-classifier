@@ -24,14 +24,10 @@ Users can enter in a song title and the result will be a predicted genre.
 + **Modules:** node.js, webpack, npm
 
 ### Back End
-+ **Libraries:** flask
++ **Frameworks:** Flask
 + **NAME:** findOneSong(name, randomFlag)
-+ **SYNOPSIS:** In command prompt, navigate to the backend folder and run 'python3 backend.py'
-+ **DESCRIPTION:** The function will take the song tiel as @name and the random pick sonf feature as @randomFlag from url, when front-end or a browser triggers the url.Both @name and @randomFlag are string datatype. @name can be anything inside a string, but @randomFlag should be a string contains 'True' or 'False' only. The function will return a json message, which contaions one object 'error' only when there is no this song title in database or analysis result with objects, 'songName','artist', 'songGenre', 'predictedScore', 'actualGenre, 'songScore', 'modelScore', 'error'.
++ **DESCRIPTION:** The function will take the song tiel as @name and the random pick sonf feature as @randomFlag from the url, which front-end triggers. Both @name and @randomFlag are string datatype. @name can be anything inside a string, but @randomFlag should be 'True' or 'False' only. The function will return a json message, which contaions one object 'error' only when there is no this song title in database or result with objects, 'songName','artist', 'songGenre', 'predictedScore', 'actualGenre, 'songScore', 'modelScore', 'error', when the song is in the database.
 + **EXAMPLES:** For example, 'http://localhost:8080/song/enter song/True', @name is 'enter song' and @randomFlag is 'True'
-+ **SEE ALSO:** database.query(), ANN_class.ANN(), neuralNet.get_features(), neuralNet.predict()
-+ **BUGS:** No known bugs.
-+ **anything else:**
 
 ### Data Managment
 + [Data Overview](Data_Management/DataOverview.md)
