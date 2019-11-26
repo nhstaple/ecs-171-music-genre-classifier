@@ -171,14 +171,25 @@ for num_layers in layers:
             minScore = model.get_mean_score()
             model.save_to_disk("paramsweep_model")
         
-        #plot of training/testing accuracy over time
+        #plot of training/testing accuracy and error over time
         training_accuracy = []
         testing_accuracy = []
+        training_error = []
+        testing_error = []
+
+        training_error[:] = []
+        testing_error[:] = []
+
         for x in history.history['val_categorical_accuracy']:
             testing_accuracy.append(x)
         for x in history.history['categorical_accuracy']:
             training_accuracy.append(x)
+        for x in history.history['val_loss']:
+            testing_error.append(x)
+        for x in history.history['loss']:
+            training_error.append(x)
 
+        plt.figure(1)
         plt.plot(training_accuracy, label = "training accuracy")
         plt.plot(testing_accuracy, label = "testing accuracy")
         plt.xlabel("epoch")
@@ -186,7 +197,15 @@ for num_layers in layers:
         plt.title("categorical accuracy vs epoch on {}".format(DATA_SET))
         plt.legend()
 
-        plt.show()
+        plt.figure(2)
+        plt.plot(training_error, label = "training error")
+        plt.plot(testing_error, label = "testing error")
+        plt.xlabel("epoch")
+        plt.ylabel("error")
+        plt.title("error vs epoch on {}".format(DATA_SET))
+        plt.legend()
+        plt.savefig("../Figures/Parameter_Sweep/{0}x{1}_error.png".format(num_layers, num_nodes))
+        plt.clf()
 
 #create a dataframe from the grid to better display it
 grid = pd.DataFrame(grid_vect, index=layers, columns=nodes)
