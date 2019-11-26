@@ -1,8 +1,4 @@
 # Machine Learning
-+ **Model used:** Feed forward neural net with one hidden layer and 190 active nodes. The activation layer is relu with a softmax output. 
-+ **Training:** 
-+ **Prediction:** 
-+ **Metrics:**
 
 ## results.py 
 ### Libraries:** None  
