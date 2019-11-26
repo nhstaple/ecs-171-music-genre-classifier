@@ -79,7 +79,8 @@ def findOneSong(name, randomFlag):
 			'songScore' : str(sample['prediction']['score']),
 			'modelScore' : str(neuralNet.get_mean_score()),
 			'error' : error,
-			'redirect_link' : redirect_link
+			'redirect_link' : redirect_link,
+			'predictionVector': str(sample['prediction']['genres'])
 		})
 	else:
 		return jsonify({
