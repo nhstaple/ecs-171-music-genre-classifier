@@ -34,13 +34,13 @@ Users can enter in a song title and the result will be a predicted genre.
 + [Data Format](Data_Management/dataCheck.ipynb)
 
 ### Machine Learning Group
-+ **Model used:** insert what model we used
-+ **Training:** how to train?
-+ **Prediction:** how to predict?
++ **Model used:** Feed forward neural net with one hidden layer and 190 active nodes. Softmax 
++ **Training:** 
++ **Prediction:** 
 + **Metrics:**
 
-+ **File: results.py **
-+ **Libraries: None **
++ **File: ** results.py 
++ **Libraries: **None  
 + **NAME: Result (class) **
 + **SYNOPSIS:** Object returned by the trained model 
 + **DESCRIPTION:** The object consists of dictionary with title: str, artist: str, prediciton: dict. The prediction dictionary contains variables corresponding to the top 4 genres the song will be in with each variable being its probability of being that genre. 
