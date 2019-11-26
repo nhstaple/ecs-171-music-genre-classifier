@@ -21,6 +21,8 @@ import sys
 sys.path.append('../Back_End/')
 import song_result_interface
 
+from random import randint
+
 # ANN - Artificial Neural Network
 # constructor
 # ANN
@@ -233,6 +235,43 @@ class ANN():
 			print("Weights")
 			print(self.model.layers[index].get_weights()[0])
 			index = index - 1
+
+	def naive_predict(self, sample):
+		num_predictions = 16
+		if not self.trained:
+			print("ERROR! Trained to predict on an untrained network.\nSample\n{0}".format(sample))
+			exit()
+
+		result = sample
+
+		vector = dict()
+		for i in range(0, len(classes)):
+			vector[classes[i]] = randint(1, num_predictions)/16
+
+		vector_vals = vector.values()
+		vector = sorted(vector, key = lambda i: vector[i],reverse=True)
+
+		new_vector = dict()
+		counter = 0
+		for i in range(0, len(vector)):
+			prediction = list(vector_vals)[counter]
+			new_vector[vector[i]] = prediction
+			counter = counter + 1
+		vector = new_vector
+
+		score = 16
+		for i in range(0, len(classes)):	
+			if list(vector.keys())[i] in sample['genre_top']:
+				score = i + 1
+				break
+
+		result['prediction'] = dict()
+		result['prediction']['genres'] = vector
+		result['prediction']['score'] = score
+		result['prediction']['result'] = list(vector.keys())[0]
+
+		self.scores.append(result['prediction']['score'])
+		return result
 
 	# performs a prediction based on the sample
 	# assume that the model is trained
