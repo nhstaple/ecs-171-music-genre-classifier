@@ -1,3 +1,13 @@
+# Additional CSV's
+In order to run the website no additional files must be downloaded as they are already in the
+Data folder of the repository. However some of the data_management files use additional CSV's and
+the full feature set, instead of the reduced one, to display the data. In order to have all the
+necessary files you must Download: https://os.unil.cloud.switch.ch/fma/fma_metadata.zip
+place the csv's(tracks.csv, features.csv, echonest.csv, and genres.csv) in the data folder.
+Then run the makePick.py script in the data folder in order to generate necessary 
+pickle files. Once this is done you will have the necessary files to run the notebooks and 
+any other scripts that may be found in the Data_Management folder.
+
 # CSVInterface.py
 
 CSVInterface was created early in order to provide a simple interface to interact with the data which is stored in CSV(comma-separated values) files. Later on, files were converted to pickle files instead of CSV's as the time it took to read in data from a pickle file is substantially faster.
