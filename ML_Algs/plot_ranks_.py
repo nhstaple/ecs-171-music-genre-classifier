@@ -128,15 +128,16 @@ matt_avg = matt_avg / samples
 naive_avg = naive_avg / samples
 
 #print average per prediction
-plt.subplot(1, 3, 1)
+plt.subplot(2, 2, 1)
 plt.hist(naive, 16)
 plt.title('naive avg = {}'.format(naive_avg))
-plt.subplot(1, 3, 2)
+plt.subplot(2, 2, 2)
 plt.hist(val_scores2, 16)
 plt.title('matt avg = {}'.format(matt_avg))
-plt.subplot(1, 3, 3)
+plt.subplot(2, 2, 3)
 plt.hist(val_scores, 16)
 plt.title('sweep avg = {}'.format(sweep_avg))
 plt.xlabel('rank')
 plt.ylabel('# predictions')
+plt.subplots_adjust(hspace = 0.4)
 plt.show()
