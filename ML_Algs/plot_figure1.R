@@ -4,7 +4,15 @@ library(ggplot2)
 
 types <- c(rep("SVM", 4), rep("Logistic Regression", 4), rep("ANN", 4)) #3 types of classification
 features <- c(rep(c("mfcc", "spectral_contrast", "spectral_contrast \nand mfcc", "MRMR Top 200"), 3)) #4 Features were used
-scores <- c(0.41, 0.39, 0.49, 0.42, 0.48, 0.40, 0.49, 0.56, 0.56, 0.52, 0.67, 0.55) #Results
+
+#Results are accuracy scores structured:
+#SVM: mfcc, spectral_contrast, spectral_contrast and mfcc, MRMR Top 200
+#Logistic Regression: "..."
+#ANN: "..."
+#Obtain each score by running SVM_test.py, logistic_regression_test.py, and the ANN file with different datasets
+scores <- c(0.41, 0.39, 0.49, 0.42,
+            0.48, 0.40, 0.49, 0.56,
+            0.56, 0.52, 0.67, 0.55) #Results
 
 df <- data.frame(types, features, scores)
 

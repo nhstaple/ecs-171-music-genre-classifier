@@ -74,7 +74,7 @@ def main():
 
 	#Choose which set of features to use
 	#X = D['X']['small']['spectral_contrast'][['mean', 'std']] #only spectral contrast features
-	#X = D['X']['small']['mfcc'][['mean', 'std']] #only mfcc features
+	X = D['X']['small']['mfcc'][['mean', 'std']] #only mfcc features
 	
 	#dat1 = D['X']['small']['mfcc'][['mean', 'std']] #for mfcc and spectral
 	#dat2 = D['X']['small']['spectral_contrast'][['mean', 'std']] #for mfcc and spectral
@@ -95,9 +95,9 @@ def main():
 
 	#Split into test and train sets. Note that SVM is slow for ovo so more samples takes forever
 	X_train = X.iloc[0:1500]
-	X_test = X.iloc[7000:8001]
+	X_test = X.iloc[1500:8001]
 	Y_train = Y_labels[0:1500]
-	Y_test =  Y_labels[7000:8001]
+	Y_test =  Y_labels[1500:8001]
 	
 	print("Before train")
 	#Train
