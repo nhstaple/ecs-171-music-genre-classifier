@@ -207,40 +207,6 @@ class featRead:
 			n = 200
 		return list(range(0,n))
 
-	def getBins(self):
-		med = self.getSubset(self.tableDF['tracks'], 'medium')
-		med = med['track']
-		#List containing our 16 bins
-		med_genres = list(med['genre_top'].unique())
 
-		#Sort entire clean dataset into bins
-		genre_tops = self.getSubset(self.tableDF['tracks'], 'cleanLarge')
-		genre_tops = genre_tops['track']
-		genre_tops = genre_tops[['genre_top']]
-
-		tracks = self.tableDF['tracks']
-		features = self.tableDF['features']
-		genreBins = {}
-		for bins in med_genres:
-			res = genre_tops.loc[genre_tops['genre_top'] == bins]
-			results = res.to_dict()
-			results = results['genre_top']
-
-			ans = []
-
-			for key in results:
-				song = tracks.loc[key]
-				top_g = bins
-
-				d = {}
-				d['track_id'] = key
-				d['genre_top'] = bins
-				d['X'] = pd.DataFrame(features.loc[[key],:])
-				ans.append(d)
-
-
-			genreBins[bins] = ans
-
-		return genreBins
 
 		
