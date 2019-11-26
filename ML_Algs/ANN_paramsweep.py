@@ -1,4 +1,6 @@
 # ANN_paramsweep.py
+
+#import packages
 import sys
 sys.path.append('../Back_End/')
 sys.path.append('../Data_Management/')
@@ -17,14 +19,13 @@ from ANN_result import Result
 from ANN_class import ANN
 from ANN_encode import encode, decode
 import random
+
+#set the features we're going to use
 indepent_features = ['mfcc', 'spectral_contrast']
 
 # set your experiment seed for train test split
 EXPERIMENT_SEED = 42
-FEATURE_COUNT = 200
 VALIDATION_PERCENT = 0.1
-DEFAULT_LAYERS = 1
-DEFAULT_NODES = len(classes) + 1
 DEFAULT_H_ACTIVATION = 'relu'
 DEFAULT_O_ACTIVATION = 'softmax'
 DEFAULT_LOSS = 'categorical_crossentropy'
@@ -46,10 +47,6 @@ DB = pandasDB.DataBase()
 D = {}
 # X
 D['X'] = {
-    'small'	: reader.getSubset(
-        reader.getFrame('features'),
-        sub='small'
-    ),
     'cleanLarge': reader.getSubset(
         reader.getFrame('features'),
         sub='cleanLarge'
@@ -58,30 +55,18 @@ D['X'] = {
 
 # Y
 D['Y'] = {
-    'small'	: reader.getSubset(
-        reader.getFrame('track')['genre_top'],
-        sub='small'
-    ),
     'cleanLarge': reader.getSubset(
         reader.getFrame('track')['genre_top'],
         sub='cleanLarge'
     ),
 }
 
-# Show all the weights prior to training
-# net.show_weights(net.num_hidden_layers + 1)
-
-# The data after removing outliers
-# data = outlier_method(RawData)
-
 # get the features
-# indepent_features = reader.selectN(n=FEATURE_COUNT)
 indepent_features = ['mfcc', 'spectral_contrast']
 
 print('Constructing datasets')
 print('X')
 # the ind vars
-# X =  pd.DataFrame(D['X'][DATA_SET].iloc[:, indepent_features])
 X = pd.DataFrame(D['X'][DATA_SET][indepent_features])
 
 print('Y')
@@ -97,6 +82,7 @@ trainx, valx, trainy, valy = train_test_split(
     random_state=EXPERIMENT_SEED
 )
 
+#pull a sample to get the number of features
 sample = trainx[0].copy()
 
 print('Data done!\n\n********')
@@ -110,7 +96,9 @@ net = 0
 history = 0
 callback = 0
 
-def make_and_train_model(h_layers, h_nodes):
+#a function that create a model with the given number of
+#hiddenlayers and nodes per layer
+def make_model(h_layers, h_nodes):
     # create an ANN with specified parameters
     net = ANN(p=Parameter(
         num_input=len(sample),
@@ -125,9 +113,11 @@ def make_and_train_model(h_layers, h_nodes):
     ))
     return net
 
+#set up the parameters we want to sweep over
 layers = [1,2,3,4,5,6]
 nodes = [4,8,16,32]
 minScore = 16
+#number of samples to predict on
 samples = 500
 
 # create a grid to store parameter sweep scores in
@@ -137,8 +127,8 @@ grid_vect = np.empty([len(layers), len(nodes)])
 for num_layers in layers:
     for num_nodes in nodes:
 
-        # make and train the model
-        model = make_and_train_model(num_layers, num_nodes)
+        # make the model
+        model = make_model(num_layers, num_nodes)
         # Train the network
         # returns history of training process, and a callback object that can
         # extract information about the model at the end of events ANN_callbacks.py
@@ -152,15 +142,18 @@ for num_layers in layers:
         )
 
         print("\nLayers: {0}\nNodes: {1}".format(num_layers, num_nodes))
+
         # Predicting
         # Let's see how accurate the model is according to the mean score
         print("\nRunning predictions on {} samples.".format(samples))
+        #for each sample
         for index in range(0, samples):
+            #calculate the genre prediction vector
 	        song = DB.query()['track_data']
 	        song['X'] = song['X'][indepent_features].values
-	        # song['X'] = song['X'].iloc[:, indepent_features].values
 	        model.predict(song)
 
+        #after running predictions, print out the mean score achieved
         print(model.get_mean_score())
 
         #add this model's score to the grid
@@ -177,9 +170,7 @@ for num_layers in layers:
         training_error = []
         testing_error = []
 
-        training_error[:] = []
-        testing_error[:] = []
-
+        #build the lists to be plotted
         for x in history.history['val_categorical_accuracy']:
             testing_accuracy.append(x)
         for x in history.history['categorical_accuracy']:
@@ -189,6 +180,7 @@ for num_layers in layers:
         for x in history.history['loss']:
             training_error.append(x)
 
+        #plot the training/testing accuracy
         plt.figure(1)
         plt.plot(training_accuracy, label = "training accuracy")
         plt.plot(testing_accuracy, label = "testing accuracy")
@@ -197,6 +189,7 @@ for num_layers in layers:
         plt.title("categorical accuracy vs epoch on {}".format(DATA_SET))
         plt.legend()
 
+        #plot the training/testing error
         plt.figure(2)
         plt.plot(training_error, label = "training error")
         plt.plot(testing_error, label = "testing error")
@@ -204,9 +197,11 @@ for num_layers in layers:
         plt.ylabel("error")
         plt.title("error vs epoch on {}".format(DATA_SET))
         plt.legend()
+        #save the error plots to disk
         plt.savefig("../Figures/Parameter_Sweep/{0}x{1}_error.png".format(num_layers, num_nodes))
         plt.clf()
 
 #create a dataframe from the grid to better display it
 grid = pd.DataFrame(grid_vect, index=layers, columns=nodes)
+#print the grid of mean scores for each model
 print(grid)
