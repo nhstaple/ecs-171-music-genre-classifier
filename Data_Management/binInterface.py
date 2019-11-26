@@ -83,13 +83,16 @@ class featRead:
 			print('Not a vaild set type')
 
 
-
+	#returns a dictionary. Each entry, genre, contains a list of dictionaries which contain
+	#samples of that genre which can then be fed into our model to make predicitons.
+	#@subset: for which subset do you want the sorted bins for
 	def getBins(self, subset):
-        
+        	#small subset contains only 8 genres
 		if (subset == 'small'):
 			med = self.getSubset(self.tableDF['tracks'], 'small')
 			med = med['track']
 			med_genres = list(med['genre_top'].unique())
+		#medium and cleanLarge had 16 root genres
 		else:
 			med = self.getSubset(self.tableDF['tracks'], 'medium')
 			med = med['track']
