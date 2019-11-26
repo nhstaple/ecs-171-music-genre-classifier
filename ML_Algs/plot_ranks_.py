@@ -92,9 +92,8 @@ net = ANN(trained_model=MODEL_NAME)
 if(MODEL_NAME_2 != ''):
 	net2 = ANN(trained_model=MODEL_NAME_2)
 
-samples = 0
 # The number of test samples to check
-samples = 100
+samples = 1000
 
 print('\n')
 
@@ -129,13 +128,15 @@ matt_avg = matt_avg / samples
 naive_avg = naive_avg / samples
 
 #print average per prediction
-plt.plot(val_scores, label = "optimal param sweep {}".format(sweep_avg))
-if MODEL_NAME_2 != '':
-	plt.plot(val_scores2, label = "matt's model {}".format(matt_avg))
-plt.plot(naive, label='naive model {}'.format(naive_avg))
-plt.xlabel("prediction")
-plt.ylabel("rank")
-plt.title("rank of predictions on {}".format(DATA_SET))
-plt.legend()
-
+plt.subplot(1, 3, 1)
+plt.hist(naive, 16)
+plt.title('naive avg = {}'.format(naive_avg))
+plt.subplot(1, 3, 2)
+plt.hist(val_scores2, 16)
+plt.title('matt avg = {}'.format(matt_avg))
+plt.subplot(1, 3, 3)
+plt.hist(val_scores, 16)
+plt.title('sweep avg = {}'.format(sweep_avg))
+plt.xlabel('rank')
+plt.ylabel('# predictions')
 plt.show()
