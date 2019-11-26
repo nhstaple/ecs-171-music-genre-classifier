@@ -6,10 +6,13 @@ class PageTwo extends React.Component{
         super(props);
     }
 
+    //wrapper that calls gotolandingPage in index.jsx
     gotolandingPage = () =>{        
         this.props.pageState();
     }
 
+    //wrapper that calls gotoFeelingLucky in index.jsx
+    //while new information is loading set all output to empty
     gotoFeelingLucky = () => {
         //clear page while loading new song
         document.getElementById('songName').textContent = '';
@@ -25,6 +28,7 @@ class PageTwo extends React.Component{
     }
 
     render() {
+        //page two contents
         return(
             <main>
                 <div id="page_two_contents">

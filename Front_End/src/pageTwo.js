@@ -63,11 +63,13 @@ function (_React$Component) {
     });
 
     return _this;
-  }
+  } //wrapper that calls gotolandingPage in index.jsx
+
 
   _createClass(PageTwo, [{
     key: "render",
     value: function render() {
+      //page two contents
       return _react.default.createElement("main", null, _react.default.createElement("div", {
         id: "page_two_contents"
       }, _react.default.createElement("h1", null, _react.default.createElement("div", {

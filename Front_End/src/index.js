@@ -107,6 +107,7 @@ function (_React$Component) {
   _createClass(MainPage, [{
     key: "render",
     value: function render() {
+      //first page
       if (this.state.landingPage === true) {
         return _react.default.createElement("main", null, _react.default.createElement("div", {
           className: "pageContainer"
@@ -136,7 +137,7 @@ function (_React$Component) {
         }, " Search "), _react.default.createElement("button", {
           id: "buttonStyle",
           onClick: this.gotoFeelingLucky
-        }, " Feeling Lucky "))))));
+        }, " Feeling Lucky ")))))); //second page
       } else if (this.state.secondPageState === true) {
         return _react.default.createElement(_pageTwo.default, {
           pageState: this.gotolandingPage,

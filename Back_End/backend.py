@@ -8,14 +8,9 @@ import ANN_class
 app = Flask(__name__, static_folder="../Front_End/build/", template_folder="../Front_End/build/") #define app using Flask
 
 # Homepage, which is for testing. It uses url: http://localhost:8080
-# @app.route('/', methods=['GET'])
-# def test():
-# 	return jsonify({'songGenre' : 'It works!'})
-
 @app.route("/")
 def index():
     return render_template("index.html")
-
 
 # sample url: http://localhost:8080/song/enter song/True, 
 # which the songName is the song title and can be changed
@@ -26,13 +21,13 @@ def findOneSong(name, randomFlag):
 	error = False
 
 	# get data from database
-	if(randomFlag == 'True'):
+	if(randomFlag == 'True'): # if "Search" button was pressed
 		data = database.query(name, True)
 		sample = data['track_data']
 		songName = data['track_data']['song_title'][0]
 		actualGenre = data['track_data']['genre_top'][0]
 		artist = data['track_data']['artist_name'][0]
-	else:
+	else: # if "Feeling Lucky" or "Random Song" was pressed
 		data = database.query(name, False)
 		# if there is no this song title, query return a empty list call 'track_data'
 		if(not data['track_data']):
@@ -42,15 +37,6 @@ def findOneSong(name, randomFlag):
 			songName = data['track_data'][0]['song_title'][0]
 			actualGenre = data['track_data'][0]['genre_top'][0]
 			artist = data['track_data'][0]['artist_name'][0]
-	
-	# Data:
-	# -track id
-	# -song_title
-	# -artist_name
-	# -data
-	# -genre_top
-	# -set
-	# -X
 
 	# when error == False, query found the input song title. otherwise, skip below because data is empty
 	if(error == False):
@@ -87,9 +73,11 @@ def findOneSong(name, randomFlag):
 			'error' : error
 		})
 
-
-
 if __name__ == '__main__':
+	# create the database upon startup
 	database = pandasDB.DataBase()
+
+	# create the neural network upon startup
 	neuralNet = ANN_class.ANN(trained_model='matt')
+
 	app.run(debug=True, port=8080, host='0.0.0.0') #run app on port 8080 in debug mode

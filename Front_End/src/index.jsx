@@ -30,6 +30,9 @@ class MainPage extends React.Component{
       secondPageState: false,
     })
   }
+
+  //Navigate to page two (results page) and send AJAX request to backend.
+  //Search button was pushed
   gotoPageTwoState = () =>{
     this.setState({
       landingPage: false,
@@ -39,6 +42,9 @@ class MainPage extends React.Component{
     const song = this.state.songTitle
     setTimeout(function() {ajaxRequests.sbm(song, 'False'); }, 1000);
   }
+
+  //Navigate to page two (results page) and send AJAX request to backend.
+  //Feeling Lucky or Random Song button was pushed
   gotoFeelingLucky = () => {
     this.setState({
       landingPage: false,
@@ -49,12 +55,16 @@ class MainPage extends React.Component{
     const song = this.state.songTitle
     setTimeout(function () {ajaxRequests.sbm(song, 'True');}, 1000);
   }
+
+  //Get the song title entered by the user from the input field
   handleTextChange = (event) =>{
     this.setState({
       songTitle: event.target.value
     })
   }
+
   render() {
+    //first page
     if(this.state.landingPage === true){
       return (
         <main>
@@ -84,6 +94,7 @@ class MainPage extends React.Component{
           </div>
         </main>
       );
+      //second page
     } else if(this.state.secondPageState === true) {
       return (
         <PageTwo pageState={this.gotolandingPage} parentStates={this.state} feelingLucky={this.gotoFeelingLucky}/>   
