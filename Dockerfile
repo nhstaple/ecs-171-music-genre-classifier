@@ -1,3 +1,5 @@
+#Docker image that is used to run the code
+#Author: Spencer Grossarth
 FROM tensorflow/tensorflow:latest-py3
 COPY requirements.txt /
 RUN pip3 -V

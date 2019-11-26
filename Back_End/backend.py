@@ -1,3 +1,5 @@
+#backend.py
+#Authors: Spencer Grossarth, 
 from flask import Flask, jsonify, request, render_template #import objects from the Flask model
 import sys, os
 import pandas as pd
@@ -5,14 +7,15 @@ sys.path.append(os.path.abspath(os.path.join('..', 'Data_Management'))) #path to
 sys.path.append(os.path.abspath(os.path.join('..', 'ML_Algs'))) #path to ML_Algs folder
 import pandasDB
 import ANN_class
-app = Flask(__name__, static_folder="../Front_End/build/", template_folder="../Front_End/build/") #define app using Flask
+#define app using Flask, and specifiy what static pages to load
+app = Flask(__name__, static_folder="../Front_End/build/", template_folder="../Front_End/build/")
 
-# Homepage, which is for testing. It uses url: http://localhost:8080
+# Homepage of website
 @app.route("/")
 def index():
     return render_template("index.html")
 
-# sample url: http://localhost:8080/song/enter song/True, 
+# sample url: http://0.0.0.0:8080/song/enter song/True, 
 # which the songName is the song title and can be changed
 @app.route('/song/<string:name>/<string:randomFlag>/', methods=['GET'])
 def findOneSong(name, randomFlag):
