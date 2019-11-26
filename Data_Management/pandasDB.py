@@ -1,12 +1,16 @@
 import pandas as pd 
 
 
-
+#The "DataBase" that is used by the back-end when querying songs
+#and obtaining features.
 class DataBase:
 
 	#Constructor creates df's that are needed.
 	#Assumes that pkl files are in thee same directory
-	def __init__(self, pkls=['/Data/tracks.pkl', '/Data/reducedFeat.pkl']): # '/Data/reducedFeat.pkl']):
+	#reducedFeat.pkl is a cleaned up version of features.pkl
+	#unlabeled samples(rows) were dropped.
+	#unused features(columns) were dropped
+	def __init__(self, pkls=['/Data/tracks.pkl', '/Data/reducedFeat.pkl']):
 		self.tables = {}
 		for pkl in pkls:
 			if(pkl == '/Data/tracks.pkl'):
@@ -19,7 +23,7 @@ class DataBase:
 			except:
 				print('File ' + '../'+pkl + ' was not found!')
 
-        #Returns a subset of specified frame
+    	#Returns a subset of specified frame
         #@frame: frame which we want subset from
         #@sub: string specifyin subset
 	def getSubset(self, frame, sub='small'):

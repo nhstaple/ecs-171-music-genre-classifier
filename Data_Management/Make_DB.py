@@ -1,3 +1,7 @@
+
+#file was used when attempting to implement sqlite database. As sqlite wasn't used
+#this file wasn't used.
+#script formats csv file in order to later make a DB file.
 import numpy as numpy
 import pandas as pd 
 from sqlalchemy import create_engine

@@ -1,3 +1,6 @@
+#First attempt at implementing a data base using sql. Implementation
+#was too slow so we opted to using a data frame instead.
+
 import sqlite3
 import numpy as numpy
 import pandas as pd 

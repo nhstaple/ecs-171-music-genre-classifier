@@ -1,3 +1,5 @@
+#Script should be run in Data folder. Converts necessary csv files
+#to pickle files which allows for quicker read times of the files.
 import pandas as pd 
 
 
