@@ -1,3 +1,7 @@
+#filename: Make_DB.py
+#author: Jatin Mohanty, Jose Torres
+
+
 #First attempt at implementing a data base using sql. Implementation
 #was too slow so we opted to using a data frame instead.
 
