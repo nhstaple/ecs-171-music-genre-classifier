@@ -73,11 +73,11 @@
 + **SYNOPSIS:** Returns features of class 
 + **DESCRIPTION:** Refer to synopsis <br /> <br />
 
-# TODO
-naive_predict(self, sample, num_predictions=16)
+#### NAME: naive_predict(self, sample, num_predictions=16)
++ **SYNOPSIS:** Performs prediction on untrained model 
++ **DESCRIPTION:** Refer to synopsis <br /> <br />
 
-
-### Example code
+##### Example code
 Loading a trained network
 ```
 from ANN_class import ANN
