@@ -1,5 +1,6 @@
 #Make_DB.py
-#Author(s):
+#Author(s): Jatin Mohanty, Jose Torres-Vargas
+
 #file was used when attempting to implement sqlite database. As sqlite wasn't used
 #this file wasn't used.
 #script formats csv file in order to later make a DB file.

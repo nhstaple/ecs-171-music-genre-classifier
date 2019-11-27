@@ -1,5 +1,6 @@
 #CSVInterface.py
-#Author(s): Jose Torres-Vargas
+#Author(s): Jose Torres-Vargas, Jatin Mohanty, Chance Stewart
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import KFold
@@ -103,11 +104,13 @@ class featRead:
 			print('Not a vaild set type')
 
 	#KFold function
+	#input
 	#@frame: data frame
 	#@k: integer, number of splits
-	#return: returns a collection of data frames
+	#output
+	#df_collection: returns a collection of data frames in pairs of training/testing splits
 	def makeKfold(self, frame, k):
-		kf = KFold(n_splits=k, shuffle=True)
+		kf = KFold(n_splits=k, shuffle=False)
 		df_collection = {}
 		i = 0
 		for train_index, test_index in kf.split(frame):
@@ -164,20 +167,38 @@ class featRead:
 		
 		return ret
 
+	#selectN - univariate feature selection
+	#finds the column indices for a specificed number of top scoring features
+	#calculated using univariate selection with the f_classif scoring function
+	#input
+	#@n: number of features to calculate
+	#output
+	#@indices: column indeces for the selected features
 	def selectN(self, n = 50):
+		#set up dataframes
 		featureData = self.getSubset(self.getFrame('features'), sub='cleanLarge')
 		genreData = self.getSubset(self.getFrame('track')['genre_top'], sub='cleanLarge')
 		Xdf = pd.DataFrame(featureData)
 		Ydf = pd.DataFrame(genreData)
+
+		#create class for selectKbest with f_classif and n results
 		bestfeatures = SelectKBest(score_func=f_classif, k=n)
+		#select features and put into dataframe
 		fit = bestfeatures.fit(Xdf, np.ravel(Ydf))
 		dfscores = pd.DataFrame(fit.scores_)
-		dfcolumns = pd.DataFrame(Xdf.columns)
-		featureScores = pd.concat([dfcolumns,dfscores],axis=1)
-		featureScores.columns = ['Specs','Score']  #naming the dataframe columns
-		indices = featureScores.nlargest(n,'Score').index #indices of n best features
+
+		#get column indices
+		indices = dfscores.nlargest(n, 0).index
 		return indices
 
+	#selectmRMR - minimum Redundancy Maximum Relevancy Feature Selection
+	#finds the column indices for up to 200 of the top scoring features calculated
+	#using mRMR Feature Selection (calculated with an executable file, see 
+	#FeatureSelect.ipbn for details)
+	#input
+	#@n: number of features to be returned 
+	#output
+	#@indices: column indeces of the selected features
 	def selectmRMR(self, n = 50):
 		indices = [435, 295, 412, 314, 312, 275, 437, 331,
            384, 317, 515, 449, 323, 377, 354, 462, 450, 321,
