@@ -7,6 +7,7 @@ sys.path.append(os.path.abspath(os.path.join('..', 'Data_Management'))) #path to
 sys.path.append(os.path.abspath(os.path.join('..', 'ML_Algs'))) #path to ML_Algs folder
 import pandasDB
 import ANN_class
+import song_result_interface
 #define app using Flask, and specifiy what static pages to load
 app = Flask(__name__, static_folder="../Front_End/build/", template_folder="../Front_End/build/")
 
@@ -30,53 +31,65 @@ def findOneSong(name, randomFlag):
 	# initialize error message
 	error = False
 
+	result_list = []
+
 	# get data from database
 	if(randomFlag == 'True'): # if "Feeling Lucky" or "Random Song" was pressed
 		data = database.query(name, True)
-		sample = data['track_data']
-		songName = data['track_data']['song_title'][0]
-		actualGenre = data['track_data']['genre_top'][0]
-		artist = data['track_data']['artist_name'][0]
+		current_result = song_result_interface.result
+		current_result['song_id'] = 0
+		current_result['title'] = data['track_data']['song_title'][0]
+		current_result['metadata']['artist'] = data['track_data']['artist_name'][0]
+		current_result['genre_top'] = data['track_data']['genre_top'][0]
+		current_result['subset'] = data['track_data']['set'][0]
+		current_result['X'] = data['track_data']['X']
+		result_list.append(current_result)
 	else: # if "Search" button was pressed
 		data = database.query(name, False)
 		# if there is no this song title, query return a empty list call 'track_data'
 		if(not data['track_data']):
 			error = True
 		else:
-			sample = data['track_data'][0]
-			songName = data['track_data'][0]['song_title'][0]
-			actualGenre = data['track_data'][0]['genre_top'][0]
-			artist = data['track_data'][0]['artist_name'][0]
+			# store all song name results from database
+			for index in range(0, len(data['track_data'])):
+				current_result = song_result_interface.result
+				current_result['song_id'] = index
+				current_result['title'] = data['track_data'][index]['song_title'][0]
+				current_result['metadata']['artist'] = data['track_data'][index]['artist_name'][0]
+				current_result['subset'] = data['track_data'][index]['set'][0]
+				current_result['X'] = data['track_data'][index]['X']
+				current_result['genre_top'] = data['track_data'][index]['genre_top'][0]
+				result_list.append(current_result)
 
 	# when error == False, query found the input song title. otherwise, skip below because data is empty
 	if(error == False):
-		sample['prediction'] = {}
-		sample = neuralNet.predict(sample)
-
-		predictedGenre = sample['prediction']['result']
+		result_list[0] = neuralNet.predict(result_list[0])
 
 	# send ML results to front end
 	if(error == False):
 
+		actualGenre = result_list[0]['genre_top']
+		predictedGenre = result_list[0]['prediction']['result']
+
 		# construct youtube url
 		url = 'https://www.youtube.com' + '/results?'
-		artistURl = artist
-		query = 'search_query=' + songName + '+' + artist
+		artistURl = result_list[0]['metadata']['artist']
+		query = 'search_query=' + result_list[0]['title'] + '+' + result_list[0]['metadata']['artist']
 		redirect_link = url + query
 		redirect_link = redirect_link.replace(' ', '+')
 
 		return jsonify({
-			'songName' : songName,
-			'artist' : artist,
+			'songName' : result_list[0]['title'],
+			'artist' : result_list[0]['metadata']['artist'],
 			'songGenre' : predictedGenre,
-			'predictedScore' : str(sample['prediction']['genres'][predictedGenre]*100),
+			'predictedScore' : str(result_list[0]['prediction']['genres'][predictedGenre]*100),
 			'actualGenre' : actualGenre,
-			'actualScore' : str(sample['prediction']['genres'][actualGenre]*100),
-			'songScore' : str(sample['prediction']['score']),
+			'actualScore' : str(result_list[0]['prediction']['genres'][actualGenre]*100),
+			'songScore' : str(result_list[0]['prediction']['score']),
 			'modelScore' : str(neuralNet.get_mean_score()),
 			'error' : error,
 			'redirect_link' : redirect_link,
-			'predictionVector': str(sample['prediction']['genres'])
+			'predictionVector': str(result_list[0]['prediction']['genres'])
 		})
 	else:
 		return jsonify({
