@@ -26,8 +26,17 @@ Users can enter in a song title and the result will be a predicted genre. We hav
 * **Back end programming languages:** Python (version >= 3)
 
 ## Team Members
-
-
+Nick Stapleton<br />
+Tannavee Kumar<br />
+Kevin Lee<br />
+Spencer Grossarth<br />
+Jose Torres<br />
+Jiahui Dai<br />
+Jatin Mohanty<br />
+Chance Stewart<br />
+Cameron Fitzpatrick<br />
+Luc Nglankong<br />
+Matthew Marlow<br />
 
 
 
