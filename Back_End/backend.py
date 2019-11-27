@@ -15,8 +15,15 @@ app = Flask(__name__, static_folder="../Front_End/build/", template_folder="../F
 def index():
     return render_template("index.html")
 
-# sample url: http://0.0.0.0:8080/song/enter song/True, 
-# which the songName is the song title and can be changed
+# FUNCTION: findOneSong
+# DESCRIPTION: Backend pipeline that retrieves input from the front end,
+# retrieves data from the database, predicts a song genre from the neural network
+# given the output from the database, and sends the results to the front end.
+# PARAMETER 1: @name (string datatypes) is the song title that the user 
+# enters in the front end. @name can be anything inside a string.
+# PARAMETER 2: @randomFlag (string datatypes) is the feature flag that 
+# ignores the user input and picks a random song from the database. 
+# @randomFlag should be 'True' or 'False' only.
 @app.route('/song/<string:name>/<string:randomFlag>/', methods=['GET'])
 def findOneSong(name, randomFlag):
 
