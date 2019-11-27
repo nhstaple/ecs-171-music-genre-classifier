@@ -1,6 +1,16 @@
+//ajaxRequests.js
+//Authors: Luc Nglankong, Cameron Fitzpatrick, Jiahui Dai
+
 import React, { useEffect, useState } from "react";
 
-//create and export ajax base function:
+// FUNCTION: createAJAXRequest
+// DESCRIPTION: This function creates a request given the method(GET or POST) 
+// and url.This function is primarily used to make a GET request.
+// INPUT:
+// (method) - The request method, which is either GET or POST
+// (url) - The request URL in the format <domain>/song/<songTitle>/<randomFlag>/
+// OUTPUT:
+// (xhr) - Request object
 export function createAJAXRequest(method, url) {
     let xhr = new XMLHttpRequest();
     console.log("METHOD: " + method + " URL: " + url);
@@ -8,7 +18,12 @@ export function createAJAXRequest(method, url) {
     return xhr;
 }
 
-// this function will grab the url from the window:
+// FUNCTION: getUrlVars
+// DESCRIPTION: This is a helper function that will take the url 
+// from the window and return parameters found within it.
+// This is how the song title is retrieved.
+// OUTPUT:
+// (vars) - every parameter in the URL in a dictionary
 function getUrlVars() {
     let vars = {};
     let parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
@@ -18,8 +33,22 @@ function getUrlVars() {
     return vars;
 }
 
-//create actual ajax request to send song title, and receive a response from the swe team:
-//ajax grabs the info from the url
+// FUNCTION: makeAJAXRequest
+// DESCRIPTION: This function takes the processed song title from getUrlVars() 
+// and whether or not the "Feeling Lucky" button was pressed to create an AJAX 
+// request.The request url is built using < domain > /song/ < songTitle > /<random> 
+// if the Search button was pushed or <domain>/song / RANDOM / <songTitle> if the 
+// Feeling Lucky button was pushed and creates the GET request by calling 
+// createAJAXRequest(). The function then checks for errors and sends the request 
+// before receiving the callback function. In the callback function, the response 
+// object is obtained which holds the JSON response from the backend and then modifies 
+// the DOM on the front end to show the output.
+// INPUT:
+// (song) - The song name from the input.
+// (random) - a boolean flag that represents if a random search should
+// be performed on the database.  Is True when "Feeling Lucky" or
+// "Random Song" buttons are pressed and is false when "Search"
+// button is pressed.
 function makeAJAXRequest(song = getUrlVars()(["songTitle"]), random='True'){
     //construct request URL
     let url1 = "/song/";
@@ -72,7 +101,17 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"]), random='True'){
     xhr.send();
 }
 
-//at this point, user has clicked the search button, so we will need to send the request:
+// FUNCTION: sbm
+// DESCRIPTION: This is the exported function in ajaxRequest.js that 
+// gets called when index.jsx attempts to send an AJAX request.
+// It will start the process of creating the AJAX request by calling 
+// makeAJAXRequest().
+// INPUT:
+// (id) - song title from user
+// (random) - a boolean flag that represents if a random search should
+// be performed on the database.  Is True when "Feeling Lucky" or
+// "Random Song" buttons are pressed and is false when "Search"
+// button is pressed.
 export function sbm(id, random){
     //begin AJAX request
     makeAJAXRequest(id, random);

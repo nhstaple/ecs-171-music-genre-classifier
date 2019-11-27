@@ -46,7 +46,7 @@ function (_React$Component) {
 
     _classCallCheck(this, MainPage);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(MainPage).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(MainPage).call(this, props)); //State variables for MainPage component
 
     _defineProperty(_assertThisInitialized(_this), "gotolandingPage", function () {
       _this.setState({
@@ -88,7 +88,6 @@ function (_React$Component) {
     });
 
     _this.state = {
-      // States are hardcoded for now
       landingPage: true,
       secondPageState: false,
       songTitle: '',
@@ -100,12 +99,24 @@ function (_React$Component) {
       modelScore: ''
     };
     return _this;
-  } //create goto page state functions
-  //in here setState will rerender the dom
+  } // FUNCTION: gotolandingPage
+  // DESCRIPTION: This function indicates that the user should be on the
+  // first page by setting the state boolean variables landingPage to
+  // true and secondPageState to false.Once these state variables change,
+  // the render function will execute and choose what component to show
+  // based on these variables.
 
 
   _createClass(MainPage, [{
     key: "render",
+    // FUNCTION: render
+    // DESCRIPTION: The render function is split into two components: 
+    // one for the first page(this.state.landingPage === true) and one for the results
+    // page(this.state.secondPageState === true).The first page features the input field, 
+    // Search button and Feeling Lucky button.The results page calls the < PageTwo /> 
+    // component in PageTwo.jsx.The gotolandingPage(), gotoFeelingLucky(), and state
+    // variables of index.jsx are passed to the PageTwo component.Note that Index.js
+    // is just the React representation of the JSX code from Index.jsx.
     value: function render() {
       //first page
       if (this.state.landingPage === true) {

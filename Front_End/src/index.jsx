@@ -1,3 +1,6 @@
+//index.jsx
+//Authors: Luc Nglankong, Cameron Fitzpatrick
+
 import * as ajaxRequests from './ajaxRequests.js'
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -9,8 +12,8 @@ class MainPage extends React.Component{
   constructor(props){
     super(props);
 
+    //State variables for MainPage component
     this.state = {
-      // States are hardcoded for now
       landingPage: true,
       secondPageState: false,
       songTitle: '',
@@ -22,8 +25,13 @@ class MainPage extends React.Component{
       modelScore: ''
     }
   }
-  //create goto page state functions
-  //in here setState will rerender the dom
+  
+  // FUNCTION: gotolandingPage
+  // DESCRIPTION: This function indicates that the user should be on the
+  // first page by setting the state boolean variables landingPage to
+  // true and secondPageState to false.Once these state variables change,
+  // the render function will execute and choose what component to show
+  // based on these variables.
   gotolandingPage = () =>{
     this.setState({
       landingPage: true,
@@ -31,8 +39,15 @@ class MainPage extends React.Component{
     })
   }
 
-  //Navigate to page two (results page) and send AJAX request to backend.
-  //Search button was pushed
+  // FUNCTION: gotoPageTwoState
+  // DESCRIPTION: This function indicates that the user should be on the
+  // second page by setting the state boolean variables landingPage to 
+  // false and secondPageState to true.Once these state variables 
+  // change, the render function will execute and choose what component 
+  // to show based on these variables.This function also retrieves the 
+  // given song title from the state variable songTitle(which is set by 
+  // the user in the input field) and creates an AJAX request containing 
+  // the songTitle and a boolean representing that the Search Button was pressed.
   gotoPageTwoState = () =>{
     this.setState({
       landingPage: false,
@@ -43,8 +58,10 @@ class MainPage extends React.Component{
     setTimeout(function() {ajaxRequests.sbm(song, 'False'); }, 1000);
   }
 
-  //Navigate to page two (results page) and send AJAX request to backend.
-  //Feeling Lucky or Random Song button was pushed
+  // FUNCTION: gotoFeelingLucky
+  // DESCRIPTION: This function is identical to gotoPageTwoState with 
+  // the exception that the AJAX request contains a boolean 
+  // representing that the Feeling Lucky button was pressed.
   gotoFeelingLucky = () => {
     this.setState({
       landingPage: false,
@@ -56,12 +73,27 @@ class MainPage extends React.Component{
     setTimeout(function () {ajaxRequests.sbm(song, 'True');}, 1000);
   }
 
-  //Get the song title entered by the user from the input field
+  // FUNCTION: handleTextChange
+  // DESCRIPTION: This function retrieves the song title entered
+  // in the input field by the user and saves it in the state 
+  // variable songTitle.
+  // INPUT:
+  // (event) - the event object triggered by the input field.
+  // The user input will be extracted from this parameter.
   handleTextChange = (event) =>{
     this.setState({
       songTitle: event.target.value
     })
   }
+
+  // FUNCTION: render
+  // DESCRIPTION: The render function is split into two components: 
+  // one for the first page(this.state.landingPage === true) and one for the results
+  // page(this.state.secondPageState === true).The first page features the input field, 
+  // Search button and Feeling Lucky button.The results page calls the < PageTwo /> 
+  // component in PageTwo.jsx.The gotolandingPage(), gotoFeelingLucky(), and state
+  // variables of index.jsx are passed to the PageTwo component.Note that Index.js
+  // is just the React representation of the JSX code from Index.jsx.
 
   render() {
     //first page

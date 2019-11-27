@@ -63,11 +63,25 @@ function (_React$Component) {
     });
 
     return _this;
-  } //wrapper that calls gotolandingPage in index.jsx
+  } // FUNCTION: gotolandingPage
+  // DESCRIPTION: This function wraps the gotolandingPage 
+  // function of index.jsx.It will get called when the Go 
+  // Back button is pushed.
 
 
   _createClass(PageTwo, [{
     key: "render",
+    // FUNCTION: render
+    // DESCRIPTION: This function returns JSX code that will build 
+    // the HTML for the results page.This page features the song 
+    // title, artist, predicted genre, predicted genre probability, 
+    // actual genre, actual genre probability, song rank and model 
+    // rank.There is also a back button that goes back to the first 
+    // page, random button that will reroll results for a random song, 
+    // and a YouTube search link that will search for the given song and 
+    // artist.When there is initially no data, the predicted genre text 
+    // is replaced with 'Loading...' until a response is received from 
+    // the backend.
     value: function render() {
       //page two contents
       return _react.default.createElement("main", null, _react.default.createElement("div", {

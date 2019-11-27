@@ -1,3 +1,6 @@
+//pageTwo.jsx
+//Authors: Luc Nglankong
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 class PageTwo extends React.Component{
@@ -6,13 +9,19 @@ class PageTwo extends React.Component{
         super(props);
     }
 
-    //wrapper that calls gotolandingPage in index.jsx
+    // FUNCTION: gotolandingPage
+    // DESCRIPTION: This function wraps the gotolandingPage 
+    // function of index.jsx.It will get called when the Go 
+    // Back button is pushed.
     gotolandingPage = () =>{        
         this.props.pageState();
     }
 
-    //wrapper that calls gotoFeelingLucky in index.jsx
-    //while new information is loading set all output to empty
+    // FUNCTION: gotoFeelingLucky
+    // DESCRIPTION: This function wraps the gotoFeelingLucky function 
+    // of index.jsx.It will get called when the Random Song button is 
+    // pushed.It will also set all of the text on this page to empty 
+    // while the new random data is being retrieved.
     gotoFeelingLucky = () => {
         //clear page while loading new song
         document.getElementById('songName').textContent = '';
@@ -26,6 +35,18 @@ class PageTwo extends React.Component{
         document.getElementById('redirect_link').textContent = '';
         this.props.feelingLucky();
     }
+
+    // FUNCTION: render
+    // DESCRIPTION: This function returns JSX code that will build 
+    // the HTML for the results page.This page features the song 
+    // title, artist, predicted genre, predicted genre probability, 
+    // actual genre, actual genre probability, song rank and model 
+    // rank.There is also a back button that goes back to the first 
+    // page, random button that will reroll results for a random song, 
+    // and a YouTube search link that will search for the given song and 
+    // artist.When there is initially no data, the predicted genre text 
+    // is replaced with 'Loading...' until a response is received from 
+    // the backend.
 
     render() {
         //page two contents
