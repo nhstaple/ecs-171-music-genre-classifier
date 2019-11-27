@@ -51,3 +51,15 @@ Implements the "DataBase" class that is used when querying for songs and their i
 `query()`: Function receives a song to search in the database from the front end. The function takes in the song title that is being queried and a flag specifying whether to look for the specified song or return a random song. Returns a dictionary or list of dictionaries in the case where several songs of the same name. Each dictionary contains information such as the *track_id*, *artist_name*, *top_genre*, *audio features*, *etc.*
 * Usage example: `db.query('songName', False)` This will query the DB for song of title 'songName'
 * Usage example: `db.query('songName', True)` Ignores songName and calls getRandomSong().
+
+# binInterface:
+A simpler version of CSVInterface. The only difference is that CSVInterface
+uses the whole csv files. Bin interface simply reads in the reduced feature
+pickle files. Returns features ready to be fed staright into the model.
+
+### Methods
+
+getBins('subset'): Returns a dictionary with 16 bins(root genres) for both the medium
+and cleanLarge subset. Small subset only contains 8 bins. Songs in each subest are 
+sorted into there respective bins(genre).
+* Usage example: `binInterface.getBins('small')` returns a dictionary with 8 bins.

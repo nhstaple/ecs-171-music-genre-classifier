@@ -1,3 +1,6 @@
+#pandasDB.py
+#Author(s): Jose Torres-Vargas
+
 import pandas as pd 
 
 

@@ -1,12 +1,10 @@
-
+#binInterface.py
+#Author(s): Jose Torres-Vargas
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import KFold
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_classif
-
-# import sys
-# sys.path.append('../')
 
 class featRead:
 

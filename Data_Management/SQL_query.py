@@ -1,3 +1,6 @@
+#SQL_query.py
+#Author(s):
+
 #First attempt at implementing a data base using sql. Implementation
 #was too slow so we opted to using a data frame instead.
 

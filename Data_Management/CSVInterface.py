@@ -1,4 +1,5 @@
-
+#CSVInterface.py
+#Author(s): Jose Torres-Vargas
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import KFold
