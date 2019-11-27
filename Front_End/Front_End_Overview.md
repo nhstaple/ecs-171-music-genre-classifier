@@ -11,35 +11,35 @@
 #### NAME: gotoFeelingLucky = () => {}
 + **DESCRIPTION:** This function is identical to gotoPageTwoState with the exception that the AJAX request contains a boolean representing that the Feeling Lucky button was pressed.<br /> <br />
 #### NAME: handleTextChange = () => {}
-+ **DESCRIPTION:** This function retrieves the song title entered in the input field by the user and saves it in the state variable songTitle.<br /> 
++ **DESCRIPTION:** This function retrieves the song title entered in the input field by the user and saves it in the state variable songTitle.<br /><br />
 + **Parameters:**
 event - the event object triggered by the input field. The user input will be extracted from this parameter.<br /> <br />
 ### pageTwo.jsx
 #### NAME: render()
-+ **DESCRIPTION:** This function returns JSX code that will build the HTML for the results page.  This page features the song title, artist, predicted genre, predicted genre probability, actual genre, actual genre probability, song rank and model rank.  There is also a back button that goes back to the first page, random button that will reroll results for a random song, and a YouTube search link that will search for the given song and artist.  When there is initially no data, the predicted genre text is replaced with 'Loading...' until a response is received from the backend.<br /> <br /> 
++ **DESCRIPTION:** This function returns JSX code that will build the HTML for the results page.  This page features the song title, artist, predicted genre, predicted genre probability, actual genre, actual genre probability, song rank and model rank.  There is also a back button that goes back to the first page, random button that will reroll results for a random song, and a YouTube search link that will search for the given song and artist.  When there is initially no data, the predicted genre text is replaced with 'Loading...' until a response is received from the backend.<br /><br /> 
 #### NAME: gotolandingPage = () => {}
 + **DESCRIPTION:** This function wraps the gotolandingPage function of index.jsx.  It will get called when the Go Back button is pushed.<br /> <br /> 
 #### NAME: gotoFeelingLucky = () => {}
 + **DESCRIPTION:** This function wraps the gotoFeelingLucky function of index.jsx.  It will get called when the Random Song button is pushed.  It will also set all of the text on this page to empty while the new random data is being retrieved.<br /> <br /> 
 ### ajaxRequest.js
 #### NAME: sbm(id, random)
-+ **DESCRIPTION:** This is the exported function in ajaxRequest.js that gets called when index.jsx attempts to send an AJAX request.  It will start the process of creating the AJAX request by calling makeAJAXRequest().<br />
++ **DESCRIPTION:** This is the exported function in ajaxRequest.js that gets called when index.jsx attempts to send an AJAX request.  It will start the process of creating the AJAX request by calling makeAJAXRequest().<br /><br />
 + **Parameters:**<br /> 
 ***id*** - song title from user<br /> 
 ***random*** - a boolean flag that represents if a random search should be performed on the database.  Is True when "Feeling Lucky" or "Random Song" buttons are pressed and is false when "Search" button is pressed.
 #### NAME: makeAJAXRequest(song, random)
-+ **DESCRIPTION:** This function takes the processed song title from getUrlVars() and whether or not the "Feeling Lucky" button was pressed to create an AJAX request.  The request url is built using &lt;domain&gt;/song/&lt;songTitle&gt;/&lt;random&gt; if the Search button was pushed or &lt;domain&gt;/song/RANDOM/&lt;songTitle&gt; if the Feeling Lucky button was pushed and creates the GET request by calling createAJAXRequest().  The function then checks for errors and sends the request before receiving the callback function.  In the callback function, the response object is obtained which holds the JSON response from the backend and then modifies the DOM on the front end to show the output.<br />
++ **DESCRIPTION:** This function takes the processed song title from getUrlVars() and whether or not the "Feeling Lucky" button was pressed to create an AJAX request.  The request url is built using &lt;domain&gt;/song/&lt;songTitle&gt;/&lt;random&gt; if the Search button was pushed or &lt;domain&gt;/song/RANDOM/&lt;songTitle&gt; if the Feeling Lucky button was pushed and creates the GET request by calling createAJAXRequest().  The function then checks for errors and sends the request before receiving the callback function.  In the callback function, the response object is obtained which holds the JSON response from the backend and then modifies the DOM on the front end to show the output.<br /><br />
 + **Parameters:**<br />
 ***song*** - The song name from the input.<br />
 ***random*** - a boolean flag that represents if a random search should be performed on the database.  Is True when "Feeling Lucky" or "Random Song" buttons are pressed and is false when "Search" button is pressed.<br /><br />
 #### NAME: getUrlVars()
-+ **DESCRIPTION:** This is a helper function that will take the url from the window and return parameters found within it.  This is how the song title is retrieved.<br />
++ **DESCRIPTION:** This is a helper function that will take the url from the window and return parameters found within it.  This is how the song title is retrieved.<br /><br />
 + **Output:**<br />
 ***vars*** - every parameter in the URL stored in a dictionary.<br />
 #### NAME: createAJAXRequest(method, url)
-+ **DESCRIPTION:** This function creates a request given the method (GET or POST) and url.  This function is primarily used to make a GET request. <br />
-+ **Parameters:**<br />
++ **DESCRIPTION:** This function creates a request given the method (GET or POST) and url.  This function is primarily used to make a GET request. <br /><br />
++ **Parameters:**
 ***method*** - The request method, which is either GET or POST.<br />
-***url*** - The request URL built in makeAJAXRequest()<br /><br />
-+ **Output:**<br />
+***url*** - The request URL built in makeAJAXRequest()
++ **Output:**
 ***xhr*** - Request object.<br />
