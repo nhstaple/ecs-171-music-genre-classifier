@@ -1,5 +1,5 @@
 #backend.py
-#Authors: Spencer Grossarth, 
+#Authors: Spencer Grossarth, Jiahui Dai, Luc Nglankong
 from flask import Flask, jsonify, request, render_template #import objects from the Flask model
 import sys, os
 import pandas as pd
