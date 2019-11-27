@@ -31,13 +31,13 @@ def findOneSong(name, randomFlag):
 	error = False
 
 	# get data from database
-	if(randomFlag == 'True'): # if "Search" button was pressed
+	if(randomFlag == 'True'): # if "Feeling Lucky" or "Random Song" was pressed
 		data = database.query(name, True)
 		sample = data['track_data']
 		songName = data['track_data']['song_title'][0]
 		actualGenre = data['track_data']['genre_top'][0]
 		artist = data['track_data']['artist_name'][0]
-	else: # if "Feeling Lucky" or "Random Song" was pressed
+	else: # if "Search" button was pressed
 		data = database.query(name, False)
 		# if there is no this song title, query return a empty list call 'track_data'
 		if(not data['track_data']):
