@@ -74,7 +74,7 @@
 + **DESCRIPTION:** Refer to synopsis <br /> <br />
 
 #### NAME: naive_predict(self, sample, num_predictions=16)
-+ **SYNOPSIS:** Performs prediction on untrained model 
++ **SYNOPSIS:** FILL IN 
 + **DESCRIPTION:** Refer to synopsis <br /> <br />
 
 ##### Example code
