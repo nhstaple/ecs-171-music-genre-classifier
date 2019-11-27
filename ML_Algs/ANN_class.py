@@ -341,10 +341,3 @@ class ANN():
 	def get_features(self):
 		return self.features
 
-test = False
-
-if test:
-	# Load a trained model
-	net = ANN(trained_model='test_0')
-	# Show the last two layers of weights
-	net.show_weights(2)
