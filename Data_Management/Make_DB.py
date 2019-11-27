@@ -1,3 +1,6 @@
+#filename: Make_DB.py
+#author: Jatin Mohanty, Jose Torres
+
 
 #file was used when attempting to implement sqlite database. As sqlite wasn't used
 #this file wasn't used.
