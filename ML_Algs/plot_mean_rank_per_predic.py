@@ -1,4 +1,7 @@
-# ANN_example.py
+# plot_mean_rank_per_predic.py
+# authors: Chance Stewart
+# based on code written in ANN_example.py
+
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import numpy as np
@@ -116,7 +119,7 @@ print('\n')
 val_scores = []
 val_scores2 = []
 
-def predict(pred_model, score_arr, sample=song_result_interface.result.copy(), interactive=False):
+def predict(pred_model, score_arr, sample=song_result_interface.result.copy()):
 	# ML & Al job, just updates sample['prediction']
 	sample = pred_model.predict(sample)
 	score_arr.append(sample['prediction']['score'])
@@ -133,10 +136,10 @@ avg_per_predic2 = []
 for index in range(0, samples):
 	song = DB.query()['track_data']
 	song['X'] = song['X'][indepent_features].values
-	results.append(predict(pred_model=net, score_arr=val_scores, sample=song, interactive=False))
+	results.append(predict(pred_model=net, score_arr=val_scores, sample=song))
 	avg_per_predic.append(net.get_mean_score())
 	if(MODEL_NAME_2 != ''):
-		results2.append(predict(pred_model=net2, score_arr=val_scores2, sample=song, interactive=False))
+		results2.append(predict(pred_model=net2, score_arr=val_scores2, sample=song))
 		avg_per_predic2.append(net2.get_mean_score())
 
 #print average per prediction
