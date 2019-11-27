@@ -74,8 +74,8 @@
 + **DESCRIPTION:** Refer to synopsis <br /> <br />
 
 #### NAME: naive_predict(self, sample, num_predictions=16)
-+ **SYNOPSIS:** FILL IN 
-+ **DESCRIPTION:** Refer to synopsis <br /> <br />
++ **SYNOPSIS:** Uniform prediction of a model
++ **DESCRIPTION:** Prediction that guess uniformly instead of calling predict function on the neural network <br /> <br />
 
 ##### Example code
 Loading a trained network
