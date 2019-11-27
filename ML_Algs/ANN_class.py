@@ -13,8 +13,8 @@ from genres import classes
 from ANN_parameter import Parameter
 from ANN_callback import Callback
 from ANN_encode import encode
-from ANN_result import Result
 
+# the directory where the trained models are stored
 TRAINED_MODEL_DIR = '../ML_Algs/trained_models/'
 
 import sys
@@ -24,25 +24,6 @@ import song_result_interface
 from random import randint
 
 # ANN - Artificial Neural Network
-# constructor
-# ANN
-#   input:
-# 	- trained_model: name of the model. There should be a _paramters.csv and _weights.csv associated with the name
-# 	- p: the parameters. See ANN_Parameter.py for info on how to change the parameters
-# 	- init: should the model have it's weights initialized. TODO: set the initialization
-#
-# Methods
-#	X is a Pandas data frame, Y the dependent columumn in the dataframe, encode() is a onehotencoder see ANN_encode.py
-#	returns the history, and the callback (callback defined in ANN_callback.py)
-#	ANN.train(X, encode(Y), num_iter=100, testing=(), batch=-1):
-
-# 	Num is the number of layers to print starting from the last layer
-#	ANN.show_weights(num=1)
-
-#	Sample is a pandas dataframe with one row. That's how I made it for the homework but an array of arrays might work, too.
-#	Returns a result object, see ANN_result.py
-# 	ANN.predict(sample)
-
 class ANN():
 	# The constructor
 	def __init__(
@@ -178,11 +159,13 @@ class ANN():
 		# The accuracy record
 		hist = 0
 
+		# Flag that indicates if a testing set was provided
 		test_provided = False
 
 		if batch < 1:
 			print('error bad batch size:\t{}'.format(batch))
 
+		# if there wasn't a test
 		if len(testing) == 0:
 			test_provided = False
 
@@ -193,6 +176,7 @@ class ANN():
 			if not (test_ratio > 0.00 and test_ratio <= 2/3):
 				print('error invalid ratio {}'.format(test_ratio))
 				test_ratio = 1/3
+		# else there was a test
 		else:
 			if test_ratio != 0.00:
 				print('warning invalided param when test set provided {}'.format(test_ratio))
@@ -236,6 +220,7 @@ class ANN():
 			print(self.model.layers[index].get_weights()[0])
 			index = index - 1
 
+	# guesses uniformly on each genre of a song's prediction
 	def naive_predict(self, sample, num_predictions=16):
 		if not self.trained:
 			print("ERROR! Trained to predict on an untrained network.\nSample\n{0}".format(sample))
@@ -321,6 +306,8 @@ class ANN():
 		self.scores.append(result['prediction']['score'])
 		return result
 
+	# save the model to disk into the ML_Algs/trained_models/ directory
+	# save parameters, weights, and features
 	def save_to_disk(self, model_name='test'):
 		# Save the parameters to disk
 		parameter_file = open(TRAINED_MODEL_DIR + model_name + '_parameters.csv', "w")
@@ -350,6 +337,7 @@ class ANN():
 			total_score += self.scores[i]
 		return total_score/(len(self.scores))
 
+	# returns the features used for training the model
 	def get_features(self):
 		return self.features
 

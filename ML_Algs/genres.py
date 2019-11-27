@@ -1,4 +1,7 @@
 # genres.py
+## author- nick
+## Description
+## All the top level genres used in the data set
 
 # Genres
 classes = [
@@ -20,5 +23,5 @@ classes = [
 	'Easy Listening'
 ]
 
-
+# the number of genres
 NUM_GENRES = len(classes)

@@ -6,24 +6,35 @@ import numpy as np
 import pandas as pd
 from genres import classes, NUM_GENRES
 from ANN_parameter import Parameter
-from ANN_result import Result
 from ANN_class import ANN
 from ANN_encode import encode, decode
 import random
 
 # set your experiment seed for train test split
+# These parameters correspond to the parameters from the optimal hyperparameter sweep.
+# set your experiment seed for train test split
+# These parameters correspond to the parameters used for Matt's model.
 EXPERIMENT_SEED = 42
-FEATURE_COUNT = 200
 VALIDATION_PERCENT = 0.1
-DEFAULT_LAYERS = 1
-DEFAULT_NODES = 189 + 16 + 1
+# num of hidden layers
+DEFAULT_LAYERS = 4
+# num of nodes per layer
+DEFAULT_NODES = 32
+# activation function
 DEFAULT_H_ACTIVATION = 'relu'
+# output function
 DEFAULT_O_ACTIVATION = 'softmax'
+# loss metric
 DEFAULT_LOSS = 'categorical_crossentropy'
+# batch size
 DEFAULT_BATCH = 200
-DEFAULT_EPOCHS = 50
+# num of training epochs
+DEFAULT_EPOCHS = 100
 TEST_RATIO = 0.34
+# data set for training
 DATA_SET = 'cleanLarge'
+# num features for mrmr
+FEATURE_COUNT = 200
 MRMR = False
 
 # Load model or train model?
@@ -50,6 +61,7 @@ print('Initializing Data Management interface...')
 # reads the data from the csv
 reader = CSVInterface.featRead()
 
+# Data manegement interface
 DB = pandasDB.DataBase()
 
 # D = { X | Y }
@@ -109,8 +121,11 @@ print('\nBuilding neural net')
 print('input : {}'.format(len(sample)))
 print('output: {}\n'.format(NUM_GENRES))
 
+# the neural network
 net = 0
+# the history object from training
 history = 0
+# the callback function from training
 callback = 0
 
 # Use this for pre trained models
@@ -142,10 +157,10 @@ else:
 		interactive=False
 	)
 
-samples = 0
 # The number of test samples to check
 samples = int(input('Begin prediction on test set. <= 8 samples will run in interactive mode.\nNumber of samples:\t'))
 
+# Check if user input is within array bounds
 if samples > valx.shape[0]:
 	samples = valx.shape[0]
 	print('Too bad... you wanted too many samples. Using the max:\t{}'.format(samples))
@@ -156,6 +171,12 @@ print('\n')
 val_scores = []
 val_accuracy = []
 
+# wrapper to do a prediction on the neural network
+# input
+## sample: the song sample from the back end pipeline
+## interactive: bool to display information interactively
+# output
+## sample: the song sample with a modified 'prediction' field
 def predict(sample, interactive=False):
 	# ML & Al job, just updates sample['prediction']
 	sample = net.predict(sample)
@@ -165,6 +186,7 @@ def predict(sample, interactive=False):
 		val_accuracy.append(1)
 	else:
 		val_accuracy.append(0)
+
 	# showing results
 	if interactive:
 		print('\n\n')
@@ -187,9 +209,13 @@ def predict(sample, interactive=False):
 	return sample
 
 for index in range(0, samples):
+	# Get a random song
 	song = DB.query()['track_data']
-	song['X'] = song['X'][indepent_features].values
-	# song['X'] = song['X'].iloc[:, indepent_features].values
+	# Select the features for the model
+	if MRMR:
+		song['X'] = song['X'].iloc[:, indepent_features].values
+	else:
+		song['X'] = song['X'][indepent_features].values
 	if samples <= 8 and samples >= 1:
 		song = predict(sample=song, interactive=True)
 	else:

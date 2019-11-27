@@ -1,4 +1,7 @@
 # ANN_callback.py
+# author - nick
+## Description
+## The callback function passed to keras's neural network train call
 
 import numpy as np
 import keras
@@ -12,6 +15,7 @@ from tensorflow.keras.optimizers import SGD
 class Callback(keras.callbacks.Callback):
 	# add variables to keep track of parameters
 	def __init__(self):
+		# The weights of the network
 		self.weights = []
 	
 	def on_train_begin(self, logs={}):

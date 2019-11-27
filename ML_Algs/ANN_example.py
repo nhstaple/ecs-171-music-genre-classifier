@@ -1,4 +1,12 @@
 # ANN_example.py
+# author(s) - matt, chance, nick
+## Description
+## This file loads a trained network that's stored in ML_algs/trained_models. If a model
+## isn't loaded, then this script will create a model specified by the default parameters.
+## After a trained model is in memory predictions will be made on the model. To see detailed
+## information about predictions enter a small sample size.
+## A histogram will display the 
+
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.metrics import categorical_accuracy
@@ -6,24 +14,34 @@ import numpy as np
 import pandas as pd
 from genres import classes, NUM_GENRES
 from ANN_parameter import Parameter
-from ANN_result import Result
 from ANN_class import ANN
 from ANN_encode import encode, decode
 import random
 
 # set your experiment seed for train test split
+# These parameters correspond to the parameters used for Matt's model.
 EXPERIMENT_SEED = 42
-FEATURE_COUNT = 200
 VALIDATION_PERCENT = 0.1
+# num of hidden layers
 DEFAULT_LAYERS = 1
-DEFAULT_NODES = len(classes) + 1
+# num of nodes per layer
+DEFAULT_NODES = 189 + 1
+# activation function
 DEFAULT_H_ACTIVATION = 'relu'
+# output function
 DEFAULT_O_ACTIVATION = 'softmax'
+# loss metric
 DEFAULT_LOSS = 'categorical_crossentropy'
+# batch size
 DEFAULT_BATCH = 200
-DEFAULT_EPOCHS = 200
+# num of training epochs
+DEFAULT_EPOCHS = 100
 TEST_RATIO = 0.34
+# data set for training
 DATA_SET = 'cleanLarge'
+# num features for mrmr
+FEATURE_COUNT = 200
+MRMR = False
 
 # Load model or train model?
 g = input("Load a model from disk? (y/n)\t") 
@@ -49,6 +67,7 @@ print('Initializing Data Management interface...')
 # reads the data from the csv
 reader = CSVInterface.featRead()
 
+# Data manegement interface
 DB = pandasDB.DataBase()
 
 # D = { X | Y }
@@ -77,9 +96,6 @@ D['Y'] = {
 		sub='cleanLarge'
 	),
 }
-
-# The data after removing outliers
-# data = outlier_method(RawData)
 
 #get the features
 indepent_features = ['mfcc', 'spectral_contrast']
@@ -111,8 +127,11 @@ print('\nBuilding neural net')
 print('input : {}'.format(len(sample)))
 print('output: {}\n'.format(NUM_GENRES))
 
+# the neural network
 net = 0
+# the history object from training
 history = 0
+# the callback function from training
 callback = 0
 
 # Use this for pre trained models
@@ -122,8 +141,8 @@ else:
 	# Use this to test your own architecture
 	net = ANN(p=Parameter(
 		num_input=len(sample),
-		num_hidden_layers=1,
-		nodes_per_hidden=len(sample) + 1,
+		num_hidden_layers=DEFAULT_LAYERS,
+		nodes_per_hidden=DEFAULT_NODES,
 		num_output=NUM_GENRES,
 		hidden_activation=DEFAULT_H_ACTIVATION,
 		output_activation=DEFAULT_O_ACTIVATION,
@@ -144,10 +163,10 @@ else:
 		interactive=False
 	)
 
-samples = 0
 # The number of test samples to check
-samples = int(input('Begin prediction on test set.\nNumber of samples:\t'))
+samples = int(input('Begin prediction on test set. <= 8 samples will run in interactive mode.\nNumber of samples:\t'))
 
+# Check if user input is within array bounds
 if samples > valx.shape[0]:
 	samples = valx.shape[0]
 	print('Too bad... you wanted too many samples. Using the max:\t{}'.format(samples))
@@ -158,7 +177,13 @@ print('\n')
 val_scores = []
 val_accuracy = []
 
-def predict(sample=song_result_interface.result.copy(), interactive=False):
+# wrapper to do a prediction on the neural network
+# input
+## sample: the song sample from the back end pipeline
+## interactive: bool to display information interactively
+# output
+## sample: the song sample with a modified 'prediction' field
+def predict(sample, interactive=False):
 	# ML & Al job, just updates sample['prediction']
 	sample = net.predict(sample)
 	val_scores.append(sample['prediction']['score'])
@@ -188,18 +213,18 @@ def predict(sample=song_result_interface.result.copy(), interactive=False):
 		input('Press enter to continue...')
 	return sample
 
-results = []
-avg_per_predic = []
-
 for index in range(0, samples):
+	# Get a random song
 	song = DB.query()['track_data']
-	song['X'] = song['X'][indepent_features].values
-	# song['X'] = song['X'].iloc[:, indepent_features].values
-	if samples <= 8 and samples >= 1:
-		results.append(predict(sample=song, interactive=True))
+	# Select the features for the model
+	if MRMR:
+		song['X'] = song['X'].iloc[:, indepent_features].values
 	else:
-		results.append(predict(sample=song, interactive=False))
-	avg_per_predic.append(net.get_mean_score())
+		song['X'] = song['X'][indepent_features].values
+	if samples <= 8 and samples >= 1:
+		song = predict(sample=song, interactive=True)
+	else:
+		song = predict(sample=song, interactive=False)
 
 #calculate the mean accuracy where
 #accuracy = 1 iff genre_top == 1st prediction genre, else = 0
@@ -218,21 +243,18 @@ plt.title('Histogram of ranks on {}'.format(DATA_SET))
 
 plt.show()
 
-plt.plot(avg_per_predic, label = "average rank per prediction")
-plt.xlabel("prediction")
-plt.ylabel("average rank")
-plt.title("average rank vs prediction on {}".format(DATA_SET))
-plt.legend()
-
-plt.show()
-
 if(MODEL_NAME == ''):
 	#plot of training accuracy over time
 	training_error = []
+	testing_error = []
 	for x in history.history['val_categorical_accuracy']:
+		testing_error.append(x)
+
+	for x in history.history['categorical_accuracy']:
 		training_error.append(x)
 
 	plt.plot(training_error, label = "training accuracy")
+	plt.plot(testing_error, label = "testing accuracy")
 	plt.xlabel("epoch")
 	plt.ylabel("accuracy")
 	plt.title("accuracy vs epoch on {}".format(DATA_SET))

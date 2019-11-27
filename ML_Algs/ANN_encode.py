@@ -6,7 +6,6 @@
 import numpy as np
 from genres import classes, NUM_GENRES
 
-# TODO replace with the actual feature name that is the genre
 dep = 'genre_top'
 
 # decodes an encoding 

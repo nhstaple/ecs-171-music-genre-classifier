@@ -1,5 +1,7 @@
 # ANN_parameter.py
 # author nick s.
+## Description
+## this class acts as a parameter for the ANN_class constructor
 
 import numpy as np
 from tensorflow import keras

@@ -1,4 +1,5 @@
 # ANN_paramsweep.py
+# author - matt
 
 #import packages
 import sys
