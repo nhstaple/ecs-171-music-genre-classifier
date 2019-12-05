@@ -86,17 +86,51 @@ function makeAJAXRequest(song = getUrlVars()(["songTitle"]), random='True'){
             return;
         }
 
+        //quick fix to reset highlighting
+        document.getElementById("genre_rank_1").style.backgroundColor = "";
+        document.getElementById("probability_rank_1").style.backgroundColor = "";
+        document.getElementById("genre_rank_2").style.backgroundColor = "";
+        document.getElementById("probability_rank_2").style.backgroundColor = "";
+        document.getElementById("genre_rank_3").style.backgroundColor = "";
+        document.getElementById("probability_rank_3").style.backgroundColor = "";
+        document.getElementById("genre_rank_4").style.backgroundColor = "";
+        document.getElementById("probability_rank_4").style.backgroundColor = "";
+        document.getElementById("genre_rank_5").style.backgroundColor = "";
+        document.getElementById("probability_rank_5").style.backgroundColor = "";
+        document.getElementById("genre_rank_6").style.backgroundColor = "";
+        document.getElementById("probability_rank_6").style.backgroundColor = "";
+        document.getElementById("genre_rank_7").style.backgroundColor = "";
+        document.getElementById("probability_rank_7").style.backgroundColor = "";
+        document.getElementById("genre_rank_8").style.backgroundColor = "";
+        document.getElementById("probability_rank_8").style.backgroundColor = "";
+
         //place the response on the screen
         document.getElementById('songName').textContent = object.songName;
         document.getElementById('artist').textContent = object.artist;
-        document.getElementById('placeGenreHere').textContent = object.songGenre;
-        document.getElementById('predictedScore').textContent = object.predictedScore + "% probability";
+        document.getElementById('genre_rank_1').textContent = "1. " + object.genre_rank_1 + ":";
+        document.getElementById('genre_rank_2').textContent = "2. " + object.genre_rank_2 + ":";
+        document.getElementById('genre_rank_3').textContent = "3. " + object.genre_rank_3 + ":";
+        document.getElementById('genre_rank_4').textContent = "4. " + object.genre_rank_4 + ":";
+        document.getElementById('genre_rank_5').textContent = "5. " + object.genre_rank_5 + ":";
+        document.getElementById('genre_rank_6').textContent = "6. " + object.genre_rank_6 + ":";
+        document.getElementById('genre_rank_7').textContent = "7. " + object.genre_rank_7 + ":";
+        document.getElementById('genre_rank_8').textContent = "8. " + object.genre_rank_8 + ":";
+        document.getElementById('probability_rank_1').textContent = object.probability_rank_1 + "% probability";
+        document.getElementById('probability_rank_2').textContent = object.probability_rank_2 + "% probability";
+        document.getElementById('probability_rank_3').textContent = object.probability_rank_3 + "% probability";
+        document.getElementById('probability_rank_4').textContent = object.probability_rank_4 + "% probability";
+        document.getElementById('probability_rank_5').textContent = object.probability_rank_5 + "% probability";
+        document.getElementById('probability_rank_6').textContent = object.probability_rank_6 + "% probability";
+        document.getElementById('probability_rank_7').textContent = object.probability_rank_7 + "% probability";
+        document.getElementById('probability_rank_8').textContent = object.probability_rank_8 + "% probability";
         document.getElementById('actualGenre').textContent = "Actual: " + object.actualGenre;
         document.getElementById('songScore').textContent = "Song Rank: " + object.songScore;
         document.getElementById('actualScore').textContent = object.actualScore + "% probability";
         document.getElementById('modelScore').textContent = "Model Rank: " + object.modelScore;
         document.getElementById('redirect_link').href = object.redirect_link;
         document.getElementById('redirect_link').textContent = "YouTube Search";
+        document.getElementById("genre_rank_" + object.songScore).style.backgroundColor = "yellow";
+        document.getElementById("probability_rank_" + object.songScore).style.backgroundColor = "yellow";
     }
     xhr.send();
 }

@@ -26,13 +26,43 @@ class PageTwo extends React.Component{
         //clear page while loading new song
         document.getElementById('songName').textContent = '';
         document.getElementById('artist').textContent = '';
-        document.getElementById('placeGenreHere').textContent = 'LOADING...';
-        document.getElementById('predictedScore').textContent = '';
+        document.getElementById('genre_rank_1').textContent = 'LOADING...';
+        document.getElementById('probability_rank_1').textContent = '';
+        document.getElementById('genre_rank_2').textContent = '';
+        document.getElementById('probability_rank_2').textContent = '';
+        document.getElementById('genre_rank_3').textContent = '';
+        document.getElementById('probability_rank_3').textContent = '';
+        document.getElementById('genre_rank_4').textContent = '';
+        document.getElementById('probability_rank_4').textContent = '';
+        document.getElementById('genre_rank_5').textContent = '';
+        document.getElementById('probability_rank_5').textContent = '';
+        document.getElementById('genre_rank_6').textContent = '';
+        document.getElementById('probability_rank_6').textContent = '';
+        document.getElementById('genre_rank_7').textContent = '';
+        document.getElementById('probability_rank_7').textContent = '';
+        document.getElementById('genre_rank_8').textContent = '';
+        document.getElementById('probability_rank_8').textContent = '';
         document.getElementById('actualGenre').textContent = '';
         document.getElementById('songScore').textContent = '';
         document.getElementById('actualScore').textContent = '';
         document.getElementById('modelScore').textContent = '';
         document.getElementById('redirect_link').textContent = '';
+        document.getElementById("genre_rank_1").style.backgroundColor = "";
+        document.getElementById("probability_rank_1").style.backgroundColor = "";
+        document.getElementById("genre_rank_2").style.backgroundColor = "";
+        document.getElementById("probability_rank_2").style.backgroundColor = "";
+        document.getElementById("genre_rank_3").style.backgroundColor = "";
+        document.getElementById("probability_rank_3").style.backgroundColor = "";
+        document.getElementById("genre_rank_4").style.backgroundColor = "";
+        document.getElementById("probability_rank_4").style.backgroundColor = "";
+        document.getElementById("genre_rank_5").style.backgroundColor = "";
+        document.getElementById("probability_rank_5").style.backgroundColor = "";
+        document.getElementById("genre_rank_6").style.backgroundColor = "";
+        document.getElementById("probability_rank_6").style.backgroundColor = "";
+        document.getElementById("genre_rank_7").style.backgroundColor = "";
+        document.getElementById("probability_rank_7").style.backgroundColor = "";
+        document.getElementById("genre_rank_8").style.backgroundColor = "";
+        document.getElementById("probability_rank_8").style.backgroundColor = "";
         this.props.feelingLucky();
     }
 
@@ -67,15 +97,87 @@ class PageTwo extends React.Component{
                     </h1>
                     <button id="back_button" onClick={this.gotolandingPage}>Go Back</button>
                     <button id="random_button" onClick={this.gotoFeelingLucky}> Random Song </button>
-                    <div id="predicted_genre">
-                        <div id="predicted_genre_name">
-                            <p id="placeGenreHere">
-                                LOADING...
-                            </p>
+                    <div id="results_wrapper">
+                        <div className="predicted_genre" >
+                            <div className="predicted_genre_name">
+                                <p id="genre_rank_1">
+                                    LOADING...
+                                </p>
+                            </div>
+                            <div className="predicted_genre_probability">
+                                <p id="probability_rank_1">
+                                </p>
+                            </div>
                         </div>
-                        <div id="predicted_genre_probability">
-                            <p id="predictedScore">
-                            </p>
+                        <div className="predicted_genre" >
+                            <div className="predicted_genre_name">
+                                <p id="genre_rank_2">
+                                </p>
+                            </div>
+                            <div className="predicted_genre_probability">
+                                <p id="probability_rank_2">
+                                </p>
+                            </div>
+                        </div>
+                        <div className="predicted_genre" >
+                            <div className="predicted_genre_name">
+                                <p id="genre_rank_3">
+                                </p>
+                            </div>
+                            <div className="predicted_genre_probability">
+                                <p id="probability_rank_3">
+                                </p>
+                            </div>
+                        </div>
+                        <div className="predicted_genre" >
+                            <div className="predicted_genre_name">
+                                <p id="genre_rank_4">
+                                </p>
+                            </div>
+                            <div className="predicted_genre_probability">
+                                <p id="probability_rank_4">
+                                </p>
+                            </div>
+                        </div>
+                        <div className="predicted_genre" >
+                            <div className="predicted_genre_name">
+                                <p id="genre_rank_5">
+                                </p>
+                            </div>
+                            <div className="predicted_genre_probability">
+                                <p id="probability_rank_5">
+                                </p>
+                            </div>
+                        </div>
+                        <div className="predicted_genre" >
+                            <div className="predicted_genre_name">
+                                <p id="genre_rank_6">
+                                </p>
+                            </div>
+                            <div className="predicted_genre_probability">
+                                <p id="probability_rank_6">
+                                </p>
+                            </div>
+                        </div>
+                        <div className="predicted_genre" >
+                            <div className="predicted_genre_name">
+                                <p id="genre_rank_7">
+                                </p>
+                            </div>
+                            <div className="predicted_genre_probability">
+                                <p id="probability_rank_7">
+                                </p>
+                            </div>
+                        </div>
+                        <div className="predicted_genre" >
+                            <div className="predicted_genre_name">
+                                <p id="genre_rank_8">
+                                </p>
+                            </div>
+                            <div className="predicted_genre_probability">
+                                <p id="probability_rank_8">
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <div id="actual_genre">

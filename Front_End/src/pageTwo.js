@@ -51,13 +51,43 @@ function (_React$Component) {
       //clear page while loading new song
       document.getElementById('songName').textContent = '';
       document.getElementById('artist').textContent = '';
-      document.getElementById('placeGenreHere').textContent = 'LOADING...';
-      document.getElementById('predictedScore').textContent = '';
+      document.getElementById('genre_rank_1').textContent = 'LOADING...';
+      document.getElementById('probability_rank_1').textContent = '';
+      document.getElementById('genre_rank_2').textContent = '';
+      document.getElementById('probability_rank_2').textContent = '';
+      document.getElementById('genre_rank_3').textContent = '';
+      document.getElementById('probability_rank_3').textContent = '';
+      document.getElementById('genre_rank_4').textContent = '';
+      document.getElementById('probability_rank_4').textContent = '';
+      document.getElementById('genre_rank_5').textContent = '';
+      document.getElementById('probability_rank_5').textContent = '';
+      document.getElementById('genre_rank_6').textContent = '';
+      document.getElementById('probability_rank_6').textContent = '';
+      document.getElementById('genre_rank_7').textContent = '';
+      document.getElementById('probability_rank_7').textContent = '';
+      document.getElementById('genre_rank_8').textContent = '';
+      document.getElementById('probability_rank_8').textContent = '';
       document.getElementById('actualGenre').textContent = '';
       document.getElementById('songScore').textContent = '';
       document.getElementById('actualScore').textContent = '';
       document.getElementById('modelScore').textContent = '';
       document.getElementById('redirect_link').textContent = '';
+      document.getElementById("genre_rank_1").style.backgroundColor = "";
+      document.getElementById("probability_rank_1").style.backgroundColor = "";
+      document.getElementById("genre_rank_2").style.backgroundColor = "";
+      document.getElementById("probability_rank_2").style.backgroundColor = "";
+      document.getElementById("genre_rank_3").style.backgroundColor = "";
+      document.getElementById("probability_rank_3").style.backgroundColor = "";
+      document.getElementById("genre_rank_4").style.backgroundColor = "";
+      document.getElementById("probability_rank_4").style.backgroundColor = "";
+      document.getElementById("genre_rank_5").style.backgroundColor = "";
+      document.getElementById("probability_rank_5").style.backgroundColor = "";
+      document.getElementById("genre_rank_6").style.backgroundColor = "";
+      document.getElementById("probability_rank_6").style.backgroundColor = "";
+      document.getElementById("genre_rank_7").style.backgroundColor = "";
+      document.getElementById("probability_rank_7").style.backgroundColor = "";
+      document.getElementById("genre_rank_8").style.backgroundColor = "";
+      document.getElementById("probability_rank_8").style.backgroundColor = "";
 
       _this.props.feelingLucky();
     });
@@ -103,16 +133,88 @@ function (_React$Component) {
         id: "random_button",
         onClick: this.gotoFeelingLucky
       }, " Random Song "), _react.default.createElement("div", {
-        id: "predicted_genre"
+        id: "results_wrapper"
       }, _react.default.createElement("div", {
-        id: "predicted_genre_name"
+        className: "predicted_genre"
+      }, _react.default.createElement("div", {
+        className: "predicted_genre_name"
       }, _react.default.createElement("p", {
-        id: "placeGenreHere"
+        id: "genre_rank_1"
       }, "LOADING...")), _react.default.createElement("div", {
-        id: "predicted_genre_probability"
+        className: "predicted_genre_probability"
       }, _react.default.createElement("p", {
-        id: "predictedScore"
+        id: "probability_rank_1"
       }))), _react.default.createElement("div", {
+        className: "predicted_genre"
+      }, _react.default.createElement("div", {
+        className: "predicted_genre_name"
+      }, _react.default.createElement("p", {
+        id: "genre_rank_2"
+      })), _react.default.createElement("div", {
+        className: "predicted_genre_probability"
+      }, _react.default.createElement("p", {
+        id: "probability_rank_2"
+      }))), _react.default.createElement("div", {
+        className: "predicted_genre"
+      }, _react.default.createElement("div", {
+        className: "predicted_genre_name"
+      }, _react.default.createElement("p", {
+        id: "genre_rank_3"
+      })), _react.default.createElement("div", {
+        className: "predicted_genre_probability"
+      }, _react.default.createElement("p", {
+        id: "probability_rank_3"
+      }))), _react.default.createElement("div", {
+        className: "predicted_genre"
+      }, _react.default.createElement("div", {
+        className: "predicted_genre_name"
+      }, _react.default.createElement("p", {
+        id: "genre_rank_4"
+      })), _react.default.createElement("div", {
+        className: "predicted_genre_probability"
+      }, _react.default.createElement("p", {
+        id: "probability_rank_4"
+      }))), _react.default.createElement("div", {
+        className: "predicted_genre"
+      }, _react.default.createElement("div", {
+        className: "predicted_genre_name"
+      }, _react.default.createElement("p", {
+        id: "genre_rank_5"
+      })), _react.default.createElement("div", {
+        className: "predicted_genre_probability"
+      }, _react.default.createElement("p", {
+        id: "probability_rank_5"
+      }))), _react.default.createElement("div", {
+        className: "predicted_genre"
+      }, _react.default.createElement("div", {
+        className: "predicted_genre_name"
+      }, _react.default.createElement("p", {
+        id: "genre_rank_6"
+      })), _react.default.createElement("div", {
+        className: "predicted_genre_probability"
+      }, _react.default.createElement("p", {
+        id: "probability_rank_6"
+      }))), _react.default.createElement("div", {
+        className: "predicted_genre"
+      }, _react.default.createElement("div", {
+        className: "predicted_genre_name"
+      }, _react.default.createElement("p", {
+        id: "genre_rank_7"
+      })), _react.default.createElement("div", {
+        className: "predicted_genre_probability"
+      }, _react.default.createElement("p", {
+        id: "probability_rank_7"
+      }))), _react.default.createElement("div", {
+        className: "predicted_genre"
+      }, _react.default.createElement("div", {
+        className: "predicted_genre_name"
+      }, _react.default.createElement("p", {
+        id: "genre_rank_8"
+      })), _react.default.createElement("div", {
+        className: "predicted_genre_probability"
+      }, _react.default.createElement("p", {
+        id: "probability_rank_8"
+      })))), _react.default.createElement("div", {
         id: "actual_genre"
       }, _react.default.createElement("div", {
         id: "actual_genre_name"

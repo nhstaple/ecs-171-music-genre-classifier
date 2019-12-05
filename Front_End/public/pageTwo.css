@@ -71,30 +71,33 @@ main {
     font-family: 'carlito', sans-serif;
 }
 
+#results_wrapper{
+    text-align: left;
+}
+
 /* wrapper of predicted genre information for positioning purposes */
-#predicted_genre{
+.predicted_genre{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     text-align: center;
     justify-content: center;
     align-items: center;
     flex: 1;
     font-size: 2em;
-    color: #737373;
+    
+    color: #DEB31A;
 }
 
 /* Name of the predicted genre */
-#predicted_genre_name{
-    font-size: 5em;
-    color: #DEB31A;
+.predicted_genre_name{
+    color: #737373;
     font-family: 'league-gothic', sans-serif;
 }
 
 /* Probability of the predicted genre */
-#predicted_genre_probability{
-    font-size: 1em;
-    color: #737373;
-    font-family: 'carlito', sans-serif;
+.predicted_genre_probability{
+    color: #DEB31A;
+    font-family: 'league-gothic', sans-serif;
 }
 
 /* wrapper of actual genre information for positioning purposes */

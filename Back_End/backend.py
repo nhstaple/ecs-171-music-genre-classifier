@@ -69,7 +69,8 @@ def findOneSong(name, randomFlag):
 	if(error == False):
 
 		actualGenre = result_list[0]['genre_top']
-		predictedGenre = result_list[0]['prediction']['result']
+		predictedGenres = list(result_list[0]['prediction']['genres'].keys())
+		predictedProbabilities = list(result_list[0]['prediction']['genres'].values())
 
 		# construct youtube url
 		url = 'https://www.youtube.com' + '/results?'
@@ -81,12 +82,26 @@ def findOneSong(name, randomFlag):
 		return jsonify({
 			'songName' : result_list[0]['title'],
 			'artist' : result_list[0]['metadata']['artist'],
-			'songGenre' : predictedGenre,
-			'predictedScore' : str(result_list[0]['prediction']['genres'][predictedGenre]*100),
+			'genre_rank_1' : predictedGenres[0],
+			'genre_rank_2' : predictedGenres[1],
+			'genre_rank_3' : predictedGenres[2],
+			'genre_rank_4' : predictedGenres[3],
+			'genre_rank_5' : predictedGenres[4],
+			'genre_rank_6' : predictedGenres[5],
+			'genre_rank_7' : predictedGenres[6],
+			'genre_rank_8' : predictedGenres[7],
+			'probability_rank_1' : str(round(predictedProbabilities[0]*100,4)),
+			'probability_rank_2' : str(round(predictedProbabilities[1]*100,4)),
+			'probability_rank_3' : str(round(predictedProbabilities[2]*100,4)),
+			'probability_rank_4' : str(round(predictedProbabilities[3]*100,4)),
+			'probability_rank_5' : str(round(predictedProbabilities[4]*100,4)),
+			'probability_rank_6' : str(round(predictedProbabilities[5]*100,4)),
+			'probability_rank_7' : str(round(predictedProbabilities[6]*100,4)),
+			'probability_rank_8' : str(round(predictedProbabilities[7]*100,4)),
 			'actualGenre' : actualGenre,
-			'actualScore' : str(result_list[0]['prediction']['genres'][actualGenre]*100),
+			'actualScore' : str(round(result_list[0]['prediction']['genres'][actualGenre]*100,4)),
 			'songScore' : str(result_list[0]['prediction']['score']),
-			'modelScore' : str(neuralNet.get_mean_score()),
+			'modelScore' : str(round(neuralNet.get_mean_score(),4)),
 			'error' : error,
 			'redirect_link' : redirect_link,
 			'predictionVector': str(result_list[0]['prediction']['genres'])
