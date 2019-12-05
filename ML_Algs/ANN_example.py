@@ -17,6 +17,8 @@ from ANN_parameter import Parameter
 from ANN_class import ANN
 from ANN_encode import encode, decode
 import random
+from scipy.stats import sem, t
+from scipy import mean
 
 # set your experiment seed for train test split
 # These parameters correspond to the parameters used for Matt's model.
@@ -242,6 +244,18 @@ plt.hist(val_scores, bins=n_bins)
 plt.title('Histogram of ranks on {}'.format(DATA_SET))
 
 plt.show()
+
+#confidence interval
+confidence = 0.95
+n = len(val_scores)
+m = mean(val_scores)
+std_err = sem(val_scores)
+h = std_err * t.ppf((1 + confidence) / 2, n - 1)
+
+start = m - h
+end = m + h
+
+print("95% Confidence Interval: {0} to {1}".format(start, end))
 
 if(MODEL_NAME == ''):
 	#plot of training accuracy over time
