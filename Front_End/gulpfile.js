@@ -1,4 +1,5 @@
 //convert jsx to js file
+//created by Cameron FitzPatrick, 2019
 var gulp = require('gulp');
 var babel = require('gulp-babel');
 gulp.task("babel", function(){
